@@ -1,10 +1,12 @@
-# UserService
+# Exagrad Student Service
 
-UserService is a Spring Boot-based application designed to manage user-related operations. It leverages modern Java (Java 21) and integrates with various Spring Boot modules for web, data, and testing functionalities.
+ExaGrad Student Service is a Spring Boot–based application designed to manage student-related operations at SAU
+in connection with exams and grades. It leverages modern Java (Java 21) and integrates with various Spring Boot
+modules for web, data, and testing functionalities.
 
 ## Features
 
-- RESTful API for user management
+- RESTful API for exames and grades from student
 - Integration with H2 in-memory database
 - Dependency injection and configuration using Spring Boot
 - Unit and integration testing with JUnit 5
@@ -20,8 +22,8 @@ UserService is a Spring Boot-based application designed to manage user-related o
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/your-repo/userservice.git
-cd userservice
+git clone https://github.com/Agile-Software-Engineering-25/team-13-backend-exagrad-student-service.git
+cd team-13-backend-exagrad-student-service
 ```
 ### Build the Project
 ```bash
@@ -39,8 +41,6 @@ Run unit tests using Maven:
 ```bash
 mvn test
 ```
-### System Tests
-Here information will follow, but system tests will be run on a central server and reports will be made.
 
 ## Code Style & Linting
 
