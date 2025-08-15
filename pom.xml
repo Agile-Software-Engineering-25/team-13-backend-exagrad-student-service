@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.ase</groupId>
-    <artifactId>userservice</artifactId>
+    <artifactId>exagrad-student-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>userService</name>
-    <description>userService</description>
+    <name>exagrad-student-service</name>
+    <description>Exam and Grades Student Service</description>
     <url/>
     <licenses>
         <license/>
