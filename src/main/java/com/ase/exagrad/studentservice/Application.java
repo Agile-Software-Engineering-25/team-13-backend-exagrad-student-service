@@ -1,4 +1,4 @@
-package com.ase.userservice;
+package com.ase.exagrad.studentservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

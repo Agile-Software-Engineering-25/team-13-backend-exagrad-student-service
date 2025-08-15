@@ -1,4 +1,4 @@
-package com.ase.userservice;
+package com.ase.exagrad.studentservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
