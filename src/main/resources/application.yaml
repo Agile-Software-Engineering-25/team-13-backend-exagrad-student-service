@@ -17,3 +17,10 @@ spring:
 server:
   error:
     include-message: always
+minio:
+  endpoint: http://minio-server:9000
+  access-key: my-access-key
+  secret-key: my-secret-key
+  bucket: documents # maybe rename bucket more specific
+  # add another bucket for PUB
+  # TODO: get configs from file service team
