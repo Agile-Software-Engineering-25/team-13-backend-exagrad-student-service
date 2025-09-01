@@ -2,9 +2,9 @@ name: Checkstyle
 
 on:
   push:
-    branches: ['**']
+    branches: [ '**' ]
   pull_request:
-    branches: ['main']
+    branches: [ 'main' ]
 
 jobs:
   checkstyle:
@@ -32,15 +32,15 @@ jobs:
             echo "JAR=checkstyle-11.0.0-all.jar" >> "$GITHUB_ENV"
           fi
 
-      - name: Run Checkstyle
+      - name: Run Checkstyle (Google Style)
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p target
           STATUS=0
-          java -jar "$JAR" -c checkstyle.xml -f xml -o target/checkstyle-report.xml src/main/java src/test/java || STATUS=$?
+          java -jar "$JAR" -c /google_checks.xml -f xml -o target/checkstyle-report.xml src/main/java src/test/java || STATUS=$?
           # Print human-readable output to logs for convenience (do not fail this step anew)
-          java -jar "$JAR" -c checkstyle.xml -f plain src/main/java src/test/java || true
+          java -jar "$JAR" -c /google_checks.xml -f plain src/main/java src/test/java || true
           exit $STATUS
 
       - name: Upload Checkstyle report
@@ -49,5 +49,3 @@ jobs:
         with:
           name: checkstyle-report
           path: target/checkstyle-report.xml
-
-

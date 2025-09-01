@@ -1,17 +1,26 @@
 package com.ase.exagrad.studentservice.services;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-
 import java.io.InputStream;
+import lombok.extern.slf4j.Slf4j;
+
+
+
+
+import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
 public class MinioService {
 
-  public void uploadFile(String bucketName, String objectKey, InputStream inputStream, long size, String contentType) {
+  public void uploadFile(
+      String bucketName,
+      String objectKey,
+      InputStream inputStream,
+      long size,
+      String contentType) {
     // Stub: Nur Logging
-    log.info("Pretending to upload file to MinIO. bucket={}, key={}, size={}, contentType={}",
+    log.info("Pretending to upload file to MinIO."
+        + "bucket={}, key={}, size={}, contentType={}",
         bucketName, objectKey, size, contentType);
 
     // Später: Hier echten MinIO-Client aufrufen
