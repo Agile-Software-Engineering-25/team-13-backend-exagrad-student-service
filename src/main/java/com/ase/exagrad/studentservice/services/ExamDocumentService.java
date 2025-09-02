@@ -1,11 +1,13 @@
 package com.ase.exagrad.studentservice.services;
 
+import com.ase.exagrad.studentservice.config.MinioProperties;
 import com.ase.exagrad.studentservice.dto.ExamDocumentRequest;
 import com.ase.exagrad.studentservice.entities.ExamDocument;
 import com.ase.exagrad.studentservice.repositories.ExamDocumentRepository;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,32 +18,25 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@Component
 @RequiredArgsConstructor
 public class ExamDocumentService {
 
-    // TODO: load from application.yml
-    private static final String BUCKET_NAME = "team13-student-exam-documents";
     private final ExamDocumentRepository examDocumentRepository;
-    private final MinioService minioService; // <-- dein MinIO-Wrapper
+    private final MinioService minioService;
+    private final MinioProperties minioProperties;
 
     @Transactional
     public ExamDocument uploadExamDocument(MultipartFile file, ExamDocumentRequest metadata)
             throws IOException {
-        // 1. MinIO Key generieren
+        String bucketName = minioProperties.getBuckets().get("examDocuments");
         String minioKey = generateMinioKey(file.getOriginalFilename());
 
-        // 2. Datei nach MinIO hochladen
         minioService.uploadFile(
-                BUCKET_NAME,
-                minioKey,
-                file.getInputStream(),
-                file.getSize(),
-                file.getContentType());
+                bucketName, minioKey, file.getInputStream(), file.getSize(), file.getContentType());
 
-        // 3. Metadaten speichern
         ExamDocument doc =
                 ExamDocument.builder()
-                        .title(metadata.getTitle())
                         .examId(metadata.getExamId())
                         .studentId(
                                 metadata.getStudentId() != null

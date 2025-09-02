@@ -1,37 +1,67 @@
 package com.ase.exagrad.studentservice.services;
 
-import java.io.InputStream;
+import io.minio.BucketExistsArgs;
+import io.minio.GetPresignedObjectUrlArgs;
+import io.minio.MakeBucketArgs;
+import io.minio.MinioClient;
+import io.minio.PutObjectArgs;
+import io.minio.http.Method;
+
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-
-
 
 import org.springframework.stereotype.Service;
 
+import java.io.InputStream;
+import java.util.concurrent.TimeUnit;
+
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class MinioService {
 
-  public void uploadFile(
-      String bucketName,
-      String objectKey,
-      InputStream inputStream,
-      long size,
-      String contentType) {
-    // Stub: Nur Logging
-    log.info("Pretending to upload file to MinIO."
-        + "bucket={}, key={}, size={}, contentType={}",
-        bucketName, objectKey, size, contentType);
+    private final MinioClient minioClient;
 
-    // Später: Hier echten MinIO-Client aufrufen
-  }
+    public void uploadFile(
+            String bucketName,
+            String objectKey,
+            InputStream inputStream,
+            long size,
+            String contentType) {
+        try {
+            // Ensure bucket exists
+            if (!minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build())) {
+                minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build());
+                log.info("Created bucket '{}'", bucketName);
+            }
 
-  public String getFileUrl(String bucketName, String objectKey) {
-    // Stub: Gibt nur eine Fake-URL zurück
-    String url = "http://fake-minio.local/" + bucketName + "/" + objectKey;
-    log.info("Pretending to generate MinIO file URL: {}", url);
-    return url;
+            minioClient.putObject(
+                    PutObjectArgs.builder().bucket(bucketName).object(objectKey).stream(
+                                    inputStream, size, -1)
+                            .contentType(contentType)
+                            .build());
+            log.info("Uploaded file to MinIO: bucket={}, key={}", bucketName, objectKey);
+        } catch (Exception e) {
+            log.error("Error uploading file to MinIO", e);
+            throw new RuntimeException(e);
+        }
+    }
 
-    // Später: Pre-signed URL von MinIO zurückgeben
-  }
+    public String getFileUrl(String bucketName, String objectKey) {
+        try {
+            String url =
+                    minioClient.getPresignedObjectUrl(
+                            GetPresignedObjectUrlArgs.builder()
+                                    .method(Method.GET)
+                                    .bucket(bucketName)
+                                    .object(objectKey)
+                                    .expiry(1, TimeUnit.HOURS)
+                                    .build());
+            log.info("Generated MinIO presigned URL: {}", url);
+            return url;
+        } catch (Exception e) {
+            log.error("Error generating presigned URL", e);
+            throw new RuntimeException(e);
+        }
+    }
 }
