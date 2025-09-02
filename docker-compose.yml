@@ -9,5 +9,6 @@ services:
       MINIO_ROOT_USER: my-access-key
       MINIO_ROOT_PASSWORD: my-secret-key
     command: server /data --console-address ":9001"
-    volumes:
-      - ./minio-data:/data
+    # Add volume for persistence Data (usefully if u work with h2:file instead of h2:mem)
+    # volumes:
+    #   - ./minio-data:/data
