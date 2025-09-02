@@ -54,10 +54,11 @@ public class ExamDocumentService {
     }
 
     public List<ExamDocument> getDocumentsByStudentId(String studentId) {
-        // TODO: replace with query in repository -> more efficient that filter after load all
-        return examDocumentRepository.findAll().stream()
-                .filter(doc -> doc.getStudentId().equals(studentId))
-                .toList();
+        return examDocumentRepository.findByStudentId(studentId);
+    }
+
+    public List<ExamDocument> getDocumentsByExamId(String examId) {
+        return examDocumentRepository.findByExamId(examId);
     }
 
     private String generateMinioKey(String originalFilename) {
