@@ -10,10 +10,18 @@ spring:
       hibernate:
         format_sql: true
   datasource:
-    url: jdbc:h2:file:./data/mydb
+    url: jdbc:h2:mem:./data/mydb
     driverClassName: org.h2.Driver
     username: sa
     password: password
 server:
   error:
     include-message: always
+minio:
+  # TODO: updated these configs if more information from the responsible team  are gained
+  endpoint: http://localhost:9000
+  accessKey: my-access-key
+  secretKey: my-secret-key
+  buckets:
+    examDocuments: student-exam-documents
+    pubDocuments: student-pub-documents
