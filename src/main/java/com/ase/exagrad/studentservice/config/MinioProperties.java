@@ -11,7 +11,7 @@ import java.util.Map;
 @Component
 @ConfigurationProperties(prefix = "minio")
 public class MinioProperties {
-    private String url;
+    private String endpoint;
     private String accessKey;
     private String secretKey;
     private Map<String, String> buckets;

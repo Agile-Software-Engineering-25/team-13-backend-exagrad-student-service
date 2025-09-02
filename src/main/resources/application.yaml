@@ -10,7 +10,7 @@ spring:
       hibernate:
         format_sql: true
   datasource:
-    url: jdbc:h2:file:./data/mydb
+    url: jdbc:h2:mem:./data/mydb
     driverClassName: org.h2.Driver
     username: sa
     password: password
@@ -18,9 +18,10 @@ server:
   error:
     include-message: always
 minio:
-  endpoint: http://minio-server:9000
-  access-key: my-access-key
-  secret-key: my-secret-key
-  bucket: documents # maybe rename bucket more specific
-  # add another bucket for PUB
-  # TODO: get configs from file service team
+  # TODO: updated these configs if more information from the responsible team  are gained
+  endpoint: http://localhost:9000
+  accessKey: my-access-key
+  secretKey: my-secret-key
+  buckets:
+    examDocuments: student-exam-documents
+    pubDocuments: student-pub-documents
