@@ -2,6 +2,7 @@ package com.ase.exagrad.studentservice.services;
 
 import com.ase.exagrad.studentservice.config.MinioProperties;
 import com.ase.exagrad.studentservice.dto.ExamDocumentRequest;
+import com.ase.exagrad.studentservice.dto.ExamDocumentResponse;
 import com.ase.exagrad.studentservice.entities.ExamDocument;
 import com.ase.exagrad.studentservice.repositories.ExamDocumentRepository;
 
@@ -16,6 +17,7 @@ import java.io.IOException;
 import java.time.Year;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Component
@@ -43,17 +45,39 @@ public class ExamDocumentService {
                                         ? metadata.getStudentId()
                                         : "DEFAULT-STUDENT")
                         .minioKey(minioKey)
+                        .fileName(file.getOriginalFilename()) // Store clean filename
                         .build();
 
         return examDocumentRepository.save(doc);
     }
 
-    public List<ExamDocument> getDocumentsByStudentId(String studentId) {
-        return examDocumentRepository.findByStudentId(studentId);
+    public List<ExamDocumentResponse> getDocumentsByStudentId(String studentId) {
+        List<ExamDocument> documents = examDocumentRepository.findByStudentId(studentId);
+        return convertToResponseWithUrls(documents);
     }
 
-    public List<ExamDocument> getDocumentsByExamId(String examId) {
-        return examDocumentRepository.findByExamId(examId);
+    public List<ExamDocumentResponse> getDocumentsByExamId(String examId) {
+        List<ExamDocument> documents = examDocumentRepository.findByExamId(examId);
+        return convertToResponseWithUrls(documents);
+    }
+
+    private List<ExamDocumentResponse> convertToResponseWithUrls(List<ExamDocument> documents) {
+        String bucketName = minioProperties.getBuckets().get("examDocuments");
+
+        return documents.stream()
+                .map(
+                        doc -> {
+                            String downloadUrl =
+                                    minioService.getFileUrl(bucketName, doc.getMinioKey());
+                            return ExamDocumentResponse.builder()
+                                    .examId(doc.getExamId())
+                                    .studentId(doc.getStudentId())
+                                    .uploadDate(doc.getUploadDate())
+                                    .downloadUrl(downloadUrl)
+                                    .fileName(doc.getFileName())
+                                    .build();
+                        })
+                .collect(Collectors.toList());
     }
 
     private String generateMinioKey(String originalFilename) {

@@ -4,7 +4,6 @@ import com.ase.exagrad.studentservice.dto.ExamDocumentRequest;
 import com.ase.exagrad.studentservice.dto.ExamDocumentResponse;
 import com.ase.exagrad.studentservice.entities.ExamDocument;
 import com.ase.exagrad.studentservice.services.ExamDocumentService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,7 +27,6 @@ import java.util.Map;
 public class ExamDocumentController {
 
     private final ExamDocumentService examDocumentService;
-    private final ObjectMapper objectMapper;
 
     @PostMapping(consumes = {"multipart/form-data"})
     public ResponseEntity<?> uploadExamDocument(
@@ -40,7 +38,10 @@ public class ExamDocumentController {
             Map<String, Object> response =
                     Map.of(
                             "id", saved.getId(),
-                            "minioKey", saved.getMinioKey());
+                            "fileName",
+                                    saved
+                                            .getFileName()); // Return clean filename instead of
+                                                             // minioKey
 
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
 
@@ -63,20 +64,15 @@ public class ExamDocumentController {
                     .body(Map.of("error", "Provide either studentId OR examId, not both"));
         }
 
-        List<ExamDocument> documents;
+        List<ExamDocumentResponse> response;
         if (studentId != null) {
-            documents = examDocumentService.getDocumentsByStudentId(studentId);
+            response = examDocumentService.getDocumentsByStudentId(studentId);
         } else if (examId != null) {
-            documents = examDocumentService.getDocumentsByExamId(examId);
+            response = examDocumentService.getDocumentsByExamId(examId);
         } else {
             return ResponseEntity.badRequest()
                     .body(Map.of("error", "Either studentId or examId must be provided"));
         }
-
-        List<ExamDocumentResponse> response =
-                documents.stream()
-                        .map(doc -> objectMapper.convertValue(doc, ExamDocumentResponse.class))
-                        .toList();
 
         return ResponseEntity.ok(response);
     }

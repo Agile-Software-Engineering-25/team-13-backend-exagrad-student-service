@@ -40,4 +40,7 @@ public class ExamDocument {
 
     @Column(nullable = false, unique = true)
     private String minioKey;
+
+    @Column(nullable = false)
+    private String fileName;
 }

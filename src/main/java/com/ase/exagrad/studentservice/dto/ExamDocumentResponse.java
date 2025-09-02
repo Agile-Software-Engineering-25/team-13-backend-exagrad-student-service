@@ -11,6 +11,6 @@ public class ExamDocumentResponse {
     private String examId;
     private String studentId;
     private Instant uploadDate;
-    private String minioKey;
+    private String downloadUrl;
     private String fileName;
 }
