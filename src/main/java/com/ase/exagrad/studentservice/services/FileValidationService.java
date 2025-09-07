@@ -18,20 +18,21 @@ import java.util.Set;
 @Service
 public class FileValidationService {
 
+    private static final Set<String> DANGEROUS_EXTENSIONS =
+            Set.of("exe", "bat", "cmd", "com", "scr", "vbs", "js", "jar", "sh");
+    // Magic bytes for common file types
+    private static final byte[] PDF_SIGNATURE = {0x25, 0x50, 0x44, 0x46}; // %PDF
+    private static final byte[] PNG_SIGNATURE = {
+        (byte) 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A
+    };
+    private static final byte[] JPEG_SIGNATURE = {(byte) 0xFF, (byte) 0xD8, (byte) 0xFF};
+
     @Value("${app.file.max-size:10485760}") // 10MB default
     private long maxFileSize;
 
-    @Value("${app.file.allowed-types:application/pdf,image/jpeg,image/png,image/gif,text/plain,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document}")
+    @Value(
+            "${app.file.allowed-types:application/pdf,image/jpeg,image/png,image/gif,text/plain,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document}")
     private String allowedTypesConfig;
-
-    private static final Set<String> DANGEROUS_EXTENSIONS = Set.of(
-        "exe", "bat", "cmd", "com", "scr", "vbs", "js", "jar", "sh"
-    );
-
-    // Magic bytes for common file types
-    private static final byte[] PDF_SIGNATURE = {0x25, 0x50, 0x44, 0x46}; // %PDF
-    private static final byte[] PNG_SIGNATURE = {(byte)0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A};
-    private static final byte[] JPEG_SIGNATURE = {(byte)0xFF, (byte)0xD8, (byte)0xFF};
 
     public void validateFile(MultipartFile file) {
         if (file == null || file.isEmpty()) {
@@ -52,7 +53,10 @@ public class FileValidationService {
         // Sanitize filename - remove path traversal attempts
         String sanitized = fileName.replaceAll("[\\\\/:*?\"<>|]", "_");
         if (!sanitized.equals(fileName)) {
-            log.warn("Filename contained illegal characters, sanitized: {} -> {}", fileName, sanitized);
+            log.warn(
+                    "Filename contained illegal characters, sanitized: {} -> {}",
+                    fileName,
+                    sanitized);
         }
 
         // Check for dangerous extensions
@@ -70,9 +74,10 @@ public class FileValidationService {
     private void validateFileSize(long size) {
         if (size > maxFileSize) {
             throw new FileValidationException(
-                String.format("File size exceeds maximum allowed size of %d bytes", maxFileSize));
+                    String.format(
+                            "File size exceeds maximum allowed size of %d bytes", maxFileSize));
         }
-        
+
         if (size == 0) {
             throw new FileValidationException("File cannot be empty");
         }
@@ -93,7 +98,7 @@ public class FileValidationService {
         try (InputStream inputStream = file.getInputStream()) {
             byte[] header = new byte[10];
             int bytesRead = inputStream.read(header);
-            
+
             if (bytesRead < 4) {
                 throw new FileValidationException("File content appears to be corrupted");
             }
@@ -123,7 +128,7 @@ public class FileValidationService {
         if (data.length < signature.length) {
             return false;
         }
-        
+
         for (int i = 0; i < signature.length; i++) {
             if (data[i] != signature[i]) {
                 return false;
@@ -141,8 +146,6 @@ public class FileValidationService {
         if (fileName == null) {
             return "unnamed_file";
         }
-        return fileName.replaceAll("[\\\\/:*?\"<>|]", "_")
-                      .replaceAll("\\s+", "_")
-                      .trim();
+        return fileName.replaceAll("[\\\\/:*?\"<>|]", "_").replaceAll("\\s+", "_").trim();
     }
 }
