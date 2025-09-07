@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v1/documents/exams")
+@RequestMapping("/documents/exams")
 @RequiredArgsConstructor
 public class ExamDocumentController {
 

@@ -17,6 +17,8 @@ spring:
 server:
   error:
     include-message: always
+  servlet:
+    context-path: /api/v1
 minio:
   # TODO: updated these configs if more information from the responsible team  are gained
   endpoint: http://localhost:9000
