@@ -10,5 +10,5 @@ import java.util.UUID;
 public interface ExamDocumentRepository extends JpaRepository<ExamDocument, UUID> {
     List<ExamDocument> findByStudentId(String studentId);
 
-    List<ExamDocument> findByExamId(String examID);
+    List<ExamDocument> findByExamId(String examId);
 }

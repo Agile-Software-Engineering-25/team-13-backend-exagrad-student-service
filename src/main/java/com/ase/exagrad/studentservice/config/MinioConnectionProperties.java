@@ -9,8 +9,8 @@ import java.util.Map;
 
 @Data
 @Component
-@ConfigurationProperties(prefix = "minio")
-public class MinioProperties {
+@ConfigurationProperties(prefix = "minio-connection")
+public class MinioConnectionProperties {
     private String endpoint;
     private String accessKey;
     private String secretKey;

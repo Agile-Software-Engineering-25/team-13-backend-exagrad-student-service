@@ -1,9 +1,13 @@
 package com.ase.exagrad.studentservice.controllers;
 
-import com.ase.exagrad.studentservice.dto.ExamDocumentRequest;
-import com.ase.exagrad.studentservice.dto.ExamDocumentResponse;
+import com.ase.exagrad.studentservice.dto.request.ExamDocumentRequest;
+import com.ase.exagrad.studentservice.dto.response.ExamDocumentResponse;
+import com.ase.exagrad.studentservice.dto.response.UploadResponse;
+import com.ase.exagrad.studentservice.dto.response.ApiResponse;
 import com.ase.exagrad.studentservice.entities.ExamDocument;
 import com.ase.exagrad.studentservice.services.ExamDocumentService;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/documents/exams")
@@ -29,51 +32,47 @@ public class ExamDocumentController {
     private final ExamDocumentService examDocumentService;
 
     @PostMapping(consumes = {"multipart/form-data"})
-    public ResponseEntity<?> uploadExamDocument(
+    public ResponseEntity<ApiResponse<UploadResponse>> uploadExamDocument(
             @RequestPart("file") MultipartFile file,
-            @RequestPart("metadata") ExamDocumentRequest metadata) {
+            @RequestPart("metadata") ExamDocumentRequest metadata,
+            HttpServletRequest request) {
+
         try {
             ExamDocument saved = examDocumentService.uploadExamDocument(file, metadata);
 
-            Map<String, Object> response =
-                    Map.of(
-                            "id", saved.getId(),
-                            "fileName",
-                                    saved
-                                            .getFileName()); // Return clean filename instead of
-                                                             // minioKey
-
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);
-
+            UploadResponse uploadResponse = UploadResponse.fromEntity(saved);
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(ApiResponse.created(uploadResponse, request.getRequestURI()));
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(Map.of("error", e.getMessage()));
+            return ResponseEntity.badRequest()
+                    .body(ApiResponse.badRequest(e.getMessage(), request.getRequestURI()));
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of("error", "Upload failed: " + e.getMessage()));
+                    .body(
+                            ApiResponse.internalServerError(
+                                    "Upload failed: " + e.getMessage(), request.getRequestURI()));
         }
     }
 
     @GetMapping
-    public ResponseEntity<?> getDocuments(
+    public ResponseEntity<ApiResponse<List<ExamDocumentResponse>>> getDocuments(
             @RequestParam(required = false) String studentId,
-            @RequestParam(required = false) String examId) {
+            @RequestParam(required = false) String examId,
+            HttpServletRequest request) {
 
-        if (studentId != null && examId != null) {
+        if ((studentId != null && examId != null) || (studentId == null && examId == null)) {
             return ResponseEntity.badRequest()
-                    .body(Map.of("error", "Provide either studentId OR examId, not both"));
+                    .body(
+                            ApiResponse.badRequest(
+                                    "Provide exactly one parameter: studentId OR examId",
+                                    request.getRequestURI()));
         }
 
-        List<ExamDocumentResponse> response;
-        if (studentId != null) {
-            response = examDocumentService.getDocumentsByStudentId(studentId);
-        } else if (examId != null) {
-            response = examDocumentService.getDocumentsByExamId(examId);
-        } else {
-            return ResponseEntity.badRequest()
-                    .body(Map.of("error", "Either studentId or examId must be provided"));
-        }
+        List<ExamDocumentResponse> documents =
+                studentId != null
+                        ? examDocumentService.getDocumentsByStudentId(studentId)
+                        : examDocumentService.getDocumentsByExamId(examId);
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(ApiResponse.success(documents, request.getRequestURI()));
     }
 }
