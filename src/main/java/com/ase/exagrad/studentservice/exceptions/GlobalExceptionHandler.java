@@ -1,7 +1,8 @@
 package com.ase.exagrad.studentservice.exceptions;
 
-import com.ase.exagrad.studentservice.dto.response.ApiResponse;
-import com.ase.exagrad.studentservice.dto.response.ErrorDetails;
+import com.ase.exagrad.studentservice.components.ApiResponseFactory;
+import com.ase.exagrad.studentservice.dtos.response.ApiResponse;
+import com.ase.exagrad.studentservice.dtos.response.ErrorDetails;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -16,6 +17,11 @@ import org.springframework.web.multipart.MaxUploadSizeExceededException;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    private final ApiResponseFactory apiResponseFactory;
+
+    public GlobalExceptionHandler(ApiResponseFactory apiResponseFactory) {
+        this.apiResponseFactory = apiResponseFactory;
+    }
 
     @ExceptionHandler(FileValidationException.class)
     public ResponseEntity<ApiResponse<Void>> handleFileValidation(
@@ -30,7 +36,7 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.badRequest()
                 .body(
-                        ApiResponse.error(
+                        apiResponseFactory.error(
                                 ex.getMessage(),
                                 request.getRequestURI(),
                                 HttpStatus.BAD_REQUEST,
@@ -51,7 +57,7 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(
-                        ApiResponse.error(
+                        apiResponseFactory.error(
                                 "File storage operation failed",
                                 request.getRequestURI(),
                                 HttpStatus.INTERNAL_SERVER_ERROR,
@@ -71,7 +77,7 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE)
                 .body(
-                        ApiResponse.error(
+                        apiResponseFactory.error(
                                 "File too large",
                                 request.getRequestURI(),
                                 HttpStatus.PAYLOAD_TOO_LARGE,
@@ -91,7 +97,7 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(
-                        ApiResponse.error(
+                        apiResponseFactory.error(
                                 "Internal server error",
                                 request.getRequestURI(),
                                 HttpStatus.INTERNAL_SERVER_ERROR,

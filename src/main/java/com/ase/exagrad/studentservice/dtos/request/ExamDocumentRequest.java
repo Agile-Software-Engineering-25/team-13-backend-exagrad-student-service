@@ -1,4 +1,4 @@
-package com.ase.exagrad.studentservice.dto.request;
+package com.ase.exagrad.studentservice.dtos.request;
 
 import lombok.Data;
 

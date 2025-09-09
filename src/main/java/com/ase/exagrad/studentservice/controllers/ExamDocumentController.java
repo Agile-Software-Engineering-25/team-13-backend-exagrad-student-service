@@ -1,10 +1,9 @@
 package com.ase.exagrad.studentservice.controllers;
 
-import com.ase.exagrad.studentservice.dto.request.ExamDocumentRequest;
-import com.ase.exagrad.studentservice.dto.response.ExamDocumentResponse;
-import com.ase.exagrad.studentservice.dto.response.UploadResponse;
-import com.ase.exagrad.studentservice.dto.response.ApiResponse;
-import com.ase.exagrad.studentservice.entities.ExamDocument;
+import com.ase.exagrad.studentservice.components.ApiResponseFactory;
+import com.ase.exagrad.studentservice.dtos.request.ExamDocumentRequest;
+import com.ase.exagrad.studentservice.dtos.response.ApiResponse;
+import com.ase.exagrad.studentservice.dtos.response.ExamDocumentResponse;
 import com.ase.exagrad.studentservice.services.ExamDocumentService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,26 +29,27 @@ import java.util.List;
 public class ExamDocumentController {
 
     private final ExamDocumentService examDocumentService;
+    private final ApiResponseFactory apiResponseFactory;
 
     @PostMapping(consumes = {"multipart/form-data"})
-    public ResponseEntity<ApiResponse<UploadResponse>> uploadExamDocument(
+    public ResponseEntity<ApiResponse<ExamDocumentResponse>> uploadExamDocument(
             @RequestPart("file") MultipartFile file,
             @RequestPart("metadata") ExamDocumentRequest metadata,
             HttpServletRequest request) {
 
         try {
-            ExamDocument saved = examDocumentService.uploadExamDocument(file, metadata);
+            ExamDocumentResponse response = examDocumentService.uploadExamDocument(file, metadata);
 
-            UploadResponse uploadResponse = UploadResponse.fromEntity(saved);
             return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(ApiResponse.created(uploadResponse, request.getRequestURI()));
+                    .body(apiResponseFactory.created(response, request.getRequestURI()));
+
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest()
-                    .body(ApiResponse.badRequest(e.getMessage(), request.getRequestURI()));
+                    .body(apiResponseFactory.badRequest(e.getMessage(), request.getRequestURI()));
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(
-                            ApiResponse.internalServerError(
+                            apiResponseFactory.internalServerError(
                                     "Upload failed: " + e.getMessage(), request.getRequestURI()));
         }
     }
@@ -63,7 +63,7 @@ public class ExamDocumentController {
         if ((studentId != null && examId != null) || (studentId == null && examId == null)) {
             return ResponseEntity.badRequest()
                     .body(
-                            ApiResponse.badRequest(
+                            apiResponseFactory.badRequest(
                                     "Provide exactly one parameter: studentId OR examId",
                                     request.getRequestURI()));
         }
@@ -73,6 +73,6 @@ public class ExamDocumentController {
                         ? examDocumentService.getDocumentsByStudentId(studentId)
                         : examDocumentService.getDocumentsByExamId(examId);
 
-        return ResponseEntity.ok(ApiResponse.success(documents, request.getRequestURI()));
+        return ResponseEntity.ok(apiResponseFactory.success(documents, request.getRequestURI()));
     }
 }

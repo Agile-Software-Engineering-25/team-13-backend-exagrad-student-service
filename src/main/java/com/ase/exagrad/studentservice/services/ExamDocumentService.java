@@ -1,13 +1,16 @@
 package com.ase.exagrad.studentservice.services;
 
 import com.ase.exagrad.studentservice.config.StorageProperties;
-import com.ase.exagrad.studentservice.dto.request.ExamDocumentRequest;
-import com.ase.exagrad.studentservice.dto.response.ExamDocumentResponse;
+import com.ase.exagrad.studentservice.dtos.request.ExamDocumentRequest;
+import com.ase.exagrad.studentservice.dtos.response.ExamDocumentResponse;
 import com.ase.exagrad.studentservice.entities.ExamDocument;
+import com.ase.exagrad.studentservice.mappers.ExamDocumentMapper;
 import com.ase.exagrad.studentservice.repositories.ExamDocumentRepository;
 
 import lombok.RequiredArgsConstructor;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,19 +24,22 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ExamDocumentService {
 
+    private static final Logger log = LoggerFactory.getLogger(ExamDocumentService.class);
     private final ExamDocumentRepository examDocumentRepository;
     private final MinioService minioService;
     private final StorageProperties storageProperties;
     private final FileValidationService fileValidationService;
+    private final ExamDocumentMapper examDocumentMapper;
 
     @Transactional
-    public ExamDocument uploadExamDocument(MultipartFile file, ExamDocumentRequest metadata)
+    public ExamDocumentResponse uploadExamDocument(MultipartFile file, ExamDocumentRequest metadata)
             throws IOException {
         // Validate file before processing
         fileValidationService.validateFile(file);
-        
+
         String bucketName = storageProperties.getExamDocumentsBucket();
-        String sanitizedFilename = fileValidationService.sanitizeFileName(file.getOriginalFilename());
+        String sanitizedFilename =
+                fileValidationService.sanitizeFileName(file.getOriginalFilename());
         String minioKey = generateMinioKey(sanitizedFilename);
 
         minioService.uploadFile(
@@ -47,7 +53,10 @@ public class ExamDocumentService {
                         .fileName(sanitizedFilename)
                         .build();
 
-        return examDocumentRepository.save(doc);
+        ExamDocument saved = examDocumentRepository.saveAndFlush(doc);
+
+        String downloadUrl = minioService.getFileUrl(bucketName, saved.getMinioKey());
+        return examDocumentMapper.toResponse(saved, downloadUrl);
     }
 
     public List<ExamDocumentResponse> getDocumentsByStudentId(String studentId) {
@@ -68,7 +77,7 @@ public class ExamDocumentService {
                         doc -> {
                             String downloadUrl =
                                     minioService.getFileUrl(bucketName, doc.getMinioKey());
-                            return ExamDocumentResponse.fromEntity(doc, downloadUrl);
+                            return examDocumentMapper.toResponse(doc, downloadUrl);
                         })
                 .toList();
     }

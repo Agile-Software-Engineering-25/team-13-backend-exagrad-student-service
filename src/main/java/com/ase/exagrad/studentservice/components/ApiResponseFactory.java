@@ -1,50 +1,39 @@
-package com.ase.exagrad.studentservice.dto.response;
+package com.ase.exagrad.studentservice.components;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.ase.exagrad.studentservice.dtos.response.ApiResponse;
+import com.ase.exagrad.studentservice.dtos.response.ErrorDetails;
+
+import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
 
-import java.time.Instant;
+@Component
+@RequiredArgsConstructor
+public class ApiResponseFactory {
 
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class ApiResponse<T> {
-    private boolean success;
-    private int statusCode;
-    private String status;
-    private String message;
-    private Instant timestamp;
-    private String endpoint;
+    private final TimeProvider timeProvider;
 
-    private T data;
-
-    private ErrorDetails error;
-
-    public static <T> ApiResponse<T> success(T data, String endpoint, HttpStatus httpStatus) {
+    public <T> ApiResponse<T> success(T data, String endpoint, HttpStatus httpStatus) {
         return ApiResponse.<T>builder()
                 .success(true)
                 .statusCode(httpStatus.value())
                 .status(httpStatus.getReasonPhrase())
                 .data(data)
-                .timestamp(Instant.now())
+                .timestamp(timeProvider.now())
                 .endpoint(endpoint)
                 .build();
     }
 
-    public static <T> ApiResponse<T> success(T data, String endpoint) {
+    public <T> ApiResponse<T> success(T data, String endpoint) {
         return success(data, endpoint, HttpStatus.OK);
     }
 
-    public static <T> ApiResponse<T> created(T data, String endpoint) {
+    public <T> ApiResponse<T> created(T data, String endpoint) {
         return success(data, endpoint, HttpStatus.CREATED);
     }
 
-    public static <T> ApiResponse<T> error(
+    public <T> ApiResponse<T> error(
             String message, String endpoint, HttpStatus httpStatus, ErrorDetails errorDetails) {
         return ApiResponse.<T>builder()
                 .success(false)
@@ -52,12 +41,12 @@ public class ApiResponse<T> {
                 .status(httpStatus.getReasonPhrase())
                 .message(message)
                 .error(errorDetails)
-                .timestamp(Instant.now())
+                .timestamp(timeProvider.now())
                 .endpoint(endpoint)
                 .build();
     }
 
-    public static <T> ApiResponse<T> badRequest(String message, String endpoint) {
+    public <T> ApiResponse<T> badRequest(String message, String endpoint) {
         return error(
                 message,
                 endpoint,
@@ -65,7 +54,7 @@ public class ApiResponse<T> {
                 ErrorDetails.builder().code("VALIDATION_ERROR").message(message).build());
     }
 
-    public static <T> ApiResponse<T> internalServerError(String message, String endpoint) {
+    public <T> ApiResponse<T> internalServerError(String message, String endpoint) {
         return error(
                 message,
                 endpoint,

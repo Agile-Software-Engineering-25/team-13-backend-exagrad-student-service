@@ -1,7 +1,5 @@
 package com.ase.exagrad.studentservice.entities;
 
-import com.ase.exagrad.studentservice.dto.response.ExamDocumentResponse;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -45,15 +43,4 @@ public class ExamDocument {
 
     @Column(nullable = false)
     private String fileName;
-
-    public static ExamDocumentResponse fromEntity(ExamDocument entity, String downloadUrl) {
-        return ExamDocumentResponse.builder()
-            .id(entity.getId())
-            .examId(entity.getExamId())
-            .studentId(entity.getStudentId())
-            .uploadDate(entity.getUploadDate())
-            .downloadUrl(downloadUrl)
-            .fileName(entity.getFileName())
-            .build();
-    }
 }

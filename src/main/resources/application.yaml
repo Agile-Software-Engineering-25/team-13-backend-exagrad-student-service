@@ -25,6 +25,7 @@ minio-connection:
   accessKey: my-access-key
   secretKey: my-secret-key
 app:
+  timezone: Europe/Berlin
   storage:
     examDocumentsBucket: student-exam-documents
     pubDocumentsBucket: student-pub-documents
