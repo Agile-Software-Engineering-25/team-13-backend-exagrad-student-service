@@ -112,17 +112,20 @@ public class FileValidationService {
         if (!startsWithSignature(header, PDF_SIGNATURE)) {
           throw new FileValidationException("File content does not match PDF format");
         }
-      } else if ("image/png".equals(contentType)) {
+      }
+      else if ("image/png".equals(contentType)) {
         if (!startsWithSignature(header, PNG_SIGNATURE)) {
           throw new FileValidationException("File content does not match PNG format");
         }
-      } else if ("image/jpeg".equals(contentType)) {
+      }
+      else if ("image/jpeg".equals(contentType)) {
         if (!startsWithSignature(header, JPEG_SIGNATURE)) {
           throw new FileValidationException("File content does not match JPEG format");
         }
       }
 
-    } catch (IOException e) {
+    }
+    catch (IOException e) {
       throw new FileValidationException("Failed to read file content for validation", e);
     }
   }
