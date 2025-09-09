@@ -1,4 +1,4 @@
-package com.ase.exagrad.studentservice.services;
+package com.ase.exagrad.studentservice.service;
 
 import java.io.IOException;
 import java.time.Year;
@@ -10,11 +10,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import com.ase.exagrad.studentservice.config.StorageProperties;
-import com.ase.exagrad.studentservice.dtos.request.ExamDocumentRequest;
-import com.ase.exagrad.studentservice.dtos.response.ExamDocumentResponse;
-import com.ase.exagrad.studentservice.entities.ExamDocument;
+import com.ase.exagrad.studentservice.dto.request.ExamDocumentRequest;
+import com.ase.exagrad.studentservice.dto.response.ExamDocumentResponse;
+import com.ase.exagrad.studentservice.entity.ExamDocument;
 import com.ase.exagrad.studentservice.mappers.ExamDocumentMapper;
-import com.ase.exagrad.studentservice.repositories.ExamDocumentRepository;
+import com.ase.exagrad.studentservice.repository.ExamDocumentRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service

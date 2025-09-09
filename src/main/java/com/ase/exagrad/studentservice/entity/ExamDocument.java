@@ -1,4 +1,4 @@
-package com.ase.exagrad.studentservice.entities;
+package com.ase.exagrad.studentservice.entity;
 
 import java.time.Instant;
 import java.util.UUID;

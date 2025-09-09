@@ -1,9 +1,9 @@
-package com.ase.exagrad.studentservice.services;
+package com.ase.exagrad.studentservice.service;
 
 import java.io.InputStream;
 import java.util.concurrent.TimeUnit;
 import org.springframework.stereotype.Service;
-import com.ase.exagrad.studentservice.exceptions.StorageException;
+import com.ase.exagrad.studentservice.exception.StorageException;
 import io.minio.BucketExistsArgs;
 import io.minio.GetPresignedObjectUrlArgs;
 import io.minio.MakeBucketArgs;

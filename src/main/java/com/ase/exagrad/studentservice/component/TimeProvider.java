@@ -1,4 +1,4 @@
-package com.ase.exagrad.studentservice.components;
+package com.ase.exagrad.studentservice.component;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;

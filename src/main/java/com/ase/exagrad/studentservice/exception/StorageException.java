@@ -1,4 +1,4 @@
-package com.ase.exagrad.studentservice.exceptions;
+package com.ase.exagrad.studentservice.exception;
 
 public class StorageException extends RuntimeException {
 

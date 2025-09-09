@@ -1,4 +1,4 @@
-package com.ase.exagrad.studentservice.dtos.response;
+package com.ase.exagrad.studentservice.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

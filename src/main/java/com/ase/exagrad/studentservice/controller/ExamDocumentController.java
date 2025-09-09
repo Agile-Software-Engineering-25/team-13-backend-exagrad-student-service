@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import com.ase.exagrad.studentservice.components.ApiResponseFactory;
-import com.ase.exagrad.studentservice.dtos.request.ExamDocumentRequest;
-import com.ase.exagrad.studentservice.dtos.response.ApiResponse;
-import com.ase.exagrad.studentservice.dtos.response.ExamDocumentResponse;
-import com.ase.exagrad.studentservice.services.ExamDocumentService;
+import com.ase.exagrad.studentservice.component.ApiResponseFactory;
+import com.ase.exagrad.studentservice.dto.request.ExamDocumentRequest;
+import com.ase.exagrad.studentservice.dto.response.ApiResponse;
+import com.ase.exagrad.studentservice.dto.response.ExamDocumentResponse;
+import com.ase.exagrad.studentservice.service.ExamDocumentService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 

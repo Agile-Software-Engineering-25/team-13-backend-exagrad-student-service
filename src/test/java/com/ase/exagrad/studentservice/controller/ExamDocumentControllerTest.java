@@ -19,11 +19,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import com.ase.exagrad.studentservice.components.ApiResponseFactory;
-import com.ase.exagrad.studentservice.dtos.request.ExamDocumentRequest;
-import com.ase.exagrad.studentservice.dtos.response.ApiResponse;
-import com.ase.exagrad.studentservice.dtos.response.ExamDocumentResponse;
-import com.ase.exagrad.studentservice.services.ExamDocumentService;
+import com.ase.exagrad.studentservice.component.ApiResponseFactory;
+import com.ase.exagrad.studentservice.dto.request.ExamDocumentRequest;
+import com.ase.exagrad.studentservice.dto.response.ApiResponse;
+import com.ase.exagrad.studentservice.dto.response.ExamDocumentResponse;
+import com.ase.exagrad.studentservice.service.ExamDocumentService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebMvcTest(ExamDocumentController.class)

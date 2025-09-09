@@ -1,4 +1,4 @@
-package com.ase.exagrad.studentservice.services;
+package com.ase.exagrad.studentservice.service;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,7 +8,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import com.ase.exagrad.studentservice.exceptions.FileValidationException;
+import com.ase.exagrad.studentservice.exception.FileValidationException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
