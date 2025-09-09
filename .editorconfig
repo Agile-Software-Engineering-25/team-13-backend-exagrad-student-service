@@ -18,7 +18,6 @@ ij_java_names_count_to_use_import_on_demand = 999
 # Import order to match Checkstyle groups: java, javax, org, com
 ij_java_imports_layout = $*, java.**, javax.**, org.**, com.**, *
 # Configure brace style to match Google Checkstyle
-ij_java_brace_style = next_line_if_wrapped
 ij_java_catch_on_new_line = true
 ij_java_finally_on_new_line = true
 ij_java_else_on_new_line = true
