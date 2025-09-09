@@ -1,4 +1,4 @@
-package com.ase.exagrad.studentservice.controllers;
+package com.ase.exagrad.studentservice.controller;
 
 import com.ase.exagrad.studentservice.components.ApiResponseFactory;
 import com.ase.exagrad.studentservice.dtos.request.ExamDocumentRequest;
@@ -60,7 +60,8 @@ public class ExamDocumentController {
             @RequestParam(required = false) String examId,
             HttpServletRequest request) {
 
-        if ((studentId != null && examId != null) || (studentId == null && examId == null)) {
+        if ((studentId != null && !studentId.isEmpty() && examId != null && !examId.isEmpty()) 
+                || ((studentId == null || studentId.isEmpty()) && (examId == null || examId.isEmpty()))) {
             return ResponseEntity.badRequest()
                     .body(
                             apiResponseFactory.badRequest(
@@ -69,7 +70,7 @@ public class ExamDocumentController {
         }
 
         List<ExamDocumentResponse> documents =
-                studentId != null
+                (studentId != null && !studentId.isEmpty())
                         ? examDocumentService.getDocumentsByStudentId(studentId)
                         : examDocumentService.getDocumentsByExamId(examId);
 
