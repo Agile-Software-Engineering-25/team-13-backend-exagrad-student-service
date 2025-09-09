@@ -1,24 +1,21 @@
 package com.ase.exagrad.studentservice.services;
 
+import java.io.IOException;
+import java.time.Year;
+import java.util.List;
+import java.util.UUID;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import com.ase.exagrad.studentservice.config.StorageProperties;
 import com.ase.exagrad.studentservice.dtos.request.ExamDocumentRequest;
 import com.ase.exagrad.studentservice.dtos.response.ExamDocumentResponse;
 import com.ase.exagrad.studentservice.entities.ExamDocument;
 import com.ase.exagrad.studentservice.mappers.ExamDocumentMapper;
 import com.ase.exagrad.studentservice.repositories.ExamDocumentRepository;
-
 import lombok.RequiredArgsConstructor;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.time.Year;
-import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -33,25 +30,25 @@ public class ExamDocumentService {
 
     @Transactional
     public ExamDocumentResponse uploadExamDocument(MultipartFile file, ExamDocumentRequest metadata)
-            throws IOException {
+        throws IOException {
         // Validate file before processing
         fileValidationService.validateFile(file);
 
         String bucketName = storageProperties.getExamDocumentsBucket();
         String sanitizedFilename =
-                fileValidationService.sanitizeFileName(file.getOriginalFilename());
+            fileValidationService.sanitizeFileName(file.getOriginalFilename());
         String minioKey = generateMinioKey(sanitizedFilename);
 
         minioService.uploadFile(
-                bucketName, minioKey, file.getInputStream(), file.getSize(), file.getContentType());
+            bucketName, minioKey, file.getInputStream(), file.getSize(), file.getContentType());
 
         ExamDocument doc =
-                ExamDocument.builder()
-                        .examId(metadata.getExamId())
-                        .studentId(metadata.getStudentId())
-                        .minioKey(minioKey)
-                        .fileName(sanitizedFilename)
-                        .build();
+            ExamDocument.builder()
+                .examId(metadata.getExamId())
+                .studentId(metadata.getStudentId())
+                .minioKey(minioKey)
+                .fileName(sanitizedFilename)
+                .build();
 
         ExamDocument saved = examDocumentRepository.saveAndFlush(doc);
 
@@ -73,13 +70,13 @@ public class ExamDocumentService {
         String bucketName = storageProperties.getExamDocumentsBucket();
 
         return documents.stream()
-                .map(
-                        doc -> {
-                            String downloadUrl =
-                                    minioService.getFileUrl(bucketName, doc.getMinioKey());
-                            return examDocumentMapper.toResponse(doc, downloadUrl);
-                        })
-                .toList();
+            .map(
+                doc -> {
+                    String downloadUrl =
+                        minioService.getFileUrl(bucketName, doc.getMinioKey());
+                    return examDocumentMapper.toResponse(doc, downloadUrl);
+                })
+            .toList();
     }
 
     private String generateMinioKey(String originalFilename) {

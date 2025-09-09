@@ -1,11 +1,9 @@
 package com.ase.exagrad.studentservice.components;
 
-import lombok.RequiredArgsConstructor;
-
-import org.springframework.stereotype.Component;
-
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import org.springframework.stereotype.Component;
+import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
