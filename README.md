@@ -12,8 +12,8 @@ modules for web, data, and testing functionalities.
 docker compose up -d
 ```
 
-- API: hhtp://localhost:9000
-- Web UI: hhtp://localhost:9001
+- API: http://localhost:9000
+- Web UI: http://localhost:9001
 - Zugang: my-acess-key / my-secret-key
 
 ## Features
