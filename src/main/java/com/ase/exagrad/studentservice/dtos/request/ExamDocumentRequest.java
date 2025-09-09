@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class ExamDocumentRequest {
-    private String examId;
-    private String studentId;
+  private String examId;
+  private String studentId;
 }

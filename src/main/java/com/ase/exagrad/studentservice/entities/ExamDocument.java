@@ -23,23 +23,23 @@ import lombok.Setter;
 @Builder
 public class ExamDocument {
 
-    @Id
-    @GeneratedValue
-    private UUID id;
+  @Id
+  @GeneratedValue
+  private UUID id;
 
-    @Column(nullable = false)
-    private String examId;
+  @Column(nullable = false)
+  private String examId;
 
-    @Column(nullable = false)
-    private String studentId;
+  @Column(nullable = false)
+  private String studentId;
 
-    @CreationTimestamp
-    @Column(nullable = false, updatable = false)
-    private Instant uploadDate;
+  @CreationTimestamp
+  @Column(nullable = false, updatable = false)
+  private Instant uploadDate;
 
-    @Column(nullable = false, unique = true)
-    private String minioKey;
+  @Column(nullable = false, unique = true)
+  private String minioKey;
 
-    @Column(nullable = false)
-    private String fileName;
+  @Column(nullable = false)
+  private String fileName;
 }

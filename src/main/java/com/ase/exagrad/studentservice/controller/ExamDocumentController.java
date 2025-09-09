@@ -24,52 +24,52 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ExamDocumentController {
 
-    private final ExamDocumentService examDocumentService;
-    private final ApiResponseFactory apiResponseFactory;
+  private final ExamDocumentService examDocumentService;
+  private final ApiResponseFactory apiResponseFactory;
 
-    @PostMapping(consumes = {"multipart/form-data"})
-    public ResponseEntity<ApiResponse<ExamDocumentResponse>> uploadExamDocument(
-        @RequestPart("file") MultipartFile file,
-        @RequestPart("metadata") ExamDocumentRequest metadata,
-        HttpServletRequest request) {
+  @PostMapping(consumes = {"multipart/form-data"})
+  public ResponseEntity<ApiResponse<ExamDocumentResponse>> uploadExamDocument(
+      @RequestPart("file") MultipartFile file,
+      @RequestPart("metadata") ExamDocumentRequest metadata,
+      HttpServletRequest request) {
 
-        try {
-            ExamDocumentResponse response = examDocumentService.uploadExamDocument(file, metadata);
+    try {
+      ExamDocumentResponse response = examDocumentService.uploadExamDocument(file, metadata);
 
-            return ResponseEntity.status(HttpStatus.CREATED)
-                .body(apiResponseFactory.created(response, request.getRequestURI()));
+      return ResponseEntity.status(HttpStatus.CREATED)
+          .body(apiResponseFactory.created(response, request.getRequestURI()));
 
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest()
-                .body(apiResponseFactory.badRequest(e.getMessage(), request.getRequestURI()));
-        } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(
-                    apiResponseFactory.internalServerError(
-                        "Upload failed: " + e.getMessage(), request.getRequestURI()));
-        }
+    } catch (IllegalArgumentException e) {
+      return ResponseEntity.badRequest()
+          .body(apiResponseFactory.badRequest(e.getMessage(), request.getRequestURI()));
+    } catch (IOException e) {
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+          .body(
+              apiResponseFactory.internalServerError(
+                  "Upload failed: " + e.getMessage(), request.getRequestURI()));
+    }
+  }
+
+  @GetMapping
+  public ResponseEntity<ApiResponse<List<ExamDocumentResponse>>> getDocuments(
+      @RequestParam(required = false) String studentId,
+      @RequestParam(required = false) String examId,
+      HttpServletRequest request) {
+
+    if ((studentId!=null && !studentId.isEmpty() && examId!=null && !examId.isEmpty())
+        || ((studentId==null || studentId.isEmpty()) && (examId==null || examId.isEmpty()))) {
+      return ResponseEntity.badRequest()
+          .body(
+              apiResponseFactory.badRequest(
+                  "Provide exactly one parameter: studentId OR examId",
+                  request.getRequestURI()));
     }
 
-    @GetMapping
-    public ResponseEntity<ApiResponse<List<ExamDocumentResponse>>> getDocuments(
-        @RequestParam(required = false) String studentId,
-        @RequestParam(required = false) String examId,
-        HttpServletRequest request) {
+    List<ExamDocumentResponse> documents =
+        (studentId!=null && !studentId.isEmpty())
+            ? examDocumentService.getDocumentsByStudentId(studentId)
+            :examDocumentService.getDocumentsByExamId(examId);
 
-        if ((studentId!=null && !studentId.isEmpty() && examId!=null && !examId.isEmpty())
-            || ((studentId==null || studentId.isEmpty()) && (examId==null || examId.isEmpty()))) {
-            return ResponseEntity.badRequest()
-                .body(
-                    apiResponseFactory.badRequest(
-                        "Provide exactly one parameter: studentId OR examId",
-                        request.getRequestURI()));
-        }
-
-        List<ExamDocumentResponse> documents =
-            (studentId!=null && !studentId.isEmpty())
-                ? examDocumentService.getDocumentsByStudentId(studentId)
-                :examDocumentService.getDocumentsByExamId(examId);
-
-        return ResponseEntity.ok(apiResponseFactory.success(documents, request.getRequestURI()));
-    }
+    return ResponseEntity.ok(apiResponseFactory.success(documents, request.getRequestURI()));
+  }
 }

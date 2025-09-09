@@ -8,7 +8,7 @@ import lombok.Data;
 @Component
 @ConfigurationProperties(prefix = "minio-connection")
 public class MinioConnectionProperties {
-    private String endpoint;
-    private String accessKey;
-    private String secretKey;
+  private String endpoint;
+  private String accessKey;
+  private String secretKey;
 }

@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.ase.exagrad.studentservice.entities.ExamDocument;
 
 public interface ExamDocumentRepository extends JpaRepository<ExamDocument, UUID> {
-    List<ExamDocument> findByStudentId(String studentId);
+  List<ExamDocument> findByStudentId(String studentId);
 
-    List<ExamDocument> findByExamId(String examId);
+  List<ExamDocument> findByExamId(String examId);
 }

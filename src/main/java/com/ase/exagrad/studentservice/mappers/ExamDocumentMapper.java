@@ -10,16 +10,16 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ExamDocumentMapper {
 
-    private final ZoneId appZoneId;
+  private final ZoneId appZoneId;
 
-    public ExamDocumentResponse toResponse(ExamDocument entity, String downloadUrl) {
-        return ExamDocumentResponse.builder()
-            .id(entity.getId())
-            .examId(entity.getExamId())
-            .studentId(entity.getStudentId())
-            .uploadDate(entity.getUploadDate().atZone(appZoneId))
-            .downloadUrl(downloadUrl)
-            .fileName(entity.getFileName())
-            .build();
-    }
+  public ExamDocumentResponse toResponse(ExamDocument entity, String downloadUrl) {
+    return ExamDocumentResponse.builder()
+        .id(entity.getId())
+        .examId(entity.getExamId())
+        .studentId(entity.getStudentId())
+        .uploadDate(entity.getUploadDate().atZone(appZoneId))
+        .downloadUrl(downloadUrl)
+        .fileName(entity.getFileName())
+        .build();
+  }
 }

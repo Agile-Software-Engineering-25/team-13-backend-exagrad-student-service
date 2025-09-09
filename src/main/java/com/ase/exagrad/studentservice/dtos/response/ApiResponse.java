@@ -11,12 +11,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ApiResponse<T> {
-    private boolean success;
-    private int statusCode;
-    private String status;
-    private String message;
-    private ZonedDateTime timestamp;
-    private String endpoint;
-    private T data;
-    private ErrorDetails error;
+  private boolean success;
+  private int statusCode;
+  private String status;
+  private String message;
+  private ZonedDateTime timestamp;
+  private String endpoint;
+  private T data;
+  private ErrorDetails error;
 }

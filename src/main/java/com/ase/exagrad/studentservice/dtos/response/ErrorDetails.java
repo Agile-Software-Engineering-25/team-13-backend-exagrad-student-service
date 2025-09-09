@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ErrorDetails {
-    private String code;
-    private String message;
-    private String details;
-    private String field;
+  private String code;
+  private String message;
+  private String details;
+  private String field;
 }

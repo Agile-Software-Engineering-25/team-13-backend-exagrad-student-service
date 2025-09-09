@@ -29,227 +29,227 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @WebMvcTest(ExamDocumentController.class)
 class ExamDocumentControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+  @Autowired
+  private MockMvc mockMvc;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+  @Autowired
+  private ObjectMapper objectMapper;
 
-    @MockitoBean
-    private ExamDocumentService examDocumentService;
+  @MockitoBean
+  private ExamDocumentService examDocumentService;
 
-    @MockitoBean
-    private ApiResponseFactory apiResponseFactory;
+  @MockitoBean
+  private ApiResponseFactory apiResponseFactory;
 
-    private MockMultipartFile mockFile;
-    private ExamDocumentRequest examDocumentRequest;
-    private ExamDocumentResponse examDocumentResponse;
-    private UUID testId;
+  private MockMultipartFile mockFile;
+  private ExamDocumentRequest examDocumentRequest;
+  private ExamDocumentResponse examDocumentResponse;
+  private UUID testId;
 
-    @BeforeEach
-    void setUp() {
-        testId = UUID.randomUUID();
+  @BeforeEach
+  void setUp() {
+    testId = UUID.randomUUID();
 
-        // Create test file
-        mockFile =
-            new MockMultipartFile(
-                "file", "test.pdf", "application/pdf", "Test PDF content".getBytes());
+    // Create test file
+    mockFile =
+        new MockMultipartFile(
+            "file", "test.pdf", "application/pdf", "Test PDF content".getBytes());
 
-        // Create test request
-        examDocumentRequest = new ExamDocumentRequest();
-        examDocumentRequest.setExamId("EXAM123");
-        examDocumentRequest.setStudentId("STUDENT123");
+    // Create test request
+    examDocumentRequest = new ExamDocumentRequest();
+    examDocumentRequest.setExamId("EXAM123");
+    examDocumentRequest.setStudentId("STUDENT123");
 
-        // Create test response
-        examDocumentResponse =
-            ExamDocumentResponse.builder()
-                .id(testId)
-                .examId("EXAM123")
-                .studentId("STUDENT123")
-                .fileName("test.pdf")
-                .uploadDate(Instant.now().atZone(ZoneId.systemDefault()))
-                .downloadUrl("http://example.com/download/test.pdf")
-                .build();
-    }
+    // Create test response
+    examDocumentResponse =
+        ExamDocumentResponse.builder()
+            .id(testId)
+            .examId("EXAM123")
+            .studentId("STUDENT123")
+            .fileName("test.pdf")
+            .uploadDate(Instant.now().atZone(ZoneId.systemDefault()))
+            .downloadUrl("http://example.com/download/test.pdf")
+            .build();
+  }
 
-    @Test
-    void uploadExamDocument_ValidInput_ReturnsCreatedStatus() throws Exception {
-        // Arrange
-        ApiResponse<ExamDocumentResponse> successResponse =
-            createApiResponse(examDocumentResponse, "Document uploaded successfully");
+  @Test
+  void uploadExamDocument_ValidInput_ReturnsCreatedStatus() throws Exception {
+    // Arrange
+    ApiResponse<ExamDocumentResponse> successResponse =
+        createApiResponse(examDocumentResponse, "Document uploaded successfully");
 
-        when(examDocumentService.uploadExamDocument(any(), any())).thenReturn(examDocumentResponse);
-        when(apiResponseFactory.created(
-            any(ExamDocumentResponse.class), any(String.class)))
-            .thenReturn(successResponse);
+    when(examDocumentService.uploadExamDocument(any(), any())).thenReturn(examDocumentResponse);
+    when(apiResponseFactory.created(
+        any(ExamDocumentResponse.class), any(String.class)))
+        .thenReturn(successResponse);
 
-        // Act & Assert
-        mockMvc.perform(
-                multipart("/documents/exams")
-                    .file(mockFile)
-                    .file(createJsonFile("metadata", examDocumentRequest)))
-            .andExpect(status().isCreated())
-            .andExpect(jsonPath("$.data.id").value(testId.toString()))
-            .andExpect(jsonPath("$.data.examId").value("EXAM123"))
-            .andExpect(jsonPath("$.data.studentId").value("STUDENT123"))
-            .andExpect(jsonPath("$.data.fileName").value("test.pdf"))
-            .andExpect(jsonPath("$.data.downloadUrl").exists());
-    }
+    // Act & Assert
+    mockMvc.perform(
+            multipart("/documents/exams")
+                .file(mockFile)
+                .file(createJsonFile("metadata", examDocumentRequest)))
+        .andExpect(status().isCreated())
+        .andExpect(jsonPath("$.data.id").value(testId.toString()))
+        .andExpect(jsonPath("$.data.examId").value("EXAM123"))
+        .andExpect(jsonPath("$.data.studentId").value("STUDENT123"))
+        .andExpect(jsonPath("$.data.fileName").value("test.pdf"))
+        .andExpect(jsonPath("$.data.downloadUrl").exists());
+  }
 
-    @Test
-    void uploadExamDocument_ServiceThrowsIllegalArgumentException_ReturnsBadRequest()
-        throws Exception {
-        // Arrange
-        String errorMessage = "Invalid file format";
-        ApiResponse<ExamDocumentResponse> errorResponse = createErrorApiResponse(errorMessage);
+  @Test
+  void uploadExamDocument_ServiceThrowsIllegalArgumentException_ReturnsBadRequest()
+      throws Exception {
+    // Arrange
+    String errorMessage = "Invalid file format";
+    ApiResponse<ExamDocumentResponse> errorResponse = createErrorApiResponse(errorMessage);
 
-        when(examDocumentService.uploadExamDocument(any(), any()))
-            .thenThrow(new IllegalArgumentException(errorMessage));
-        when(apiResponseFactory.<ExamDocumentResponse>badRequest(
-            eq(errorMessage), any(String.class)))
-            .thenReturn(errorResponse);
+    when(examDocumentService.uploadExamDocument(any(), any()))
+        .thenThrow(new IllegalArgumentException(errorMessage));
+    when(apiResponseFactory.<ExamDocumentResponse>badRequest(
+        eq(errorMessage), any(String.class)))
+        .thenReturn(errorResponse);
 
-        // Act & Assert
-        mockMvc.perform(
-                multipart("/documents/exams")
-                    .file(mockFile)
-                    .file(createJsonFile("metadata", examDocumentRequest)))
-            .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.message").value(errorMessage));
-    }
+    // Act & Assert
+    mockMvc.perform(
+            multipart("/documents/exams")
+                .file(mockFile)
+                .file(createJsonFile("metadata", examDocumentRequest)))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.message").value(errorMessage));
+  }
 
-    @Test
-    void uploadExamDocument_ServiceThrowsIOException_ReturnsInternalServerError() throws Exception {
-        // Arrange
-        String errorMessage = "Upload failed: File processing error";
-        ApiResponse<ExamDocumentResponse> errorResponse = createErrorApiResponse(errorMessage);
+  @Test
+  void uploadExamDocument_ServiceThrowsIOException_ReturnsInternalServerError() throws Exception {
+    // Arrange
+    String errorMessage = "Upload failed: File processing error";
+    ApiResponse<ExamDocumentResponse> errorResponse = createErrorApiResponse(errorMessage);
 
-        when(examDocumentService.uploadExamDocument(any(), any()))
-            .thenThrow(new IOException("File processing error"));
-        when(apiResponseFactory.<ExamDocumentResponse>internalServerError(
-            eq(errorMessage), any(String.class)))
-            .thenReturn(errorResponse);
+    when(examDocumentService.uploadExamDocument(any(), any()))
+        .thenThrow(new IOException("File processing error"));
+    when(apiResponseFactory.<ExamDocumentResponse>internalServerError(
+        eq(errorMessage), any(String.class)))
+        .thenReturn(errorResponse);
 
-        // Act & Assert
-        mockMvc.perform(
-                multipart("/documents/exams")
-                    .file(mockFile)
-                    .file(createJsonFile("metadata", examDocumentRequest)))
-            .andExpect(status().isInternalServerError())
-            .andExpect(jsonPath("$.message").value(errorMessage));
-    }
+    // Act & Assert
+    mockMvc.perform(
+            multipart("/documents/exams")
+                .file(mockFile)
+                .file(createJsonFile("metadata", examDocumentRequest)))
+        .andExpect(status().isInternalServerError())
+        .andExpect(jsonPath("$.message").value(errorMessage));
+  }
 
-    @Test
-    void getDocuments_WithStudentId_ReturnsDocumentsList() throws Exception {
-        // Arrange
-        List<ExamDocumentResponse> documents = List.of(examDocumentResponse);
-        ApiResponse<List<ExamDocumentResponse>> successResponse =
-            createApiResponse(documents, "Documents retrieved successfully");
+  @Test
+  void getDocuments_WithStudentId_ReturnsDocumentsList() throws Exception {
+    // Arrange
+    List<ExamDocumentResponse> documents = List.of(examDocumentResponse);
+    ApiResponse<List<ExamDocumentResponse>> successResponse =
+        createApiResponse(documents, "Documents retrieved successfully");
 
-        when(examDocumentService.getDocumentsByStudentId("STUDENT123")).thenReturn(documents);
-        when(apiResponseFactory.<List<ExamDocumentResponse>>success(
-            any(List.class), any(String.class)))
-            .thenReturn(successResponse);
+    when(examDocumentService.getDocumentsByStudentId("STUDENT123")).thenReturn(documents);
+    when(apiResponseFactory.<List<ExamDocumentResponse>>success(
+        any(List.class), any(String.class)))
+        .thenReturn(successResponse);
 
-        // Act & Assert
-        mockMvc.perform(get("/documents/exams").param("studentId", "STUDENT123"))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.data").isArray())
-            .andExpect(jsonPath("$.data[0].id").value(testId.toString()))
-            .andExpect(jsonPath("$.data[0].studentId").value("STUDENT123"));
-    }
+    // Act & Assert
+    mockMvc.perform(get("/documents/exams").param("studentId", "STUDENT123"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.data").isArray())
+        .andExpect(jsonPath("$.data[0].id").value(testId.toString()))
+        .andExpect(jsonPath("$.data[0].studentId").value("STUDENT123"));
+  }
 
-    @Test
-    void getDocuments_WithExamId_ReturnsDocumentsList() throws Exception {
-        // Arrange
-        List<ExamDocumentResponse> documents = List.of(examDocumentResponse);
-        ApiResponse<List<ExamDocumentResponse>> successResponse =
-            createApiResponse(documents, "Documents retrieved successfully");
+  @Test
+  void getDocuments_WithExamId_ReturnsDocumentsList() throws Exception {
+    // Arrange
+    List<ExamDocumentResponse> documents = List.of(examDocumentResponse);
+    ApiResponse<List<ExamDocumentResponse>> successResponse =
+        createApiResponse(documents, "Documents retrieved successfully");
 
-        when(examDocumentService.getDocumentsByExamId("EXAM123")).thenReturn(documents);
-        when(apiResponseFactory.<List<ExamDocumentResponse>>success(
-            any(List.class), any(String.class)))
-            .thenReturn(successResponse);
+    when(examDocumentService.getDocumentsByExamId("EXAM123")).thenReturn(documents);
+    when(apiResponseFactory.<List<ExamDocumentResponse>>success(
+        any(List.class), any(String.class)))
+        .thenReturn(successResponse);
 
-        // Act & Assert
-        mockMvc.perform(get("/documents/exams").param("examId", "EXAM123"))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.data").isArray())
-            .andExpect(jsonPath("$.data[0].id").value(testId.toString()))
-            .andExpect(jsonPath("$.data[0].examId").value("EXAM123"));
-    }
+    // Act & Assert
+    mockMvc.perform(get("/documents/exams").param("examId", "EXAM123"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.data").isArray())
+        .andExpect(jsonPath("$.data[0].id").value(testId.toString()))
+        .andExpect(jsonPath("$.data[0].examId").value("EXAM123"));
+  }
 
-    @Test
-    void getDocuments_NoParameters_ReturnsBadRequest() throws Exception {
-        // Arrange
-        String errorMessage = "Provide exactly one parameter: studentId OR examId";
-        ApiResponse<List<ExamDocumentResponse>> errorResponse =
-            createErrorApiResponse(errorMessage);
+  @Test
+  void getDocuments_NoParameters_ReturnsBadRequest() throws Exception {
+    // Arrange
+    String errorMessage = "Provide exactly one parameter: studentId OR examId";
+    ApiResponse<List<ExamDocumentResponse>> errorResponse =
+        createErrorApiResponse(errorMessage);
 
-        when(apiResponseFactory.<List<ExamDocumentResponse>>badRequest(
-            eq(errorMessage), any(String.class)))
-            .thenReturn(errorResponse);
+    when(apiResponseFactory.<List<ExamDocumentResponse>>badRequest(
+        eq(errorMessage), any(String.class)))
+        .thenReturn(errorResponse);
 
-        // Act & Assert
-        mockMvc.perform(get("/documents/exams"))
-            .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.message").value(errorMessage));
-    }
+    // Act & Assert
+    mockMvc.perform(get("/documents/exams"))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.message").value(errorMessage));
+  }
 
-    @Test
-    void getDocuments_BothParameters_ReturnsBadRequest() throws Exception {
-        // Arrange
-        String errorMessage = "Provide exactly one parameter: studentId OR examId";
-        ApiResponse<List<ExamDocumentResponse>> errorResponse =
-            createErrorApiResponse(errorMessage);
+  @Test
+  void getDocuments_BothParameters_ReturnsBadRequest() throws Exception {
+    // Arrange
+    String errorMessage = "Provide exactly one parameter: studentId OR examId";
+    ApiResponse<List<ExamDocumentResponse>> errorResponse =
+        createErrorApiResponse(errorMessage);
 
-        when(apiResponseFactory.<List<ExamDocumentResponse>>badRequest(
-            eq(errorMessage), any(String.class)))
-            .thenReturn(errorResponse);
+    when(apiResponseFactory.<List<ExamDocumentResponse>>badRequest(
+        eq(errorMessage), any(String.class)))
+        .thenReturn(errorResponse);
 
-        // Act & Assert
-        mockMvc.perform(
-                get("/documents/exams")
-                    .param("studentId", "STUDENT123")
-                    .param("examId", "EXAM123"))
-            .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.message").value(errorMessage));
-    }
+    // Act & Assert
+    mockMvc.perform(
+            get("/documents/exams")
+                .param("studentId", "STUDENT123")
+                .param("examId", "EXAM123"))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.message").value(errorMessage));
+  }
 
-    @Test
-    void getDocuments_EmptyStudentId_ReturnsBadRequest() throws Exception {
-        // Arrange
-        String errorMessage = "Provide exactly one parameter: studentId OR examId";
-        ApiResponse<List<ExamDocumentResponse>> errorResponse =
-            createErrorApiResponse(errorMessage);
+  @Test
+  void getDocuments_EmptyStudentId_ReturnsBadRequest() throws Exception {
+    // Arrange
+    String errorMessage = "Provide exactly one parameter: studentId OR examId";
+    ApiResponse<List<ExamDocumentResponse>> errorResponse =
+        createErrorApiResponse(errorMessage);
 
-        when(apiResponseFactory.<List<ExamDocumentResponse>>badRequest(
-            eq(errorMessage), any(String.class)))
-            .thenReturn(errorResponse);
+    when(apiResponseFactory.<List<ExamDocumentResponse>>badRequest(
+        eq(errorMessage), any(String.class)))
+        .thenReturn(errorResponse);
 
-        // Act & Assert
-        mockMvc.perform(get("/documents/exams").param("studentId", ""))
-            .andExpect(status().isBadRequest());
-    }
+    // Act & Assert
+    mockMvc.perform(get("/documents/exams").param("studentId", ""))
+        .andExpect(status().isBadRequest());
+  }
 
-    // Helper methods
-    private MockMultipartFile createJsonFile(String name, Object content) throws Exception {
-        return new MockMultipartFile(
-            name, "", "application/json", objectMapper.writeValueAsBytes(content));
-    }
+  // Helper methods
+  private MockMultipartFile createJsonFile(String name, Object content) throws Exception {
+    return new MockMultipartFile(
+        name, "", "application/json", objectMapper.writeValueAsBytes(content));
+  }
 
-    private <T> ApiResponse<T> createApiResponse(T data, String message) {
-        ApiResponse<T> response = new ApiResponse<>();
-        response.setData(data);
-        response.setMessage(message);
-        response.setEndpoint("/documents/exams");
-        return response;
-    }
+  private <T> ApiResponse<T> createApiResponse(T data, String message) {
+    ApiResponse<T> response = new ApiResponse<>();
+    response.setData(data);
+    response.setMessage(message);
+    response.setEndpoint("/documents/exams");
+    return response;
+  }
 
-    private <T> ApiResponse<T> createErrorApiResponse(String message) {
-        ApiResponse<T> response = new ApiResponse<>();
-        response.setMessage(message);
-        response.setEndpoint("/documents/exams");
-        return response;
-    }
+  private <T> ApiResponse<T> createErrorApiResponse(String message) {
+    ApiResponse<T> response = new ApiResponse<>();
+    response.setMessage(message);
+    response.setEndpoint("/documents/exams");
+    return response;
+  }
 }

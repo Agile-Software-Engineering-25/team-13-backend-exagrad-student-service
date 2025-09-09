@@ -1,8 +1,10 @@
 # Exagrad Student Service
 
-ExaGrad Student Service is a Spring Boot–based application designed to manage student-related
+ExaGrad Student Service is a Spring Boot–based application designed to manage
+student-related
 operations at SAU
-in connection with exams and grades. It leverages modern Java (Java 21) and integrates with various
+in connection with exams and grades. It leverages modern Java (Java 21) and
+integrates with various
 Spring Boot
 modules for web, data, and testing functionalities.
 
@@ -64,7 +66,8 @@ mvn test
 
 ## Code Style & Linting
 
-This project uses Checkstyle (CLI jar) and EditorConfig to enforce a consistent Java code style.
+This project uses Checkstyle (CLI jar) and EditorConfig to enforce a consistent
+Java code style.
 
 - How to run locally:
     - Using the bundled/dl jar:
@@ -82,7 +85,8 @@ This project uses Checkstyle (CLI jar) and EditorConfig to enforce a consistent 
           ```
 
 - IDE auto-formatting:
-    - `.editorconfig` sets 2‑space indentation for `*.java` and YAML, trims trailing whitespace, and
+    - `.editorconfig` sets 2‑space indentation for `*.java` and YAML, trims
+      trailing whitespace, and
       enforces final newline.
     - IntelliJ import layout is aligned with our import groups.
 
@@ -120,9 +124,11 @@ We run Checkstyle in CI on every push and on PRs to `main`.
 
 - Workflow: `.github/workflows/checkstyle.yml`
     - Sets up Temurin JDK 21
-    - Uses `checkstyle-11.0.0-all.jar` (downloaded if not in repo) or `checkstyle.jar` if present
+    - Uses `checkstyle-11.0.0-all.jar` (downloaded if not in repo)
+      or `checkstyle.jar` if present
     - Runs Checkstyle against `src/main/java` and `src/test/java`
-    - Fails the job on violations and uploads `target/checkstyle-report.xml` as an artifact
+    - Fails the job on violations and uploads `target/checkstyle-report.xml` as
+      an artifact
 
 - Blocking PRs on failures:
     - In GitHub repo settings → Branches → Protect `main`
@@ -133,12 +139,14 @@ We run Checkstyle in CI on every push and on PRs to `main`.
 
 The project uses the following key dependencies:
 
-- `spring-boot-starter-web`: For building web applications, including RESTful services.
+- `spring-boot-starter-web`: For building web applications, including RESTful
+  services.
 - `spring-boot-starter-data-jpa`: For integrating with JPA and databases.
 - `spring-boot-starter-test`: For testing support, including JUnit 5.
 - `h2`: An in-memory database for development and testing purposes.
 - `lombok`: For reducing boilerplate code in Java classes.
 - `spring-boot-starter-validation`: For validating user input.
-- `spring-boot-starter-security`: For securing the application with basic authentication.
+- `spring-boot-starter-security`: For securing the application with basic
+  authentication.
 - `springdoc-openapi-ui`: For generating OpenAPI documentation and Swagger UI.
 - `spring-boot-starter-actuator`: For monitoring and managing the application.

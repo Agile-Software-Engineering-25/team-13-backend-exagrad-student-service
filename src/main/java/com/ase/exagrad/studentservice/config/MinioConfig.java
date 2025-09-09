@@ -9,15 +9,15 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MinioConfig {
 
-    private final MinioConnectionProperties minioConnectionProperties;
+  private final MinioConnectionProperties minioConnectionProperties;
 
-    @Bean
-    public MinioClient minioClient() {
-        return MinioClient.builder()
-            .endpoint(minioConnectionProperties.getEndpoint())
-            .credentials(
-                minioConnectionProperties.getAccessKey(),
-                minioConnectionProperties.getSecretKey())
-            .build();
-    }
+  @Bean
+  public MinioClient minioClient() {
+    return MinioClient.builder()
+        .endpoint(minioConnectionProperties.getEndpoint())
+        .credentials(
+            minioConnectionProperties.getAccessKey(),
+            minioConnectionProperties.getSecretKey())
+        .build();
+  }
 }

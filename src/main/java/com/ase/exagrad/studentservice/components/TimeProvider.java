@@ -9,9 +9,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class TimeProvider {
 
-    private final ZoneId appZoneId;
+  private final ZoneId appZoneId;
 
-    public ZonedDateTime now() {
-        return ZonedDateTime.now(appZoneId);
-    }
+  public ZonedDateTime now() {
+    return ZonedDateTime.now(appZoneId);
+  }
 }
