@@ -20,3 +20,4 @@ ij_java_imports_layout = $*, java.**, javax.**, org.**, com.**, *
 
 [*.{yml,yaml}]
 indent_size = 2
+c
