@@ -39,10 +39,12 @@ public class ExamDocumentController {
       return ResponseEntity.status(HttpStatus.CREATED)
           .body(apiResponseFactory.created(response, request.getRequestURI()));
 
-    } catch (IllegalArgumentException e) {
+    }
+    catch (IllegalArgumentException e) {
       return ResponseEntity.badRequest()
           .body(apiResponseFactory.badRequest(e.getMessage(), request.getRequestURI()));
-    } catch (IOException e) {
+    }
+    catch (IOException e) {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
           .body(
               apiResponseFactory.internalServerError(
