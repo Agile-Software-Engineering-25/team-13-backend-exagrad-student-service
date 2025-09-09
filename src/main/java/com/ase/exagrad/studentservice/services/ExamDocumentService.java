@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ExamDocumentService {
 
-  private static final Logger log = LoggerFactory.getLogger(ExamDocumentService.class);
+  private static final Logger LOG = LoggerFactory.getLogger(ExamDocumentService.class);
   private final ExamDocumentRepository examDocumentRepository;
   private final MinioService minioService;
   private final StorageProperties storageProperties;

@@ -28,7 +28,9 @@ public class FileValidationService {
   private long maxFileSize;
 
   @Value(
-      "${app.file.allowed-types:application/pdf,image/jpeg,image/png,image/gif,text/plain,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document}")
+      "${app.file.allowed-types:application/pdf,image/jpeg,image/png,"
+          + "image/gif,text/plain,application/msword,"
+          + "application/vnd.openxmlformats-officedocument.wordprocessingml.document}")
   private String allowedTypesConfig;
 
   public void validateFile(MultipartFile file) {
@@ -63,8 +65,10 @@ public class FileValidationService {
     }
 
     // Filename length check
-    if (fileName.length() > 255) {
-      throw new FileValidationException("File name is too long (max 255 characters)");
+    final int maxFilenameLength = 255;
+    if (fileName.length() > maxFilenameLength) {
+      throw new FileValidationException(
+          "File name is too long (max " + maxFilenameLength + " characters)");
     }
   }
 
@@ -93,10 +97,12 @@ public class FileValidationService {
 
   private void validateFileContent(MultipartFile file) {
     try (InputStream inputStream = file.getInputStream()) {
-      byte[] header = new byte[10];
+      final int headerSize = 10;
+      byte[] header = new byte[headerSize];
       int bytesRead = inputStream.read(header);
 
-      if (bytesRead < 4) {
+      final int minBytesRequired = 4;
+      if (bytesRead < minBytesRequired) {
         throw new FileValidationException("File content appears to be corrupted");
       }
 

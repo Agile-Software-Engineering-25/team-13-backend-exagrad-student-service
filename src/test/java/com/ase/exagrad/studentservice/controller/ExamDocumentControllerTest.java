@@ -73,7 +73,7 @@ class ExamDocumentControllerTest {
   }
 
   @Test
-  void uploadExamDocument_ValidInput_ReturnsCreatedStatus() throws Exception {
+  void uploadExamDocumentValidInputReturnsCreatedStatus() throws Exception {
     // Arrange
     ApiResponse<ExamDocumentResponse> successResponse =
         createApiResponse(examDocumentResponse, "Document uploaded successfully");
@@ -97,7 +97,7 @@ class ExamDocumentControllerTest {
   }
 
   @Test
-  void uploadExamDocument_ServiceThrowsIllegalArgumentException_ReturnsBadRequest()
+  void uploadExamDocumentServiceThrowsIllegalArgumentExceptionReturnsBadRequest()
       throws Exception {
     // Arrange
     String errorMessage = "Invalid file format";
@@ -119,7 +119,7 @@ class ExamDocumentControllerTest {
   }
 
   @Test
-  void uploadExamDocument_ServiceThrowsIOException_ReturnsInternalServerError() throws Exception {
+  void uploadExamDocumentServiceThrowsIOExceptionReturnsInternalServerError() throws Exception {
     // Arrange
     String errorMessage = "Upload failed: File processing error";
     ApiResponse<ExamDocumentResponse> errorResponse = createErrorApiResponse(errorMessage);
@@ -140,7 +140,7 @@ class ExamDocumentControllerTest {
   }
 
   @Test
-  void getDocuments_WithStudentId_ReturnsDocumentsList() throws Exception {
+  void getDocumentsWithStudentIdReturnsDocumentsList() throws Exception {
     // Arrange
     List<ExamDocumentResponse> documents = List.of(examDocumentResponse);
     ApiResponse<List<ExamDocumentResponse>> successResponse =
@@ -160,7 +160,7 @@ class ExamDocumentControllerTest {
   }
 
   @Test
-  void getDocuments_WithExamId_ReturnsDocumentsList() throws Exception {
+  void getDocumentsWithExamIdReturnsDocumentsList() throws Exception {
     // Arrange
     List<ExamDocumentResponse> documents = List.of(examDocumentResponse);
     ApiResponse<List<ExamDocumentResponse>> successResponse =
@@ -180,7 +180,7 @@ class ExamDocumentControllerTest {
   }
 
   @Test
-  void getDocuments_NoParameters_ReturnsBadRequest() throws Exception {
+  void getDocumentsNoParametersReturnsBadRequest() throws Exception {
     // Arrange
     String errorMessage = "Provide exactly one parameter: studentId OR examId";
     ApiResponse<List<ExamDocumentResponse>> errorResponse =
@@ -197,7 +197,7 @@ class ExamDocumentControllerTest {
   }
 
   @Test
-  void getDocuments_BothParameters_ReturnsBadRequest() throws Exception {
+  void getDocumentsBothParametersReturnsBadRequest() throws Exception {
     // Arrange
     String errorMessage = "Provide exactly one parameter: studentId OR examId";
     ApiResponse<List<ExamDocumentResponse>> errorResponse =
@@ -217,7 +217,7 @@ class ExamDocumentControllerTest {
   }
 
   @Test
-  void getDocuments_EmptyStudentId_ReturnsBadRequest() throws Exception {
+  void getDocumentsEmptyStudentIdReturnsBadRequest() throws Exception {
     // Arrange
     String errorMessage = "Provide exactly one parameter: studentId OR examId";
     ApiResponse<List<ExamDocumentResponse>> errorResponse =
