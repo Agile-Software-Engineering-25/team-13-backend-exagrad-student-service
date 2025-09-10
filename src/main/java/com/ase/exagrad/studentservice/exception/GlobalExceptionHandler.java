@@ -2,6 +2,7 @@ package com.ase.exagrad.studentservice.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.unit.DataSize;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
@@ -65,7 +66,7 @@ public class GlobalExceptionHandler {
   public ResponseEntity<ApiResponse<Void>> handleMaxUploadSize(
       MaxUploadSizeExceededException ex, HttpServletRequest request) {
 
-    long maxMB = fileProperties.getMaxSize() / (1024 * 1024);
+    long maxMB = DataSize.ofBytes(fileProperties.getMaxSize()).toMegabytes();
 
     ErrorDetails error = ErrorDetails.builder()
         .code("FILE_SIZE_EXCEEDED")
