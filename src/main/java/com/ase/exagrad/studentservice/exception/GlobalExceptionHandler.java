@@ -1,5 +1,7 @@
 package com.ase.exagrad.studentservice.exception;
 
+import com.ase.exagrad.studentservice.config.FileProperties;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -13,12 +15,10 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestControllerAdvice
+@RequiredArgsConstructor
 public class GlobalExceptionHandler {
   private final ApiResponseFactory apiResponseFactory;
-
-  public GlobalExceptionHandler(ApiResponseFactory apiResponseFactory) {
-    this.apiResponseFactory = apiResponseFactory;
-  }
+  private final FileProperties fileProperties;
 
   @ExceptionHandler(FileValidationException.class)
   public ResponseEntity<ApiResponse<Void>> handleFileValidation(
@@ -64,21 +64,20 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(MaxUploadSizeExceededException.class)
   public ResponseEntity<ApiResponse<Void>> handleMaxUploadSize(
       MaxUploadSizeExceededException ex, HttpServletRequest request) {
-    log.warn("File size limit exceeded: {}", ex.getMessage());
 
-    ErrorDetails error =
-        ErrorDetails.builder()
-            .code("FILE_SIZE_EXCEEDED")
-            .message("File size exceeds maximum allowed limit")
-            .build();
+    long maxMB = fileProperties.getMaxSize() / (1024 * 1024);
+
+    ErrorDetails error = ErrorDetails.builder()
+        .code("FILE_SIZE_EXCEEDED")
+        .message("File size exceeds maximum allowed limit of " + maxMB + " MB")
+        .build();
 
     return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE)
-        .body(
-            apiResponseFactory.error(
-                "File too large",
-                request.getRequestURI(),
-                HttpStatus.PAYLOAD_TOO_LARGE,
-                error));
+        .body(apiResponseFactory.error(
+            "File too large (max " + maxMB + " MB allowed)",
+            request.getRequestURI(),
+            HttpStatus.PAYLOAD_TOO_LARGE,
+            error));
   }
 
   @ExceptionHandler(Exception.class)
