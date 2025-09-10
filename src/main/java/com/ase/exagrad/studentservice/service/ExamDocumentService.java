@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.time.Year;
 import java.util.List;
 import java.util.UUID;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,12 +14,13 @@ import com.ase.exagrad.studentservice.entity.ExamDocument;
 import com.ase.exagrad.studentservice.mappers.ExamDocumentMapper;
 import com.ase.exagrad.studentservice.repository.ExamDocumentRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ExamDocumentService {
 
-  private static final Logger LOG = LoggerFactory.getLogger(ExamDocumentService.class);
   private final ExamDocumentRepository examDocumentRepository;
   private final MinioService minioService;
   private final StorageProperties storageProperties;
