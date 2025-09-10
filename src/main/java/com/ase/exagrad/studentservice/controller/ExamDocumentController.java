@@ -58,8 +58,8 @@ public class ExamDocumentController {
       @RequestParam(required = false) String examId,
       HttpServletRequest request) {
 
-    if ((studentId!=null && !studentId.isEmpty() && examId!=null && !examId.isEmpty())
-        || ((studentId==null || studentId.isEmpty()) && (examId==null || examId.isEmpty()))) {
+    if ((studentId != null && !studentId.isEmpty() && examId != null && !examId.isEmpty())
+        || ((studentId == null || studentId.isEmpty()) && (examId == null || examId.isEmpty()))) {
       return ResponseEntity.badRequest()
           .body(
               apiResponseFactory.badRequest(
@@ -68,9 +68,9 @@ public class ExamDocumentController {
     }
 
     List<ExamDocumentResponse> documents =
-        (studentId!=null && !studentId.isEmpty())
+        (studentId != null && !studentId.isEmpty())
             ? examDocumentService.getDocumentsByStudentId(studentId)
-            :examDocumentService.getDocumentsByExamId(examId);
+            : examDocumentService.getDocumentsByExamId(examId);
 
     return ResponseEntity.ok(apiResponseFactory.success(documents, request.getRequestURI()));
   }
