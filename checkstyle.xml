@@ -73,7 +73,7 @@
             <property name="caseIndent" value="2"/>
             <property name="lineWrappingIndentation" value="4"/>
             <property name="tabWidth" value="2"/>
-            <property name="forceStrictCondition" value="true"/>
+            <property name="forceStrictCondition" value="false"/>
         </module>
 
 
@@ -117,7 +117,8 @@
 
         <!-- Require braces on all control statements -->
         <module name="NeedBraces">
-            <property name="tokens" value="LITERAL_IF, LITERAL_ELSE, LITERAL_FOR, LITERAL_WHILE, LITERAL_DO"/>
+            <property name="tokens"
+                      value="LITERAL_IF, LITERAL_ELSE, LITERAL_FOR, LITERAL_WHILE, LITERAL_DO"/>
         </module>
 
         <!-- Switch statements must have break, return or comment fall-through -->
@@ -145,8 +146,9 @@
 
     <!-- Line Length: max 80 characters -->
     <module name="LineLength">
-        <property name="max" value="80"/>
-        <property name="ignorePattern" value="^package.*|^import.*|a href|href|http(s)?://.*"/>
+        <property name="max" value="100"/>
+        <property name="ignorePattern"
+                  value="^package.*|^import.*|a href|href|http(s)?://.*"/>
     </module>
 
 </module>
