@@ -1,5 +1,8 @@
 package com.ase.exagrad.studentservice.entity;
 
+import java.time.Instant;
+import java.util.UUID;
+import org.hibernate.annotations.CreationTimestamp;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,9 +13,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
-import java.time.Instant;
-import java.util.UUID;
 
 @Entity
 @Table(name = "pub_documents")
@@ -33,10 +33,10 @@ public class PubDocument {
   @Column(nullable = false)
   private String studentId;
 
-  @Column //nullable?
+  @Column (nullable = false)
   private String startDate;
 
-  @Column // nullable?
+  @Column (nullable = false)
   private String endDate;
 
   @CreationTimestamp
