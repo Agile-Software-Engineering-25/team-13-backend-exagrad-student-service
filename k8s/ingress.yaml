@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: <service-name>
+  labels:
+    app: <service-name>
+  annotations:
+    traefik.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: sau-portal.de
+      http:
+        paths:
+          - path: <deployment-path> # specify under which path your service should be reachable
+            pathType: Prefix
+            backend:
+              service:
+                name: <service-name>
+                port:
+                  number: 8080

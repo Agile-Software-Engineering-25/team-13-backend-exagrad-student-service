@@ -1,0 +1,28 @@
+name: Build & (maybe) Publish
+
+on:
+  push:
+    branches: [ "**" ]        
+    tags:     [ "v*", "release-*" ]
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build (and conditionally push)
+        uses: ./ #Agile-Software-Engineering-25/build-and-publish-image@v1
+        with:
+          # optional — defaults shown:
+          # image_name: ""                 # defaults to repo name (lowercased)
+          # context: "."
+          # file: "Dockerfile"
+          # name_suffix: ""                # e.g. "-frontend" or "-backend"
+          # platforms: "linux/amd64,linux/arm64"
+          # extra_tags: ""                 # e.g. "type=raw,value=prod"
+          # build_args: |                  # newline separated KEY=VALUE
+          #   BASE_PATH=/team/app/my-app/
+          push: ${{ github.event_name != 'pull_request' }}

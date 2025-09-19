@@ -1,0 +1,23 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+metadata:
+  name: <service-name>
+
+resources:
+  - deployment.yaml
+  - service.yaml
+  - ingress.yaml
+
+commonLabels:
+  environment: <team-namespace>
+  managed-by: kustomize
+  app: <service-name>
+
+namePrefix: "ase-"
+
+namespace: <team-namespace>
+
+replicas:
+  - name: <service-name>
+    count: 1

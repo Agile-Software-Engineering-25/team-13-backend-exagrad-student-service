@@ -1,0 +1,15 @@
+name: Deploy to Kubernetes
+
+on:
+  push:
+    branches: ["**"]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to cluster
+        uses: Agile-Software-Engineering-25/deploy-to-k8s@main
+        with:
+          kubeconfig: ${{ secrets.KUBECONFIG }}
+          namespace: ${{ variables.K8S_NAMESPACE}}
