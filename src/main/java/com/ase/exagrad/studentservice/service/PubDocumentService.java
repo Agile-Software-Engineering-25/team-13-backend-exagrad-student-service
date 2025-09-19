@@ -41,10 +41,12 @@ public class PubDocumentService {
     minioService.uploadFile(
         bucketName, minioKey, file.getInputStream(), file.getSize(), file.getContentType());
 
-    PubDocument doc = //needs start and end date?
+    PubDocument doc =
         PubDocument.builder()
             .pubId(metadata.getPubId())
             .studentId(metadata.getStudentId())
+            .startDate(metadata.getStartDate())
+            .endDate(metadata.getEndDate())
             .minioKey(minioKey)
             .fileName(sanitizedFilename)
             .build();
@@ -57,11 +59,6 @@ public class PubDocumentService {
 
   public List<PubDocumentResponse> getDocumentsByStudentId(String studentId) {
     List<PubDocument> documents = pubDocumentRepository.findByStudentId(studentId);
-    return convertToResponseWithUrls(documents);
-  }
-
-  public List<PubDocumentResponse> getDocumentsByPubId(String pubId) {
-    List<PubDocument> documents = pubDocumentRepository.findByPubId(pubId);
     return convertToResponseWithUrls(documents);
   }
 
