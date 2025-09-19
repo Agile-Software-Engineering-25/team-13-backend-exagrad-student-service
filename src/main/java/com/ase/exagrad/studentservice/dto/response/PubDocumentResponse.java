@@ -5,7 +5,6 @@ import lombok.Data;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
-//warum ist der dateiname noch rot? ;-;
 @Data
 @Builder
 public class PubDocumentResponse {
@@ -13,8 +12,8 @@ public class PubDocumentResponse {
   private String pubId;
   private String studentId;
   private ZonedDateTime uploadDate;
-  private String startDate; //change to another type?
-  private String endDate; //change to another type?
+  private String startDate;
+  private String endDate;
   private String downloadUrl;
   private String fileName;
 }

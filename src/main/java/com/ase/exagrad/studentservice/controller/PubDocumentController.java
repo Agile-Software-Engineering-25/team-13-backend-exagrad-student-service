@@ -55,22 +55,17 @@ public class PubDocumentController {
   @GetMapping
   public ResponseEntity<ApiResponse<List<PubDocumentResponse>>> getDocuments(
       @RequestParam(required = false) String studentId,
-      @RequestParam(required = false) String pubId,
       HttpServletRequest request) {
 
-    if ((studentId != null && !studentId.isEmpty() && pubId != null && !pubId.isEmpty())
-        || ((studentId == null || studentId.isEmpty()) && (pubId == null || pubId.isEmpty()))) {
+    if (studentId == null || studentId.isEmpty()) {
       return ResponseEntity.badRequest()
           .body(
               apiResponseFactory.badRequest(
-                  "Provide exactly one parameter: studentId OR pubId",
+                  "Parameter studentId is required",
                   request.getRequestURI()));
     }
 
-    List<PubDocumentResponse> documents =
-        (studentId != null && !studentId.isEmpty())
-            ? pubDocumentService.getDocumentsByStudentId(studentId)
-            : pubDocumentService.getDocumentsByPubId(pubId);
+    List<PubDocumentResponse> documents = pubDocumentService.getDocumentsByStudentId(studentId);
 
     return ResponseEntity.ok(apiResponseFactory.success(documents, request.getRequestURI()));
   }

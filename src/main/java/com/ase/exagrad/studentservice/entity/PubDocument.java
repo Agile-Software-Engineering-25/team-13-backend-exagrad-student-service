@@ -39,10 +39,8 @@ public class PubDocument {
   @Column // nullable?
   private String endDate;
 
-  //Column for exams affected?
-
   @CreationTimestamp
-  @Column(nullable = false, updatable = false) //updatable false needed?
+  @Column(nullable = false, updatable = false)
   private Instant uploadDate;
 
   @Column(nullable = false, unique = true)

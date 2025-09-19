@@ -8,6 +8,4 @@ import java.util.UUID;
 //wofür ist repository nochmal? fehlt was?
 public interface PubDocumentRepository extends JpaRepository<PubDocument, UUID> {
   List<PubDocument> findByStudentId(String studentId);
-
-  List<PubDocument> findByPubId(String pubId);
 }
