@@ -1,9 +1,9 @@
 package com.ase.exagrad.studentservice.dto.response;
 
-import lombok.Builder;
-import lombok.Data;
 import java.time.ZonedDateTime;
 import java.util.UUID;
+import lombok.Builder;
+import lombok.Data;
 
 @Data
 @Builder
