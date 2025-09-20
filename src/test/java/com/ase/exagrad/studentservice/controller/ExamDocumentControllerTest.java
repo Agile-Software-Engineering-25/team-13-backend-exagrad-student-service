@@ -21,7 +21,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import com.ase.exagrad.studentservice.component.ApiResponseFactory;
 import com.ase.exagrad.studentservice.dto.request.ExamDocumentRequest;
-import com.ase.exagrad.studentservice.dto.response.ApiResponse;
+import com.ase.exagrad.studentservice.dto.response.ApiResponseWrapper;
 import com.ase.exagrad.studentservice.dto.response.ExamDocumentResponse;
 import com.ase.exagrad.studentservice.service.ExamDocumentService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -75,7 +75,7 @@ class ExamDocumentControllerTest {
   @Test
   void uploadExamDocumentValidInputReturnsCreatedStatus() throws Exception {
     // Arrange
-    ApiResponse<ExamDocumentResponse> successResponse =
+    ApiResponseWrapper<ExamDocumentResponse> successResponse =
         createApiResponse(examDocumentResponse, "Document uploaded successfully");
 
     when(examDocumentService.uploadExamDocument(any(), any())).thenReturn(examDocumentResponse);
@@ -101,7 +101,7 @@ class ExamDocumentControllerTest {
       throws Exception {
     // Arrange
     String errorMessage = "Invalid file format";
-    ApiResponse<ExamDocumentResponse> errorResponse = createErrorApiResponse(errorMessage);
+    ApiResponseWrapper<ExamDocumentResponse> errorResponse = createErrorApiResponse(errorMessage);
 
     when(examDocumentService.uploadExamDocument(any(), any()))
         .thenThrow(new IllegalArgumentException(errorMessage));
@@ -122,7 +122,7 @@ class ExamDocumentControllerTest {
   void uploadExamDocumentServiceThrowsIOExceptionReturnsInternalServerError() throws Exception {
     // Arrange
     String errorMessage = "Upload failed: File processing error";
-    ApiResponse<ExamDocumentResponse> errorResponse = createErrorApiResponse(errorMessage);
+    ApiResponseWrapper<ExamDocumentResponse> errorResponse = createErrorApiResponse(errorMessage);
 
     when(examDocumentService.uploadExamDocument(any(), any()))
         .thenThrow(new IOException("File processing error"));
@@ -143,7 +143,7 @@ class ExamDocumentControllerTest {
   void getDocumentsWithStudentIdReturnsDocumentsList() throws Exception {
     // Arrange
     List<ExamDocumentResponse> documents = List.of(examDocumentResponse);
-    ApiResponse<List<ExamDocumentResponse>> successResponse =
+    ApiResponseWrapper<List<ExamDocumentResponse>> successResponse =
         createApiResponse(documents, "Documents retrieved successfully");
 
     when(examDocumentService.getDocumentsByStudentId("STUDENT123")).thenReturn(documents);
@@ -163,7 +163,7 @@ class ExamDocumentControllerTest {
   void getDocumentsWithExamIdReturnsDocumentsList() throws Exception {
     // Arrange
     List<ExamDocumentResponse> documents = List.of(examDocumentResponse);
-    ApiResponse<List<ExamDocumentResponse>> successResponse =
+    ApiResponseWrapper<List<ExamDocumentResponse>> successResponse =
         createApiResponse(documents, "Documents retrieved successfully");
 
     when(examDocumentService.getDocumentsByExamId("EXAM123")).thenReturn(documents);
@@ -183,7 +183,7 @@ class ExamDocumentControllerTest {
   void getDocumentsNoParametersReturnsBadRequest() throws Exception {
     // Arrange
     String errorMessage = "Provide exactly one parameter: studentId OR examId";
-    ApiResponse<List<ExamDocumentResponse>> errorResponse =
+    ApiResponseWrapper<List<ExamDocumentResponse>> errorResponse =
         createErrorApiResponse(errorMessage);
 
     when(apiResponseFactory.<List<ExamDocumentResponse>>badRequest(
@@ -200,7 +200,7 @@ class ExamDocumentControllerTest {
   void getDocumentsBothParametersReturnsBadRequest() throws Exception {
     // Arrange
     String errorMessage = "Provide exactly one parameter: studentId OR examId";
-    ApiResponse<List<ExamDocumentResponse>> errorResponse =
+    ApiResponseWrapper<List<ExamDocumentResponse>> errorResponse =
         createErrorApiResponse(errorMessage);
 
     when(apiResponseFactory.<List<ExamDocumentResponse>>badRequest(
@@ -220,7 +220,7 @@ class ExamDocumentControllerTest {
   void getDocumentsEmptyStudentIdReturnsBadRequest() throws Exception {
     // Arrange
     String errorMessage = "Provide exactly one parameter: studentId OR examId";
-    ApiResponse<List<ExamDocumentResponse>> errorResponse =
+    ApiResponseWrapper<List<ExamDocumentResponse>> errorResponse =
         createErrorApiResponse(errorMessage);
 
     when(apiResponseFactory.<List<ExamDocumentResponse>>badRequest(
@@ -238,16 +238,16 @@ class ExamDocumentControllerTest {
         name, "", "application/json", objectMapper.writeValueAsBytes(content));
   }
 
-  private <T> ApiResponse<T> createApiResponse(T data, String message) {
-    ApiResponse<T> response = new ApiResponse<>();
+  private <T> ApiResponseWrapper<T> createApiResponse(T data, String message) {
+    ApiResponseWrapper<T> response = new ApiResponseWrapper<>();
     response.setData(data);
     response.setMessage(message);
     response.setEndpoint("/documents/exams");
     return response;
   }
 
-  private <T> ApiResponse<T> createErrorApiResponse(String message) {
-    ApiResponse<T> response = new ApiResponse<>();
+  private <T> ApiResponseWrapper<T> createErrorApiResponse(String message) {
+    ApiResponseWrapper<T> response = new ApiResponseWrapper<>();
     response.setMessage(message);
     response.setEndpoint("/documents/exams");
     return response;
