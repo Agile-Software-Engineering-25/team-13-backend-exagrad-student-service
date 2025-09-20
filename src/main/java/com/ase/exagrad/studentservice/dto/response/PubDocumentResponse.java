@@ -9,7 +9,6 @@ import lombok.Data;
 @Builder
 public class PubDocumentResponse {
   private UUID id;
-  private String pubId;
   private String studentId;
   private ZonedDateTime uploadDate;
   private String startDate;

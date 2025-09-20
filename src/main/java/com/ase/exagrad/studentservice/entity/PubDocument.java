@@ -28,9 +28,6 @@ public class PubDocument {
   private UUID id;
 
   @Column(nullable = false)
-  private String pubId;
-
-  @Column(nullable = false)
   private String studentId;
 
   @Column (nullable = false)
