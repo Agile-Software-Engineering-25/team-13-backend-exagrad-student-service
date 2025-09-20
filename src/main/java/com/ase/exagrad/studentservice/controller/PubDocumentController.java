@@ -29,14 +29,18 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/documents/pub")
 @RequiredArgsConstructor
-@Tag(name = "PUB Documents", description = "Operations for managing Prüfungsunfähigkeitsdokumente (examination incapacity documents)")
+@Tag(
+    name = "PUB Documents",
+    description = "Operations for managing Prüfungsunfähigkeitsdokumente")
 public class PubDocumentController {
 
   private final PubDocumentService pubDocumentService;
   private final ApiResponseFactory apiResponseFactory;
 
   @PostMapping(consumes = {"multipart/form-data", "application/octet-stream"})
-  @Operation(summary = "Upload PUB document", description = "Upload a Prüfungsunfähigkeitsdokument (examination incapacity document) with metadata")
+  @Operation(
+      summary = "Upload PUB document",
+      description = "Upload a Prüfungsunfähigkeitsdokument with metadata")
   @ApiResponses(value = {
       @ApiResponse(responseCode = "201", description = "Document uploaded successfully",
           content = @Content(schema = @Schema(implementation = PubDocumentResponse.class))),
@@ -44,8 +48,10 @@ public class PubDocumentController {
       @ApiResponse(responseCode = "500", description = "Internal server error")
   })
   public ResponseEntity<ApiResponseWrapper<PubDocumentResponse>> uploadPubDocument(
-      @Parameter(description = "PUB document file to upload") @RequestPart("file") MultipartFile file,
-      @Parameter(description = "Document metadata") @RequestPart("metadata") PubDocumentRequest metadata,
+      @Parameter(description = "PUB document file to upload") @RequestPart("file")
+      MultipartFile file,
+      @Parameter(description = "Document metadata") @RequestPart("metadata")
+      PubDocumentRequest metadata,
       HttpServletRequest request) {
 
     try {
@@ -68,13 +74,17 @@ public class PubDocumentController {
   }
 
   @GetMapping
-  @Operation(summary = "Get PUB documents", description = "Get Prüfungsunfähigkeitsdokumente by student ID")
+  @Operation(
+      summary = "Get PUB documents",
+      description = "Get Prüfungsunfähigkeitsdokumente by student ID")
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Documents retrieved successfully"),
       @ApiResponse(responseCode = "400", description = "Student ID is required")
   })
   public ResponseEntity<ApiResponseWrapper<List<PubDocumentResponse>>> getDocuments(
-      @Parameter(description = "Student ID to filter documents", required = true) @RequestParam(required = false) String studentId,
+      @Parameter(description = "Student ID to filter documents", required = true)
+      @RequestParam(required = false)
+      String studentId,
       HttpServletRequest request) {
 
     if (studentId==null || studentId.isEmpty()) {

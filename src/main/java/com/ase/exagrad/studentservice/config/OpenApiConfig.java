@@ -15,7 +15,7 @@ public class OpenApiConfig {
         .info(new Info()
             .title("ExaGrad Student Service API")
             .version("1.0.0")
-            .description("API for managing exam documents and PUB documents (Prüfungsunfähigkeitsdokumente) for students")
+            .description("API for managing exam documents and PUB documents for students")
             .contact(new Contact()
                 .name("ASE Team 13")
                 .email("simon.dietrich@stud-provadis-hochschule.de")));

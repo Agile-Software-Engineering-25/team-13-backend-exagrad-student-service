@@ -36,7 +36,9 @@ public class ExamDocumentController {
   private final ApiResponseFactory apiResponseFactory;
 
   @PostMapping(consumes = {"multipart/form-data", "application/octet-stream"})
-  @Operation(summary = "Upload exam document", description = "Upload an exam document with metadata")
+  @Operation(
+      summary = "Upload exam document",
+      description = "Upload an exam document with metadata")
   @ApiResponses(value = {
       @ApiResponse(responseCode = "201", description = "Document uploaded successfully",
           content = @Content(schema = @Schema(implementation = ExamDocumentResponse.class))),
@@ -44,8 +46,12 @@ public class ExamDocumentController {
       @ApiResponse(responseCode = "500", description = "Internal server error")
   })
   public ResponseEntity<ApiResponseWrapper<ExamDocumentResponse>> uploadExamDocument(
-      @Parameter(description = "Document file to upload") @RequestPart("file") MultipartFile file,
-      @Parameter(description = "Document metadata") @RequestPart("metadata") ExamDocumentRequest metadata,
+      @Parameter(description = "Document file to upload")
+      @RequestPart("file")
+      MultipartFile file,
+      @Parameter(description = "Document metadata")
+      @RequestPart("metadata")
+      ExamDocumentRequest metadata,
       HttpServletRequest request) {
 
     try {
@@ -68,14 +74,18 @@ public class ExamDocumentController {
   }
 
   @GetMapping
-  @Operation(summary = "Get exam documents", description = "Get exam documents by student ID or exam ID")
+  @Operation(
+      summary = "Get exam documents",
+      description = "Get exam documents by student ID or exam ID")
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Documents retrieved successfully"),
       @ApiResponse(responseCode = "400", description = "Invalid parameters")
   })
   public ResponseEntity<ApiResponseWrapper<List<ExamDocumentResponse>>> getDocuments(
-      @Parameter(description = "Student ID to filter documents") @RequestParam(required = false) String studentId,
-      @Parameter(description = "Exam ID to filter documents") @RequestParam(required = false) String examId,
+      @Parameter(description = "Student ID to filter documents") @RequestParam(required = false)
+      String studentId,
+      @Parameter(description = "Exam ID to filter documents") @RequestParam(required = false)
+      String examId,
       HttpServletRequest request) {
 
     if ((studentId!=null && !studentId.isEmpty() && examId!=null && !examId.isEmpty())
