@@ -30,10 +30,10 @@ public class PubDocument {
   @Column(nullable = false)
   private String studentId;
 
-  @Column (nullable = false)
+  @Column(nullable = false)
   private String startDate;
 
-  @Column (nullable = false)
+  @Column(nullable = false)
   private String endDate;
 
   @CreationTimestamp

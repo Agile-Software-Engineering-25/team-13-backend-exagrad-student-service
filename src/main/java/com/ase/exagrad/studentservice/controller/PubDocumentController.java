@@ -13,24 +13,39 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import com.ase.exagrad.studentservice.component.ApiResponseFactory;
 import com.ase.exagrad.studentservice.dto.request.PubDocumentRequest;
-import com.ase.exagrad.studentservice.dto.response.ApiResponse;
+import com.ase.exagrad.studentservice.dto.response.ApiResponseWrapper;
 import com.ase.exagrad.studentservice.dto.response.PubDocumentResponse;
 import com.ase.exagrad.studentservice.service.PubDocumentService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/documents/pub")
 @RequiredArgsConstructor
+@Tag(name = "PUB Documents", description = "Operations for managing Prüfungsunfähigkeitsdokumente (examination incapacity documents)")
 public class PubDocumentController {
 
   private final PubDocumentService pubDocumentService;
   private final ApiResponseFactory apiResponseFactory;
 
-  @PostMapping(consumes = {"multipart/form-data"})
-  public ResponseEntity<ApiResponse<PubDocumentResponse>> uploadPubDocument(
-      @RequestPart("file") MultipartFile file,
-      @RequestPart("metadata") PubDocumentRequest metadata,
+  @PostMapping(consumes = {"multipart/form-data", "application/octet-stream"})
+  @Operation(summary = "Upload PUB document", description = "Upload a Prüfungsunfähigkeitsdokument (examination incapacity document) with metadata")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "201", description = "Document uploaded successfully",
+          content = @Content(schema = @Schema(implementation = PubDocumentResponse.class))),
+      @ApiResponse(responseCode = "400", description = "Invalid input"),
+      @ApiResponse(responseCode = "500", description = "Internal server error")
+  })
+  public ResponseEntity<ApiResponseWrapper<PubDocumentResponse>> uploadPubDocument(
+      @Parameter(description = "PUB document file to upload") @RequestPart("file") MultipartFile file,
+      @Parameter(description = "Document metadata") @RequestPart("metadata") PubDocumentRequest metadata,
       HttpServletRequest request) {
 
     try {
@@ -53,11 +68,16 @@ public class PubDocumentController {
   }
 
   @GetMapping
-  public ResponseEntity<ApiResponse<List<PubDocumentResponse>>> getDocuments(
-      @RequestParam(required = false) String studentId,
+  @Operation(summary = "Get PUB documents", description = "Get Prüfungsunfähigkeitsdokumente by student ID")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "Documents retrieved successfully"),
+      @ApiResponse(responseCode = "400", description = "Student ID is required")
+  })
+  public ResponseEntity<ApiResponseWrapper<List<PubDocumentResponse>>> getDocuments(
+      @Parameter(description = "Student ID to filter documents", required = true) @RequestParam(required = false) String studentId,
       HttpServletRequest request) {
 
-    if (studentId == null || studentId.isEmpty()) {
+    if (studentId==null || studentId.isEmpty()) {
       return ResponseEntity.badRequest()
           .body(
               apiResponseFactory.badRequest(

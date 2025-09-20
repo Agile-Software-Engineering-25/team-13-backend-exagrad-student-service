@@ -2,7 +2,7 @@ package com.ase.exagrad.studentservice.component;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import com.ase.exagrad.studentservice.dto.response.ApiResponse;
+import com.ase.exagrad.studentservice.dto.response.ApiResponseWrapper;
 import com.ase.exagrad.studentservice.dto.response.ErrorDetails;
 import lombok.RequiredArgsConstructor;
 
@@ -12,8 +12,8 @@ public class ApiResponseFactory {
 
   private final TimeProvider timeProvider;
 
-  public <T> ApiResponse<T> success(T data, String endpoint, HttpStatus httpStatus) {
-    return ApiResponse.<T>builder()
+  public <T> ApiResponseWrapper<T> success(T data, String endpoint, HttpStatus httpStatus) {
+    return ApiResponseWrapper.<T>builder()
         .success(true)
         .statusCode(httpStatus.value())
         .status(httpStatus.getReasonPhrase())
@@ -23,17 +23,17 @@ public class ApiResponseFactory {
         .build();
   }
 
-  public <T> ApiResponse<T> success(T data, String endpoint) {
+  public <T> ApiResponseWrapper<T> success(T data, String endpoint) {
     return success(data, endpoint, HttpStatus.OK);
   }
 
-  public <T> ApiResponse<T> created(T data, String endpoint) {
+  public <T> ApiResponseWrapper<T> created(T data, String endpoint) {
     return success(data, endpoint, HttpStatus.CREATED);
   }
 
-  public <T> ApiResponse<T> error(
+  public <T> ApiResponseWrapper<T> error(
       String message, String endpoint, HttpStatus httpStatus, ErrorDetails errorDetails) {
-    return ApiResponse.<T>builder()
+    return ApiResponseWrapper.<T>builder()
         .success(false)
         .statusCode(httpStatus.value())
         .status(httpStatus.getReasonPhrase())
@@ -44,7 +44,7 @@ public class ApiResponseFactory {
         .build();
   }
 
-  public <T> ApiResponse<T> badRequest(String message, String endpoint) {
+  public <T> ApiResponseWrapper<T> badRequest(String message, String endpoint) {
     return error(
         message,
         endpoint,
@@ -52,7 +52,7 @@ public class ApiResponseFactory {
         ErrorDetails.builder().code("VALIDATION_ERROR").message(message).build());
   }
 
-  public <T> ApiResponse<T> internalServerError(String message, String endpoint) {
+  public <T> ApiResponseWrapper<T> internalServerError(String message, String endpoint) {
     return error(
         message,
         endpoint,
