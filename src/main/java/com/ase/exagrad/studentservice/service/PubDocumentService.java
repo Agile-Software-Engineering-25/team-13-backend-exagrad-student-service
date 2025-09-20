@@ -43,7 +43,6 @@ public class PubDocumentService {
 
     PubDocument doc =
         PubDocument.builder()
-            .pubId(metadata.getPubId())
             .studentId(metadata.getStudentId())
             .startDate(metadata.getStartDate())
             .endDate(metadata.getEndDate())

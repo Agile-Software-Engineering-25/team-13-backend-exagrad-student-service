@@ -4,7 +4,6 @@ import lombok.Data;
 
 @Data
 public class PubDocumentRequest {
-  private String pubId;
   private String studentId;
   private String startDate;
   private String endDate;

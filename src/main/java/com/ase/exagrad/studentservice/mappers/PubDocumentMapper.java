@@ -15,7 +15,6 @@ public class PubDocumentMapper {
   public PubDocumentResponse toResponse(PubDocument entity, String downloadUrl) {
     return PubDocumentResponse.builder()
         .id(entity.getId())
-        .pubId(entity.getPubId())
         .studentId(entity.getStudentId())
         .uploadDate(entity.getUploadDate().atZone(appZoneId))
         .startDate(entity.getStartDate())
