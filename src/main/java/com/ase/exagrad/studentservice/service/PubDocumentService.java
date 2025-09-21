@@ -84,8 +84,8 @@ public class PubDocumentService {
   }
 
   private void validateDateRange(PubDocumentRequest metadata) {
-    if (metadata.getStartDate() != null
-        && metadata.getEndDate() != null
+    if (metadata.getStartDate()!=null
+        && metadata.getEndDate()!=null
         && metadata.getStartDate().isAfter(metadata.getEndDate())) {
       throw new InvalidDateRangeException("Das Startdatum darf nicht nach dem Enddatum liegen.");
     }
