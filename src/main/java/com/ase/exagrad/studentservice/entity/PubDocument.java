@@ -1,6 +1,7 @@
 package com.ase.exagrad.studentservice.entity;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.UUID;
 import org.hibernate.annotations.CreationTimestamp;
 import jakarta.persistence.Column;
@@ -31,10 +32,10 @@ public class PubDocument {
   private String studentId;
 
   @Column (nullable = false)
-  private String startDate;
+  private LocalDate startDate;
 
   @Column (nullable = false)
-  private String endDate;
+  private LocalDate endDate;
 
   @CreationTimestamp
   @Column(nullable = false, updatable = false)

@@ -13,6 +13,7 @@ import com.ase.exagrad.studentservice.dto.response.ErrorDetails;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import com.ase.exagrad.studentservice.exception.InvalidDateRangeException;
 
 @Slf4j
 @RestControllerAdvice
@@ -98,6 +99,26 @@ public class GlobalExceptionHandler {
                 "Internal server error",
                 request.getRequestURI(),
                 HttpStatus.INTERNAL_SERVER_ERROR,
+                error));
+  }
+
+  @ExceptionHandler(InvalidDateRangeException.class)
+  public ResponseEntity<ApiResponse<Void>> handleInvalidDateRange(
+      InvalidDateRangeException ex, HttpServletRequest request) {
+    log.warn("Invalid date range: {}", ex.getMessage());
+
+    ErrorDetails error =
+        ErrorDetails.builder()
+            .code("INVALID_DATE_RANGE")
+            .message(ex.getMessage())
+            .build();
+
+    return ResponseEntity.badRequest()
+        .body(
+            apiResponseFactory.error(
+                ex.getMessage(),
+                request.getRequestURI(),
+                HttpStatus.BAD_REQUEST,
                 error));
   }
 }

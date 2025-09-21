@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.time.Year;
 import java.util.List;
 import java.util.UUID;
+import com.ase.exagrad.studentservice.exception.InvalidDateRangeException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,6 +33,8 @@ public class PubDocumentService {
       throws IOException {
     // Validate file before processing
     fileValidationService.validateFile(file);
+
+    validateDateRange(metadata);
 
     String bucketName = storageProperties.getPubDocumentsBucket();
     String sanitizedFilename =
@@ -78,5 +81,13 @@ public class PubDocumentService {
     String year = String.valueOf(Year.now().getValue());
     String unique = UUID.randomUUID().toString();
     return "pub-documents/" + year + "/" + unique + "-" + originalFilename;
+  }
+
+  private void validateDateRange(PubDocumentRequest metadata) {
+    if (metadata.getStartDate() != null
+        && metadata.getEndDate() != null
+        && metadata.getStartDate().isAfter(metadata.getEndDate())) {
+      throw new InvalidDateRangeException("Das Startdatum darf nicht nach dem Enddatum liegen.");
+    }
   }
 }
