@@ -13,7 +13,6 @@ import com.ase.exagrad.studentservice.dto.response.ErrorDetails;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import com.ase.exagrad.studentservice.exception.InvalidDateRangeException;
 
 @Slf4j
 @RestControllerAdvice
