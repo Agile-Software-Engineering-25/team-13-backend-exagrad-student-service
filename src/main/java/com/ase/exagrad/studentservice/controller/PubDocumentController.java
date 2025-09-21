@@ -2,6 +2,7 @@ package com.ase.exagrad.studentservice.controller;
 
 import java.io.IOException;
 import java.util.List;
+import com.ase.exagrad.studentservice.exception.InvalidDateRangeException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,7 +41,7 @@ public class PubDocumentController {
           .body(apiResponseFactory.created(response, request.getRequestURI()));
 
     }
-    catch (IllegalArgumentException e) {
+    catch (InvalidDateRangeException e) {
       return ResponseEntity.badRequest()
           .body(apiResponseFactory.badRequest(e.getMessage(), request.getRequestURI()));
     }
