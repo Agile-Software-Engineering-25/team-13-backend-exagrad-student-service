@@ -1,19 +1,17 @@
 package com.ase.exagrad.studentservice.dto.request;
 
 import java.time.LocalDate;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-//import jakarta.validation.constraints.NotNull;
 
 @Data
 public class PubDocumentRequest {
 
   private String studentId;
 
-  //@NotNull(message = "Start date is required")
-  //@Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}", message = "Date must be in YYYY-MM-DD format")
+  @NotNull(message = "Start date is required")
   private LocalDate startDate;
 
-  //@NotNull(message = "End date is required")
-  //@Pattern(regexp = "\\d{4}-\\d{2}-\\d{2}", message = "Date must be in YYYY-MM-DD format")
+  @NotNull(message = "End date is required")
   private LocalDate endDate;
 }
