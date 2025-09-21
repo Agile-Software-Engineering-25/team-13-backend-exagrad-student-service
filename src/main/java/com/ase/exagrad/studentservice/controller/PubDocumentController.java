@@ -58,7 +58,7 @@ public class PubDocumentController {
       @RequestParam(required = false) String studentId,
       HttpServletRequest request) {
 
-    if (studentId == null || studentId.isEmpty()) {
+    if (studentId==null || studentId.isEmpty()) {
       return ResponseEntity.badRequest()
           .body(
               apiResponseFactory.badRequest(
