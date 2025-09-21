@@ -100,4 +100,24 @@ public class GlobalExceptionHandler {
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 error));
   }
+
+  @ExceptionHandler(InvalidDateRangeException.class)
+  public ResponseEntity<ApiResponse<Void>> handleInvalidDateRange(
+      InvalidDateRangeException ex, HttpServletRequest request) {
+    log.warn("Invalid date range: {}", ex.getMessage());
+
+    ErrorDetails error =
+        ErrorDetails.builder()
+            .code("INVALID_DATE_RANGE")
+            .message(ex.getMessage())
+            .build();
+
+    return ResponseEntity.badRequest()
+        .body(
+            apiResponseFactory.error(
+                ex.getMessage(),
+                request.getRequestURI(),
+                HttpStatus.BAD_REQUEST,
+                error));
+  }
 }

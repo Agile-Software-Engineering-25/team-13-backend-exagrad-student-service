@@ -20,7 +20,7 @@ public class FileValidationService {
   private final FileProperties fileProperties;
 
   public void validateFile(MultipartFile file) {
-    if (file == null || file.isEmpty()) {
+    if (file==null || file.isEmpty()) {
       throw new FileValidationException("File is required and cannot be empty");
     }
 
@@ -30,7 +30,7 @@ public class FileValidationService {
   }
 
   private void validateFileName(String fileName) {
-    if (fileName == null || fileName.trim().isEmpty()) {
+    if (fileName==null || fileName.trim().isEmpty()) {
       throw new FileValidationException("File name is required");
     }
 
@@ -65,13 +65,13 @@ public class FileValidationService {
               "File size exceeds maximum allowed size of %d bytes", maxFileSize));
     }
 
-    if (size == 0) {
+    if (size==0) {
       throw new FileValidationException("File cannot be empty");
     }
   }
 
   private void validateContentType(String contentType) {
-    if (contentType == null) {
+    if (contentType==null) {
       throw new FileValidationException("Content type is required");
     }
 
@@ -87,7 +87,7 @@ public class FileValidationService {
     }
 
     for (int i = 0; i < signature.length; i++) {
-      if (data[i] != signature[i]) {
+      if (data[i]!=signature[i]) {
         return false;
       }
     }
@@ -96,11 +96,11 @@ public class FileValidationService {
 
   private String getFileExtension(String fileName) {
     int lastDotIndex = fileName.lastIndexOf('.');
-    return lastDotIndex > 0 ? fileName.substring(lastDotIndex + 1) : "";
+    return lastDotIndex > 0 ? fileName.substring(lastDotIndex + 1):"";
   }
 
   public String sanitizeFileName(String fileName) {
-    if (fileName == null) {
+    if (fileName==null) {
       return "unnamed_file";
     }
     return fileName.replaceAll("[\\\\/:*?\"<>|]", "_").replaceAll("\\s+", "_").trim();

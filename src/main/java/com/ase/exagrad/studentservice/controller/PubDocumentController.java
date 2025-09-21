@@ -12,35 +12,37 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import com.ase.exagrad.studentservice.component.ApiResponseFactory;
-import com.ase.exagrad.studentservice.dto.request.ExamDocumentRequest;
+import com.ase.exagrad.studentservice.dto.request.PubDocumentRequest;
 import com.ase.exagrad.studentservice.dto.response.ApiResponse;
-import com.ase.exagrad.studentservice.dto.response.ExamDocumentResponse;
-import com.ase.exagrad.studentservice.service.ExamDocumentService;
+import com.ase.exagrad.studentservice.dto.response.PubDocumentResponse;
+import com.ase.exagrad.studentservice.exception.InvalidDateRangeException;
+import com.ase.exagrad.studentservice.service.PubDocumentService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/documents/exams")
+@RequestMapping("/documents/pub")
 @RequiredArgsConstructor
-public class ExamDocumentController {
+public class PubDocumentController {
 
-  private final ExamDocumentService examDocumentService;
+  private final PubDocumentService pubDocumentService;
   private final ApiResponseFactory apiResponseFactory;
 
   @PostMapping(consumes = {"multipart/form-data"})
-  public ResponseEntity<ApiResponse<ExamDocumentResponse>> uploadExamDocument(
+  public ResponseEntity<ApiResponse<PubDocumentResponse>> uploadPubDocument(
       @RequestPart("file") MultipartFile file,
-      @RequestPart("metadata") ExamDocumentRequest metadata,
+      @Valid @RequestPart("metadata") PubDocumentRequest metadata,
       HttpServletRequest request) {
 
     try {
-      ExamDocumentResponse response = examDocumentService.uploadExamDocument(file, metadata);
+      PubDocumentResponse response = pubDocumentService.uploadPubDocument(file, metadata);
 
       return ResponseEntity.status(HttpStatus.CREATED)
           .body(apiResponseFactory.created(response, request.getRequestURI()));
 
     }
-    catch (IllegalArgumentException e) {
+    catch (InvalidDateRangeException e) {
       return ResponseEntity.badRequest()
           .body(apiResponseFactory.badRequest(e.getMessage(), request.getRequestURI()));
     }
@@ -53,24 +55,19 @@ public class ExamDocumentController {
   }
 
   @GetMapping
-  public ResponseEntity<ApiResponse<List<ExamDocumentResponse>>> getDocuments(
+  public ResponseEntity<ApiResponse<List<PubDocumentResponse>>> getDocuments(
       @RequestParam(required = false) String studentId,
-      @RequestParam(required = false) String examId,
       HttpServletRequest request) {
 
-    if ((studentId!=null && !studentId.isEmpty() && examId!=null && !examId.isEmpty())
-        || ((studentId==null || studentId.isEmpty()) && (examId==null || examId.isEmpty()))) {
+    if (studentId==null || studentId.isEmpty()) {
       return ResponseEntity.badRequest()
           .body(
               apiResponseFactory.badRequest(
-                  "Provide exactly one parameter: studentId OR examId",
+                  "Parameter studentId is required",
                   request.getRequestURI()));
     }
 
-    List<ExamDocumentResponse> documents =
-        (studentId!=null && !studentId.isEmpty())
-            ? examDocumentService.getDocumentsByStudentId(studentId)
-            :examDocumentService.getDocumentsByExamId(examId);
+    List<PubDocumentResponse> documents = pubDocumentService.getDocumentsByStudentId(studentId);
 
     return ResponseEntity.ok(apiResponseFactory.success(documents, request.getRequestURI()));
   }
