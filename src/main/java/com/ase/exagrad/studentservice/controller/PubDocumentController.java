@@ -18,6 +18,7 @@ import com.ase.exagrad.studentservice.dto.response.PubDocumentResponse;
 import com.ase.exagrad.studentservice.exception.InvalidDateRangeException;
 import com.ase.exagrad.studentservice.service.PubDocumentService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -31,7 +32,7 @@ public class PubDocumentController {
   @PostMapping(consumes = {"multipart/form-data"})
   public ResponseEntity<ApiResponse<PubDocumentResponse>> uploadPubDocument(
       @RequestPart("file") MultipartFile file,
-      @RequestPart("metadata") PubDocumentRequest metadata,
+      @Valid @RequestPart("metadata") PubDocumentRequest metadata,
       HttpServletRequest request) {
 
     try {
