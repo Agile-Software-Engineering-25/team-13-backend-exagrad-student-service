@@ -31,10 +31,10 @@ public class PubDocument {
   @Column(nullable = false)
   private String studentId;
 
-  @Column (nullable = false)
+  @Column(nullable = false)
   private LocalDate startDate;
 
-  @Column (nullable = false)
+  @Column(nullable = false)
   private LocalDate endDate;
 
   @CreationTimestamp
