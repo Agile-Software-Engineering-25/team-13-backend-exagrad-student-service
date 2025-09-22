@@ -40,5 +40,15 @@ spec:
             initialDelaySeconds: 120
             periodSeconds: 20
           env: # add environment variables here if needed
-            - name: SOME_ENVIRONMENT_VARIABLE
-              value: "ᓚᘏᗢ"
+            - name: SPRING_PROFILES_ACTIVE
+              value: "prod"
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_PASSWORD
