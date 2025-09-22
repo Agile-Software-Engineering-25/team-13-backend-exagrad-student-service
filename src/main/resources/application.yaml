@@ -10,10 +10,25 @@ spring:
       hibernate:
         format_sql: true
   datasource:
-    url: jdbc:h2:file:./data/mydb
+    url: jdbc:h2:mem:./data/mydb
     driverClassName: org.h2.Driver
     username: sa
     password: password
 server:
   error:
     include-message: always
+  servlet:
+    context-path: /api/v1
+minio-connection:
+  # TODO: updated these configs if more information from the responsible team are gained
+  endpoint: http://localhost:9000
+  accessKey: my-access-key
+  secretKey: my-secret-key
+app:
+  timezone: Europe/Berlin
+  storage:
+    examDocumentsBucket: student-exam-documents
+    pubDocumentsBucket: student-pub-documents
+  file:
+    max-size: 10485760 # 10MB
+    allowed-types: application/pdf,image/jpeg,image/png,image/gif,text/plain,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document

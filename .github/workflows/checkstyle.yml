@@ -2,9 +2,9 @@ name: Checkstyle
 
 on:
   push:
-    branches: ['**']
+    branches: [ 'main' ]
   pull_request:
-    branches: ['main']
+    branches: [ 'main' ]
 
 jobs:
   checkstyle:
@@ -49,5 +49,3 @@ jobs:
         with:
           name: checkstyle-report
           path: target/checkstyle-report.xml
-
-
