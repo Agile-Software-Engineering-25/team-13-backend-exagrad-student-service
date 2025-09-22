@@ -80,7 +80,7 @@
             <scope>runtime</scope>
         </dependency>
     </dependencies>
-        <build>
+    <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -90,7 +90,6 @@
                     <archive>
                         <manifest>
                             <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                            <!-- Change to your main class -->
                             <mainClass>com.ase.exagrad.studentservice.Application</mainClass>
                         </manifest>
                     </archive>
