@@ -17,7 +17,7 @@ spec:
       containers:
         - name: exagrad-student-service
           image:
-            ghcr.io/agile-software-engineering-25/team-13-backend-exagrad-student-service:${{ github.sha }}"
+            ghcr.io/agile-software-engineering-25/team-13-backend-exagrad-student-service:sha-715226e
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
