@@ -1,19 +1,18 @@
-name: Build & (maybe) Publish
+name: Deploy
 
 on:
   push:
-    branches: [ "**" ]        
-    tags:     [ "v*", "release-*" ]
-
-permissions:
-  contents: read
-  packages: write
+    branches: ["**"]
 
 jobs:
-  docker:
+  Deploy:
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
     steps:
-      - name: Build (and conditionally push)
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Build and push image
         uses: Agile-Software-Engineering-25/build-and-publish-image@v1
         with:
           # optional — defaults shown:
@@ -25,4 +24,10 @@ jobs:
           # extra_tags: ""                 # e.g. "type=raw,value=prod"
           # build_args: |                  # newline separated KEY=VALUE
           #   BASE_PATH=/team/app/my-app/
-          push: ${{ github.event_name != 'pull_request' }}
+          push: true
+      
+      - name: Deploy to k8s
+        uses: Agile-Software-Engineering-25/deploy-to-k8s@main
+        with:
+          kubeconfig: ${{ secrets.KUBECONFIG }}
+          namespace: ${{ variables.K8S_NAMESPACE}}
