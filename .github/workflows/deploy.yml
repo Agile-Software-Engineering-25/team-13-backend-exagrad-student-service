@@ -1,32 +1,23 @@
-name: Deploy
+name: deploy-to-k8s
 
 on:
   push:
-    branches: ['**']
 
 jobs:
-  Deploy:
+  test-action:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout repo
         uses: actions/checkout@v5
 
-      - name: Build and push image
+      - name: Upload image
         uses: Agile-Software-Engineering-25/build-and-publish-image@v1
         with:
-          # optional — defaults shown:
-          # image_name: ""                 # defaults to repo name (lowercased)
-          # context: "."
-          # file: "Dockerfile"
-          # name_suffix: ""                # e.g. "-frontend" or "-backend"
-          # platforms: "linux/amd64,linux/arm64"
-          # extra_tags: ""                 # e.g. "type=raw,value=prod"
-          # build_args: |                  # newline separated KEY=VALUE
-          #   BASE_PATH=/team/app/my-app/
           push: true
-      
-      - name: Deploy to k8s
-        uses: Agile-Software-Engineering-25/deploy-to-k8s@main
+          extra_tags: ${{ github.sha }}
+
+      - name: Deploy to Namespace
+        uses: Agile-Software-Engineering-25/deploy-to-k8s@v1
         with:
           kubeconfig: ${{ secrets.KUBECONFIG }}
-          namespace: ${{ vars.K8S_NAMESPACE}}
+          namespace: ${{ vars.K8S_NAMESPACE }}
