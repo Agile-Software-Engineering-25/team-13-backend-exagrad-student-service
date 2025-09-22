@@ -2,7 +2,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 metadata:
-  name: <service-name>
+  name: exagrad-student-service
 
 resources:
   - deployment.yaml
@@ -10,14 +10,14 @@ resources:
   - ingress.yaml
 
 commonLabels:
-  environment: <team-namespace>
+  environment: ase-13
   managed-by: kustomize
-  app: <service-name>
+  app: exagrad-student-service
 
 namePrefix: "ase-"
 
-namespace: <team-namespace>
+namespace: ase-13
 
 replicas:
-  - name: <service-name>
+  - name: exagrad-student-service
     count: 1

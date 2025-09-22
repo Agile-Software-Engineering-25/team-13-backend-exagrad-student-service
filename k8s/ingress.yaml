@@ -1,9 +1,9 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: <service-name>
+  name: exagrad-student-service
   labels:
-    app: <service-name>
+    app: exagrad-student-service
   annotations:
     traefik.ingress.kubernetes.io/rewrite-target: /
 spec:
@@ -12,10 +12,10 @@ spec:
     - host: sau-portal.de
       http:
         paths:
-          - path: <deployment-path> # specify under which path your service should be reachable
+          - path: /exagrad/student
             pathType: Prefix
             backend:
               service:
-                name: <service-name>
+                name: exagrad-student-service
                 port:
                   number: 8080

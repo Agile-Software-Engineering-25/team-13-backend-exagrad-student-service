@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: <service-name>
+  name: exagrad-student-service
   labels:
-    app: <service-name>
+    app: exagrad-student-service
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: <service-name>
+      app: exagrad-student-service
   template:
     metadata:
       labels:
-        app: <service-name>
+        app: exagrad-student-service
     spec:
       containers:
-        - name: <service-name>
-          image: <image>
+        - name: exagrad-student-service
+          image: ghcr.io/agile-software-engineering-25/team-13-backend-exagrad-student-service:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
@@ -29,13 +29,13 @@ spec:
               cpu: "300m"
           readinessProbe:
             httpGet:
-              path: <deployment-path> # you might need to change this to a health endpoint of your application
+              path: /exagrad/student
               port: 8080
             initialDelaySeconds: 10
             periodSeconds: 5
           livenessProbe:
             httpGet:
-              path: <deployment-path> # you might need to change this to a health endpoint of your application
+              path: /exagrad/student
               port: 8080
             initialDelaySeconds: 120
             periodSeconds: 20

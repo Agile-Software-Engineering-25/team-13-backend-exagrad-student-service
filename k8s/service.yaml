@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: <service-name>
+  name: exagrad-student-service
   labels:
-    app: <service-name>
+    app: exagrad-student-service
 spec:
   selector:
-    app: <service-name>
+    app: exagrad-student-service
   ports:
     - name: http
       protocol: TCP
