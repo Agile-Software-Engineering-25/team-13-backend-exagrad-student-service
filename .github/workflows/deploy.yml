@@ -56,10 +56,12 @@ jobs:
         with:
           image_name: "team-13-backend-exagrad-student-service"
           push: true
-          extra_tags: ${{ github.sha }}
+          extra_tags: "latest,${{ github.sha }}"
 
       - name: Deploy to Namespace
         uses: Agile-Software-Engineering-25/deploy-to-k8s@v1
         with:
           kubeconfig: ${{ secrets.KUBECONFIG }}
           namespace: ${{ vars.K8S_NAMESPACE }}
+          image: ghcr.io/agile-software-engineering-25/team-13-backend-exagrad-student-service
+          tag: latest
