@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Build (and conditionally push)
-        uses: ./ #Agile-Software-Engineering-25/build-and-publish-image@v1
+        uses: Agile-Software-Engineering-25/build-and-publish-image@v1
         with:
           # optional — defaults shown:
           # image_name: ""                 # defaults to repo name (lowercased)
