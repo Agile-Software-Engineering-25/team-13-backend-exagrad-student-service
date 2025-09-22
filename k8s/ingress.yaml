@@ -12,7 +12,7 @@ spec:
     - host: sau-portal.de
       http:
         paths:
-          - path: /
+          - path: /exagrad/student
             pathType: Prefix
             backend:
               service:
