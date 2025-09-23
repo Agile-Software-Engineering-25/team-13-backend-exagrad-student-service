@@ -51,4 +51,4 @@ app:
     pubDocumentsBucket: student-pub-documents
   file:
     max-size: 10485760 # 10MB
-    allowed-types: application/pdf,image/jpeg,image/png,image/gif,text/plain,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document
+    allowed-types: application/pdf,application/octet-stream,image/jpeg,image/png,image/gif,text/plain,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document
