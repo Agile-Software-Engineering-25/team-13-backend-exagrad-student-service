@@ -17,7 +17,7 @@ spec:
       containers:
         - name: exagrad-student-service
           image:
-            ghcr.io/agile-software-engineering-25/team-13-backend-exagrad-student-service:sha-40dd78c
+            ghcr.io/agile-software-engineering-25/team-13-backend-exagrad-student-service:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
