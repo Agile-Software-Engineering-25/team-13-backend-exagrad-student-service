@@ -5,7 +5,7 @@ metadata:
   labels:
     app: exagrad-student-service
   annotations:
-    traefik.ingress.kubernetes.io/rewrite-target: /api/v1
+    traefik.ingress.kubernetes.io/rule: "PathPrefixStrip:`/exagrad/student`"
 spec:
   ingressClassName: traefik
   rules:
@@ -16,6 +16,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: ase-exagrad-student-service
+                name: exagrad-student-service
                 port:
                   number: 8080
