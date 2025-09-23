@@ -4,15 +4,13 @@ metadata:
   name: ase-exagrad-student-service
   labels:
     app: exagrad-student-service
-  annotations:
-    traefik.ingress.kubernetes.io/rewrite-target: /
 spec:
   ingressClassName: traefik
   rules:
     - host: sau-portal.de
       http:
         paths:
-          - path: /exagrad/student/
+          - path: /api/v1
             pathType: Prefix
             backend:
               service:
