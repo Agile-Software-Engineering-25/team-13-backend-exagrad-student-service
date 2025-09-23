@@ -18,7 +18,7 @@ server:
   error:
     include-message: always
   servlet:
-    context-path: /api/v1
+    context-path: /api/v1/exagrad/student
 management:
   endpoints:
     web:
