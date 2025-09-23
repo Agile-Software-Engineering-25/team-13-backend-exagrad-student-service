@@ -11,4 +11,4 @@ spring:
     url: jdbc:postgresql://postgres.db:5432/appdb
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
-    driver-class-name: org.postgresql.Driver
+    driver-class-name: org.postgresql.Driver 
