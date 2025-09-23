@@ -102,7 +102,7 @@ public class GlobalExceptionHandler {
   }
 
   @ExceptionHandler(InvalidDateRangeException.class)
-  public ResponseEntity<ApiResponse<Void>> handleInvalidDateRange(
+  public ResponseEntity<ApiResponseWrapper<Void>> handleInvalidDateRange(
       InvalidDateRangeException ex, HttpServletRequest request) {
     log.warn("Invalid date range: {}", ex.getMessage());
 
