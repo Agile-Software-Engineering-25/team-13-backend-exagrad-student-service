@@ -1,4 +1,6 @@
 name: Workflow
+permissions:
+  contents: read
 
 on:
   push:
