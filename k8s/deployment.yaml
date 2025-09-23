@@ -27,18 +27,33 @@ spec:
             limits:
               memory: "1Gi"
               cpu: "300m"
-          #          readinessProbe:
-          #            httpGet:
-          #              path: /api/v1/documents/exams?studentId=1
-          #              port: 8080
-          #            initialDelaySeconds: 10
-          #            periodSeconds: 5
-          #          livenessProbe:
-          #            httpGet:
-          #              path: /api/v1/documents/exams?studentId=1
-          #              port: 8080
-          #            initialDelaySeconds: 120
-          #            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /api/v1/actuator/health/readiness
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+            successThreshold: 1
+          livenessProbe:
+            httpGet:
+              path: /api/v1/actuator/health/liveness
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 20
+            timeoutSeconds: 5
+            failureThreshold: 3
+            successThreshold: 1
+          startupProbe:
+            httpGet:
+              path: /api/v1/actuator/health/liveness
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 5
+            failureThreshold: 12
+            successThreshold: 1
           env:
             - name: POSTGRES_USER
               valueFrom:
