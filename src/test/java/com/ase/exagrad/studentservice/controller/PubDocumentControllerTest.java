@@ -158,7 +158,8 @@ class PubDocumentControllerTest {
   void getPubDocumentsNoParametersReturnsBadRequest() throws Exception {
     // Arrange
     String errorMessage = "Provide studentId";
-    ApiResponseWrapper<List<PubDocumentResponse>> errorResponse = createErrorApiResponse(errorMessage);
+    ApiResponseWrapper<List<PubDocumentResponse>> errorResponse =
+        createErrorApiResponse(errorMessage);
 
     when(apiResponseFactory.<List<PubDocumentResponse>>badRequest(eq(errorMessage),
         any(String.class)))
