@@ -5,14 +5,14 @@ metadata:
   labels:
     app: exagrad-student-service
   annotations:
-    traefik.ingress.kubernetes.io/rule: "PathPrefixStrip:`/exagrad/student`"
+    traefik.ingress.kubernetes.io/rewrite-target: /
 spec:
   ingressClassName: traefik
   rules:
     - host: sau-portal.de
       http:
         paths:
-          - path: /exagrad/student
+          - path: /exagrad/student/
             pathType: Prefix
             backend:
               service:
