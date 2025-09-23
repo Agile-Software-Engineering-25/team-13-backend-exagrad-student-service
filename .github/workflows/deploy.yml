@@ -56,7 +56,6 @@ jobs:
         with:
           image_name: "team-13-backend-exagrad-student-service"
           push: true
-          tag: "latest"
           extra_tags: "${{ github.sha }}"
 
       - name: Deploy to Namespace
