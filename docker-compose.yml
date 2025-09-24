@@ -12,3 +12,5 @@ services:
     # Add volume for persistence Data (usefully if u work with h2:file instead of h2:mem)
     # volumes:
     #   - ./minio-data:/data
+
+
