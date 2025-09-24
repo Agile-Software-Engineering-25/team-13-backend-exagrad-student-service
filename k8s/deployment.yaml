@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: exagrad-student-service
+  labels:
+    app: exagrad-student-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: exagrad-student-service
+  template:
+    metadata:
+      labels:
+        app: exagrad-student-service
+    spec:
+      containers:
+        - name: exagrad-student-service
+          image:
+            ghcr.io/agile-software-engineering-25/team-13-backend-exagrad-student-service:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "1Gi"
+              cpu: "300m"
+          readinessProbe:
+            httpGet:
+              path: /api/v1/exagrad/student/actuator/health/readiness
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+            successThreshold: 1
+          livenessProbe:
+            httpGet:
+              path: /api/v1/exagrad/student/actuator/health/liveness
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 20
+            timeoutSeconds: 5
+            failureThreshold: 3
+            successThreshold: 1
+          startupProbe:
+            httpGet:
+              path: /api/v1/exagrad/student/actuator/health/liveness
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 5
+            failureThreshold: 12
+            successThreshold: 1
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "prod"
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_PASSWORD

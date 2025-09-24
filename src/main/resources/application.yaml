@@ -18,7 +18,27 @@ server:
   error:
     include-message: always
   servlet:
-    context-path: /api/v1
+    context-path: /api/v1/exagrad/student
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,readiness,liveness
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: always
+      probes:
+        enabled: true
+    readiness:
+      enabled: true
+    liveness:
+      enabled: true
+  health:
+    livenessstate:
+      enabled: true
+    readinessstate:
+      enabled: true
 minio-connection:
   # TODO: updated these configs if more information from the responsible team are gained
   endpoint: http://localhost:9000
@@ -31,4 +51,4 @@ app:
     pubDocumentsBucket: student-pub-documents
   file:
     max-size: 10485760 # 10MB
-    allowed-types: application/pdf,image/jpeg,image/png,image/gif,text/plain,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document
+    allowed-types: application/pdf,application/octet-stream,image/jpeg,image/png,image/gif,text/plain,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document

@@ -26,7 +26,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import com.ase.exagrad.studentservice.component.ApiResponseFactory;
 import com.ase.exagrad.studentservice.dto.request.PubDocumentRequest;
-import com.ase.exagrad.studentservice.dto.response.ApiResponse;
+import com.ase.exagrad.studentservice.dto.response.ApiResponseWrapper;
 import com.ase.exagrad.studentservice.dto.response.PubDocumentResponse;
 import com.ase.exagrad.studentservice.service.PubDocumentService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -66,7 +66,7 @@ class PubDocumentControllerTest {
   @Test
   void uploadPubDocumentValidInputReturnsCreatedStatus() throws Exception {
     // Arrange
-    ApiResponse<PubDocumentResponse> successResponse =
+    ApiResponseWrapper<PubDocumentResponse> successResponse =
         createApiResponse(pubDocumentResponse, "Document uploaded successfully");
 
     when(pubDocumentService.uploadPubDocument(any(), any())).thenReturn(pubDocumentResponse);
@@ -94,7 +94,7 @@ class PubDocumentControllerTest {
       throws Exception {
     // Arrange
     String errorMessage = "Invalid date range";
-    ApiResponse<PubDocumentResponse> errorResponse = createErrorApiResponse(errorMessage);
+    ApiResponseWrapper<PubDocumentResponse> errorResponse = createErrorApiResponse(errorMessage);
 
     when(pubDocumentService.uploadPubDocument(any(), any()))
         .thenThrow(new IllegalArgumentException(errorMessage));
@@ -115,7 +115,7 @@ class PubDocumentControllerTest {
   void uploadPubDocumentServiceThrowsIOExceptionReturnsInternalServerError() throws Exception {
     // Arrange
     String errorMessage = "Upload failed: File processing error";
-    ApiResponse<PubDocumentResponse> errorResponse = createErrorApiResponse(errorMessage);
+    ApiResponseWrapper<PubDocumentResponse> errorResponse = createErrorApiResponse(errorMessage);
 
     when(pubDocumentService.uploadPubDocument(any(), any()))
         .thenThrow(new IOException("File processing error"));
@@ -137,7 +137,7 @@ class PubDocumentControllerTest {
   void getPubDocumentsWithStudentIdReturnsPubDocumentsList() throws Exception {
     // Arrange
     List<PubDocumentResponse> documents = List.of(pubDocumentResponse);
-    ApiResponse<List<PubDocumentResponse>> successResponse =
+    ApiResponseWrapper<List<PubDocumentResponse>> successResponse =
         createApiResponse(documents, "Documents retrieved successfully");
 
     when(pubDocumentService.getDocumentsByStudentId(STUDENT_ID)).thenReturn(documents);
@@ -158,7 +158,8 @@ class PubDocumentControllerTest {
   void getPubDocumentsNoParametersReturnsBadRequest() throws Exception {
     // Arrange
     String errorMessage = "Provide studentId";
-    ApiResponse<List<PubDocumentResponse>> errorResponse = createErrorApiResponse(errorMessage);
+    ApiResponseWrapper<List<PubDocumentResponse>> errorResponse =
+        createErrorApiResponse(errorMessage);
 
     when(apiResponseFactory.<List<PubDocumentResponse>>badRequest(eq(errorMessage),
         any(String.class)))
@@ -177,16 +178,16 @@ class PubDocumentControllerTest {
         name, "", "application/json", objectMapper.writeValueAsBytes(content));
   }
 
-  private <T> ApiResponse<T> createApiResponse(T data, String message) {
-    ApiResponse<T> response = new ApiResponse<>();
+  private <T> ApiResponseWrapper<T> createApiResponse(T data, String message) {
+    ApiResponseWrapper<T> response = new ApiResponseWrapper<>();
     response.setData(data);
     response.setMessage(message);
     response.setEndpoint("/documents/pub");
     return response;
   }
 
-  private <T> ApiResponse<T> createErrorApiResponse(String message) {
-    ApiResponse<T> response = new ApiResponse<>();
+  private <T> ApiResponseWrapper<T> createErrorApiResponse(String message) {
+    ApiResponseWrapper<T> response = new ApiResponseWrapper<>();
     response.setMessage(message);
     response.setEndpoint("/documents/pub");
     return response;
