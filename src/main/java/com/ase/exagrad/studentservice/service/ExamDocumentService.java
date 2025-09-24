@@ -33,7 +33,7 @@ public class ExamDocumentService {
     // Validate file before processing
     fileValidationService.validateFile(file);
 
-    String bucketName = storageProperties.getExamDocumentsBucket();
+    String bucketName = storageProperties.getBucketName();
     String sanitizedFilename =
         fileValidationService.sanitizeFileName(file.getOriginalFilename());
     String minioKey = generateMinioKey(sanitizedFilename);
@@ -66,7 +66,7 @@ public class ExamDocumentService {
   }
 
   private List<ExamDocumentResponse> convertToResponseWithUrls(List<ExamDocument> documents) {
-    String bucketName = storageProperties.getExamDocumentsBucket();
+    String bucketName = storageProperties.getBucketName();
 
     return documents.stream()
         .map(

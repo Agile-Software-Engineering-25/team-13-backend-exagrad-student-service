@@ -8,6 +8,5 @@ import lombok.Data;
 @Component
 @ConfigurationProperties(prefix = "app.storage")
 public class StorageProperties {
-  private String examDocumentsBucket;
-  private String pubDocumentsBucket;
+  private String bucketName;
 }

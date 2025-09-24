@@ -3,6 +3,7 @@ package com.ase.exagrad.studentservice.controller;
 import java.io.IOException;
 import java.util.List;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,7 +36,7 @@ public class ExamDocumentController {
   private final ExamDocumentService examDocumentService;
   private final ApiResponseFactory apiResponseFactory;
 
-  @PostMapping(consumes = {"multipart/form-data", "application/octet-stream"})
+  @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   @Operation(
       summary = "Upload exam document",
       description = "Upload an exam document with metadata")
@@ -47,11 +48,14 @@ public class ExamDocumentController {
   })
   public ResponseEntity<ApiResponseWrapper<ExamDocumentResponse>> uploadExamDocument(
       @Parameter(description = "Document file to upload")
-      @RequestPart("file")
-      MultipartFile file,
-      @Parameter(description = "Document metadata")
-      @RequestPart("metadata")
-      ExamDocumentRequest metadata,
+      @RequestPart("file") MultipartFile file,
+
+      @Parameter(
+          description = "Document metadata as JSON",
+          content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExamDocumentRequest.class))
+      )
+      @RequestPart("metadata") ExamDocumentRequest metadata,
+
       HttpServletRequest request) {
 
     try {
