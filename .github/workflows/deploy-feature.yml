@@ -31,9 +31,11 @@ jobs:
           extra_tags: "${{ steps.extract_branch.outputs.branch }},${{ github.sha }}"
 
       - name: Deploy to Namespace
-        uses: Agile-Software-Engineering-25/deploy-to-k8s@v1
+        uses: ./.github/actions/deploy-k8s
         with:
           kubeconfig: ${{ secrets.KUBECONFIG }}
           namespace: ${{ vars.K8S_NAMESPACE }}
           image: ghcr.io/agile-software-engineering-25/team-13-backend-exagrad-student-service
           tag: ${{ steps.extract_branch.outputs.branch }}
+          deployment: exagrad-student-service
+          container: exagrad-student-service
