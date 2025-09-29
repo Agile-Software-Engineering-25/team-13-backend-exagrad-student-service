@@ -22,7 +22,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - uses: actions/checkout@v5
     - name: Install kubectl
       shell: bash
       run: |
