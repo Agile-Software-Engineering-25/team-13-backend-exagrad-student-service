@@ -31,7 +31,7 @@ jobs:
           extra_tags: "${{ steps.extract_branch.outputs.branch }},${{ github.sha }}"
 
       - name: Deploy to Namespace
-        uses: ./.github/actions/deploy-k8s
+        uses: ./.github/actions
         with:
           kubeconfig: ${{ secrets.KUBECONFIG }}
           namespace: ${{ vars.K8S_NAMESPACE }}
