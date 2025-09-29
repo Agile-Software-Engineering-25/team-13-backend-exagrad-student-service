@@ -41,8 +41,10 @@ management:
       enabled: true
 minio-connection:
   endpoint: http://localhost:9000
-  accessKey: my-access-key
-  secretKey: my-secret-key
+  access-key: my-access-key
+  secret-key: my-secret-key
+  region: us-east-1
+
 app:
   timezone: Europe/Berlin
   storage:

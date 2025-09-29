@@ -10,7 +10,6 @@ import io.minio.MakeBucketArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import io.minio.RemoveObjectArgs;
-import io.minio.StatObjectArgs;
 import io.minio.http.Method;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,30 +34,25 @@ public class MinioService {
    * @param contentType the content type
    * @throws StorageException if upload fails
    */
-  public void uploadFile(
-      String bucketName,
-      String objectKey,
-      InputStream inputStream,
-      long size,
-      String contentType) {
+  public void uploadFile(String bucketName, String objectKey, InputStream inputStream,
+                         long size, String contentType) {
     try {
       ensureBucketExists(bucketName);
 
       minioClient.putObject(
-          PutObjectArgs.builder().bucket(bucketName).object(objectKey).stream(
-                  inputStream, size, PART_SIZE)
+          PutObjectArgs.builder()
+              .bucket(bucketName)
+              .object(objectKey)
+              .stream(inputStream, size, PART_SIZE)
               .contentType(contentType)
               .build());
 
-      log.info(
-          "Successfully uploaded file to MinIO: bucket={}, key={}, size={}",
-          bucketName,
-          objectKey,
-          size);
+      log.info("Successfully uploaded file to MinIO: bucket={}, key={}, size={}",
+          bucketName, objectKey, size);
+
     }
     catch (Exception e) {
-      log.error(
-          "Failed to upload file to MinIO: bucket={}, key={}", bucketName, objectKey, e);
+      log.error("Failed to upload file to MinIO: bucket={}, key={}", bucketName, objectKey, e);
       throw new StorageException("Failed to upload file: " + objectKey, e);
     }
   }
@@ -142,27 +136,6 @@ public class MinioService {
     }
   }
 
-  /**
-   * Check if file exists in MinIO bucket
-   *
-   * @param bucketName the bucket name
-   * @param objectKey  the object key/path
-   * @return true if file exists, false otherwise
-   */
-  public boolean fileExists(String bucketName, String objectKey) {
-    try {
-      minioClient.statObject(
-          StatObjectArgs.builder().bucket(bucketName).object(objectKey).build());
-      return true;
-    }
-    catch (Exception e) {
-      log.debug(
-          "File does not exist or is inaccessible: bucket={}, key={}",
-          bucketName,
-          objectKey);
-      return false;
-    }
-  }
 
   /**
    * Ensure bucket exists, create if it doesn't

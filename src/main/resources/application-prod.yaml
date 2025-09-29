@@ -14,6 +14,7 @@ spring:
     driver-class-name: org.postgresql.Driver
 minio-connection:
   endpoint: ${MINIO_ENDPOINT}
-  accessKey: ${MINIO_ACCESS_KEY}
-  secretKey: ${MINIO_SECRET_KEY}
+  access-key: ${MINIO_ACCESS_KEY}
+  secret-key: ${MINIO_SECRET_KEY}
+  region: ${MINIO_REGION:us-east-1}
 

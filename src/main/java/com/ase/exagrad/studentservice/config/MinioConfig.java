@@ -18,6 +18,7 @@ public class MinioConfig {
         .credentials(
             minioConnectionProperties.getAccessKey(),
             minioConnectionProperties.getSecretKey())
+        .region(minioConnectionProperties.getRegion())
         .build();
   }
 }
