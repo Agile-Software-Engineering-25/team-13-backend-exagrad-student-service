@@ -20,7 +20,9 @@ import com.ase.exagrad.studentservice.service.ExamDocumentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Encoding;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -40,6 +42,14 @@ public class ExamDocumentController {
   @Operation(
       summary = "Upload exam document",
       description = "Upload an exam document with metadata")
+  @RequestBody(
+      content = @Content(
+          mediaType = MediaType.MULTIPART_FORM_DATA_VALUE,
+          encoding = {
+              @Encoding(name = "metadata", contentType = MediaType.APPLICATION_JSON_VALUE)
+          }
+      )
+  )
   @ApiResponses(value = {
       @ApiResponse(responseCode = "201", description = "Document uploaded successfully",
           content = @Content(schema = @Schema(implementation = ExamDocumentResponse.class))),
@@ -50,10 +60,7 @@ public class ExamDocumentController {
       @Parameter(description = "Document file to upload")
       @RequestPart("file") MultipartFile file,
 
-      @Parameter(
-          description = "Document metadata as JSON",
-          content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExamDocumentRequest.class))
-      )
+      @Parameter(description = "Document metadata as JSON")
       @RequestPart("metadata") ExamDocumentRequest metadata,
 
       HttpServletRequest request) {

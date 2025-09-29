@@ -21,7 +21,9 @@ import com.ase.exagrad.studentservice.service.PubDocumentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Encoding;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -44,6 +46,14 @@ public class PubDocumentController {
   @Operation(
       summary = "Upload PUB document",
       description = "Upload a Prüfungsunfähigkeitsdokument with metadata")
+  @RequestBody(
+      content = @Content(
+          mediaType = MediaType.MULTIPART_FORM_DATA_VALUE,
+          encoding = {
+              @Encoding(name = "metadata", contentType = MediaType.APPLICATION_JSON_VALUE)
+          }
+      )
+  )
   @ApiResponses(value = {
       @ApiResponse(responseCode = "201", description = "Document uploaded successfully",
           content = @Content(schema = @Schema(implementation = PubDocumentResponse.class))),
