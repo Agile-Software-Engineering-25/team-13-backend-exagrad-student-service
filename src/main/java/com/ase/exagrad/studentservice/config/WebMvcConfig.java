@@ -12,8 +12,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class WebMvcConfig implements WebMvcConfigurer {
 
+  private static final long CORS_MAX_AGE_SECONDS = 3600;
   private final RequestLoggingInterceptor requestLoggingInterceptor;
-
   @Value("${app.cors.allowed-origins}")
   private String[] allowedOrigins;
 
@@ -33,6 +33,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")
         .allowedHeaders("*")
         .allowCredentials(true)
-        .maxAge(3600);
+        .maxAge(CORS_MAX_AGE_SECONDS);
   }
 }
