@@ -2,7 +2,10 @@ package com.ase.exagrad.studentservice.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -16,12 +19,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import com.ase.exagrad.studentservice.component.ApiResponseFactory;
 import com.ase.exagrad.studentservice.dto.request.ExamDocumentRequest;
 import com.ase.exagrad.studentservice.dto.response.ApiResponseWrapper;
+import com.ase.exagrad.studentservice.dto.response.ErrorDetails;
 import com.ase.exagrad.studentservice.dto.response.ExamDocumentResponse;
 import com.ase.exagrad.studentservice.service.ExamDocumentService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -230,6 +235,91 @@ class ExamDocumentControllerTest {
     // Act & Assert
     mockMvc.perform(get("/documents/exams").param("studentId", ""))
         .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  void deleteExamDocumentValidIdReturnsNoContent() throws Exception {
+    // Arrange
+    UUID documentId = UUID.randomUUID();
+    doNothing().when(examDocumentService).deleteExamDocument(documentId.toString());
+
+    // Act & Assert
+    mockMvc.perform(delete("/documents/exams/{documentId}", documentId))
+        .andExpect(status().isNoContent());
+  }
+
+  @Test
+  void deleteExamDocumentInvalidIdReturnsBadRequest() throws Exception {
+    // Arrange
+    String invalidId = "invalid-uuid";
+    String errorMessage = "Invalid document ID format";
+    ApiResponseWrapper<Void> errorResponse = createErrorApiResponse(errorMessage);
+
+    doThrow(new IllegalArgumentException(errorMessage))
+        .when(examDocumentService).deleteExamDocument(invalidId);
+    when(apiResponseFactory.<Void>badRequest(eq(errorMessage), any(String.class)))
+        .thenReturn(errorResponse);
+
+    // Act & Assert
+    mockMvc.perform(delete("/documents/exams/{documentId}", invalidId))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.message").value(errorMessage));
+  }
+
+  @Test
+  void deleteExamDocumentNotFoundReturnsBadRequest() throws Exception {
+    // Arrange
+    UUID documentId = UUID.randomUUID();
+    String errorMessage = "Document not found";
+    ApiResponseWrapper<Void> errorResponse = createErrorApiResponse(errorMessage);
+
+    doThrow(new IllegalArgumentException(errorMessage))
+        .when(examDocumentService).deleteExamDocument(documentId.toString());
+    when(apiResponseFactory.<Void>badRequest(eq(errorMessage), any(String.class)))
+        .thenReturn(errorResponse);
+
+    // Act & Assert
+    mockMvc.perform(delete("/documents/exams/{documentId}", documentId))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.message").value(errorMessage));
+  }
+
+  @Test
+  void deleteExamDocumentAfterDeadlineReturnsForbidden() throws Exception {
+    // Arrange
+    UUID documentId = UUID.randomUUID();
+    String errorMessage = "Deletion not allowed: deadline has passed for this exam";
+    ApiResponseWrapper<Void> errorResponse = createErrorApiResponse(errorMessage);
+
+    doThrow(new IllegalStateException(errorMessage))
+        .when(examDocumentService).deleteExamDocument(documentId.toString());
+    when(apiResponseFactory.<Void>error(
+        eq(errorMessage), any(String.class), eq(HttpStatus.FORBIDDEN), any(ErrorDetails.class)))
+        .thenReturn(errorResponse);
+
+    // Act & Assert
+    mockMvc.perform(delete("/documents/exams/{documentId}", documentId))
+        .andExpect(status().isForbidden())
+        .andExpect(jsonPath("$.message").value(errorMessage));
+  }
+
+  @Test
+  void deleteExamDocumentStorageFailureReturnsInternalServerError() throws Exception {
+    // Arrange
+    UUID documentId = UUID.randomUUID();
+    String errorMessage = "Deletion failed: Storage error";
+    ApiResponseWrapper<Void> errorResponse = createErrorApiResponse(errorMessage);
+
+    doThrow(new RuntimeException("Storage error"))
+        .when(examDocumentService).deleteExamDocument(documentId.toString());
+    when(apiResponseFactory.<Void>internalServerError(
+        eq(errorMessage), any(String.class)))
+        .thenReturn(errorResponse);
+
+    // Act & Assert
+    mockMvc.perform(delete("/documents/exams/{documentId}", documentId))
+        .andExpect(status().isInternalServerError())
+        .andExpect(jsonPath("$.message").value(errorMessage));
   }
 
   // Helper methods
