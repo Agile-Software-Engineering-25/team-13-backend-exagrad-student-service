@@ -3,6 +3,7 @@ package com.ase.exagrad.studentservice.controller;
 import java.io.IOException;
 import java.util.List;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +21,9 @@ import com.ase.exagrad.studentservice.service.PubDocumentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Encoding;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -39,10 +42,18 @@ public class PubDocumentController {
   private final PubDocumentService pubDocumentService;
   private final ApiResponseFactory apiResponseFactory;
 
-  @PostMapping(consumes = {"multipart/form-data", "application/octet-stream"})
+  @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   @Operation(
       summary = "Upload PUB document",
       description = "Upload a Prüfungsunfähigkeitsdokument with metadata")
+  @RequestBody(
+      content = @Content(
+          mediaType = MediaType.MULTIPART_FORM_DATA_VALUE,
+          encoding = {
+              @Encoding(name = "metadata", contentType = MediaType.APPLICATION_JSON_VALUE)
+          }
+      )
+  )
   @ApiResponses(value = {
       @ApiResponse(responseCode = "201", description = "Document uploaded successfully",
           content = @Content(schema = @Schema(implementation = PubDocumentResponse.class))),
@@ -50,10 +61,11 @@ public class PubDocumentController {
       @ApiResponse(responseCode = "500", description = "Internal server error")
   })
   public ResponseEntity<ApiResponseWrapper<PubDocumentResponse>> uploadPubDocument(
-      @Parameter(description = "PUB document file to upload") @RequestPart("file")
-      MultipartFile file,
-      @Parameter(description = "Document metadata") @Valid @RequestPart("metadata")
-      PubDocumentRequest metadata,
+      @Parameter(description = "PUB document file to upload")
+      @RequestPart("file") MultipartFile file,
+
+      @Parameter(description = "Document metadata")
+      @Valid @RequestPart("metadata") PubDocumentRequest metadata,
       HttpServletRequest request) {
 
     try {
