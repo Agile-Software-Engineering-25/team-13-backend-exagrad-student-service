@@ -84,7 +84,8 @@ public class ExamDocumentService {
     UUID uuid;
     try {
       uuid = UUID.fromString(documentId);
-    } catch (IllegalArgumentException e) {
+    }
+    catch (IllegalArgumentException e) {
       throw new IllegalArgumentException("Invalid document ID format");
     }
 
