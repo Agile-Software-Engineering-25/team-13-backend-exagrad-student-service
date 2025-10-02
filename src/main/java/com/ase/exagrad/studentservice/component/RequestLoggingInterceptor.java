@@ -17,7 +17,8 @@ public class RequestLoggingInterceptor implements HandlerInterceptor {
   private static final String START_TIME_ATTRIBUTE = "startTime";
 
   @Override
-  public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+  public boolean preHandle(HttpServletRequest request,
+                           HttpServletResponse response, Object handler) {
     Instant startTime = Instant.now();
     request.setAttribute(START_TIME_ATTRIBUTE, startTime);
 
@@ -32,7 +33,8 @@ public class RequestLoggingInterceptor implements HandlerInterceptor {
   }
 
   @Override
-  public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
+  public void afterCompletion(HttpServletRequest request,
+                              HttpServletResponse response, Object handler, Exception ex) {
     Instant startTime = (Instant) request.getAttribute(START_TIME_ATTRIBUTE);
     if (startTime!=null) {
       Duration duration = Duration.between(startTime, Instant.now());
