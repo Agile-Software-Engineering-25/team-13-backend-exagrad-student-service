@@ -1,6 +1,7 @@
 package com.ase.exagrad.studentservice.service;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.time.Year;
 import java.util.List;
 import java.util.UUID;
@@ -76,6 +77,47 @@ public class ExamDocumentService {
               return examDocumentMapper.toResponse(doc, downloadUrl);
             })
         .toList();
+  }
+
+  @Transactional
+  public void deleteExamDocument(String documentId) {
+    UUID uuid;
+    try {
+      uuid = UUID.fromString(documentId);
+    } catch (IllegalArgumentException e) {
+      throw new IllegalArgumentException("Invalid document ID format");
+    }
+
+    ExamDocument document =
+        examDocumentRepository
+            .findById(uuid)
+            .orElseThrow(() -> new IllegalArgumentException("Document not found"));
+
+    // Mock deadline check - TODO: Replace with actual Team 14 API call
+    Instant deadline = getMockDeadlineForExam(document.getExamId());
+    if (Instant.now().isAfter(deadline)) {
+      throw new IllegalStateException(
+          "Deletion not allowed: deadline has passed for this exam");
+    }
+
+    // Delete from MinIO
+    String bucketName = storageProperties.getExamDocumentsBucket();
+    minioService.deleteFile(bucketName, document.getMinioKey());
+
+    // Delete from database
+    examDocumentRepository.delete(document);
+
+    log.info("Deleted exam document with ID: {}", documentId);
+  }
+
+  /**
+   * Mock method to get deadline for an exam.
+   * TODO: Replace with actual call to Team 14 API
+   * For now, returns a deadline 7 days after document upload
+   */
+  private Instant getMockDeadlineForExam(String examId) {
+    // Mock: deadline is 7 days from now
+    return Instant.now().plusSeconds(7 * 24 * 60 * 60);
   }
 
   private String generateMinioKey(String originalFilename) {
