@@ -1,6 +1,7 @@
 package com.ase.exagrad.studentservice.service;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.time.Instant;
 import java.time.Year;
 import java.util.List;
@@ -117,8 +118,8 @@ public class ExamDocumentService {
    * For now, returns a deadline 7 days after document upload
    */
   private Instant getMockDeadlineForExam(String examId) {
-    // Mock: deadline is 7 days from now
-    return Instant.now().plusSeconds(7 * 24 * 60 * 60);
+    final long DEADLINE_DAYS = 7L;
+    return Instant.now().plus(Duration.ofDays(DEADLINE_DAYS));
   }
 
   private String generateMinioKey(String originalFilename) {
