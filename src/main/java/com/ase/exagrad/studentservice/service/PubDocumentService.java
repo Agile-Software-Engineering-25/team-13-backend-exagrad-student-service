@@ -36,7 +36,7 @@ public class PubDocumentService {
 
     validateDateRange(metadata);
 
-    String bucketName = storageProperties.getPubDocumentsBucket();
+    String bucketName = storageProperties.getBucketName();
     String sanitizedFilename =
         fileValidationService.sanitizeFileName(file.getOriginalFilename());
     String minioKey = generateMinioKey(sanitizedFilename);
@@ -65,7 +65,7 @@ public class PubDocumentService {
   }
 
   private List<PubDocumentResponse> convertToResponseWithUrls(List<PubDocument> documents) {
-    String bucketName = storageProperties.getPubDocumentsBucket();
+    String bucketName = storageProperties.getBucketName();
 
     return documents.stream()
         .map(

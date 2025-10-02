@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class TimezoneConfig {
 
-  @Value("${app.timezone:UTC}") // default to UTC if not set)
+  @Value("${app.timezone:UTC}") // default to UTC if not set
   private String timezone;
 
   @Bean

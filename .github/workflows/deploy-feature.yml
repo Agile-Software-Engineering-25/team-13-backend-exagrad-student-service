@@ -1,0 +1,41 @@
+name: Deploy Feature Branch to K3s
+
+permissions:
+  contents: read
+  packages: write
+
+on:
+  push:
+    branches-ignore: [ main ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v5
+
+      - name: Extract branch name
+        id: extract_branch
+        run: |
+          BRANCH=${GITHUB_REF#refs/heads/}
+          SAFE_BRANCH=$(echo "$BRANCH" | sed 's/[^a-zA-Z0-9-]/-/g')
+          echo "branch=$SAFE_BRANCH" >> $GITHUB_OUTPUT
+
+      - name: Build and Publish Image
+        uses: Agile-Software-Engineering-25/build-and-publish-image@v1
+        with:
+          image_name: "team-13-backend-exagrad-student-service"
+          push: true
+          extra_tags: "${{ steps.extract_branch.outputs.branch }},${{ github.sha }}"
+
+      - name: Deploy to Namespace
+        uses: ./.github/actions
+        with:
+          kubeconfig: ${{ secrets.KUBECONFIG }}
+          namespace: ${{ vars.K8S_NAMESPACE }}
+          image: ghcr.io/agile-software-engineering-25/team-13-backend-exagrad-student-service
+          tag: ${{ steps.extract_branch.outputs.branch }}
+          deployment: ase-exagrad-student-service
+          container: exagrad-student-service
