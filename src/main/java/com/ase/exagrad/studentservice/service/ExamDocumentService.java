@@ -103,7 +103,7 @@ public class ExamDocumentService {
     }
 
     // Delete from MinIO
-    String bucketName = storageProperties.getExamDocumentsBucket();
+    String bucketName = storageProperties.getBucketName();
     minioService.deleteFile(bucketName, document.getMinioKey());
 
     // Delete from database

@@ -67,7 +67,7 @@ class ExamDocumentServiceTest {
   void deleteExamDocumentValidIdBeforeDeadlineSucceeds() {
     // Arrange
     when(examDocumentRepository.findById(testDocumentId)).thenReturn(Optional.of(testDocument));
-    when(storageProperties.getExamDocumentsBucket()).thenReturn(bucketName);
+    when(storageProperties.getBucketName()).thenReturn(bucketName);
 
     // Act
     assertDoesNotThrow(() -> examDocumentService.deleteExamDocument(testDocumentId.toString()));
@@ -116,7 +116,7 @@ class ExamDocumentServiceTest {
   void deleteExamDocumentMinioServiceDeletesFileSuccessfully() {
     // Arrange
     when(examDocumentRepository.findById(testDocumentId)).thenReturn(Optional.of(testDocument));
-    when(storageProperties.getExamDocumentsBucket()).thenReturn(bucketName);
+    when(storageProperties.getBucketName()).thenReturn(bucketName);
 
     // Act
     examDocumentService.deleteExamDocument(testDocumentId.toString());
@@ -130,7 +130,7 @@ class ExamDocumentServiceTest {
   void deleteExamDocumentDatabaseRecordDeletedAfterMinioSuccess() {
     // Arrange
     when(examDocumentRepository.findById(testDocumentId)).thenReturn(Optional.of(testDocument));
-    when(storageProperties.getExamDocumentsBucket()).thenReturn(bucketName);
+    when(storageProperties.getBucketName()).thenReturn(bucketName);
 
     // Act
     examDocumentService.deleteExamDocument(testDocumentId.toString());
