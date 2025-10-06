@@ -35,6 +35,7 @@ public class PubDocumentService {
     fileValidationService.validateFile(file);
 
     validateDateRange(metadata);
+    checkForOverlappingPeriods(metadata);
 
     String bucketName = storageProperties.getBucketName();
     String sanitizedFilename =
@@ -88,6 +89,26 @@ public class PubDocumentService {
         && metadata.getEndDate()!=null
         && metadata.getStartDate().isAfter(metadata.getEndDate())) {
       throw new InvalidDateRangeException("The start date must not be after the end date.");
+    }
+  }
+
+  private void checkForOverlappingPeriods(PubDocumentRequest metadata) {
+    if (metadata.getStartDate() == null || metadata.getEndDate() == null) {
+      return;
+    }
+
+    List<PubDocument> existingDocs = pubDocumentRepository.findByStudentId(metadata.getStudentId());
+
+    boolean overlaps = existingDocs.stream().anyMatch(doc -> {
+      if (doc.getStartDate() == null || doc.getEndDate() == null) {
+        return false;
+      }
+      return !metadata.getStartDate().isAfter(doc.getEndDate())
+          && !metadata.getEndDate().isBefore(doc.getStartDate());
+    });
+
+    if (overlaps) {
+      throw new InvalidDateRangeException("Document dates conflict with an existing entry.");
     }
   }
 }
