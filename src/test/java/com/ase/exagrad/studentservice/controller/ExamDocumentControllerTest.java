@@ -19,11 +19,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import com.ase.exagrad.studentservice.component.ApiResponseFactory;
+import com.ase.exagrad.studentservice.config.TestSecurityConfig;
 import com.ase.exagrad.studentservice.dto.request.ExamDocumentRequest;
 import com.ase.exagrad.studentservice.dto.response.ApiResponseWrapper;
 import com.ase.exagrad.studentservice.dto.response.ErrorDetails;
@@ -32,6 +34,7 @@ import com.ase.exagrad.studentservice.service.ExamDocumentService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebMvcTest(ExamDocumentController.class)
+@Import(TestSecurityConfig.class)
 class ExamDocumentControllerTest {
 
   @Autowired
