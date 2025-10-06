@@ -103,11 +103,12 @@ public class PubDocumentService {
       if (doc.getStartDate() == null || doc.getEndDate() == null) {
         return false;
       }
-      return !metadata.getStartDate().isAfter(doc.getEndDate()) && !metadata.getEndDate().isBefore(doc.getStartDate());
+      return !metadata.getStartDate().isAfter(doc.getEndDate())
+          && !metadata.getEndDate().isBefore(doc.getStartDate());
     });
 
     if (overlaps) {
-      throw new InvalidDateRangeException("The provided date range overlaps with an existing document period.");
+      throw new InvalidDateRangeException("Document dates conflict with an existing entry.");
     }
   }
 }
