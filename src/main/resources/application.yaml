@@ -47,6 +47,8 @@ minio-connection:
 
 app:
   timezone: Europe/Berlin
+  cors:
+    allowed-origins: http://localhost:5173,http://localhost:3000
   storage:
     bucket-name: ase-team-13
   file:
