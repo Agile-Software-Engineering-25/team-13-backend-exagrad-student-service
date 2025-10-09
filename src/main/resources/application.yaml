@@ -44,6 +44,10 @@ minio-connection:
   access-key: my-access-key
   secret-key: my-secret-key
   region: us-east-1
+lecturer:
+  feedback:
+    api:
+      url: <<url>> # URL eintragen
 
 app:
   timezone: Europe/Berlin
