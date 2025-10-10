@@ -10,7 +10,7 @@ import org.springframework.web.client.RestTemplate;
 @CrossOrigin(origins = "https://sau-portal.de/exagrad-students")
 public class LecturerFeedbackController {
 
-    @Value("${lecturer.feedback.api.url:<<url>>}") // URL Eintragen
+    @Value("${lecturer.feedback.api.url:https://sau-portal.de/exa-grad/grading-service/api/v1/feedback/for-lecturer}")
     private String externalApiUrl;
 
     private final RestTemplate restTemplate;
@@ -19,27 +19,10 @@ public class LecturerFeedbackController {
         this.restTemplate = restTemplate;
     }
 
-    @GetMapping
-    public ResponseEntity<String> getAllFeedback() {
+    @GetMapping("/{lecturerId}")
+    public ResponseEntity<String> getFeedbackForLecturer(@PathVariable String lecturerId) {
         try {
-            ResponseEntity<String> response = restTemplate.exchange(
-                externalApiUrl,
-                HttpMethod.GET,
-                null,
-                String.class
-            );
-            return ResponseEntity.status(response.getStatusCode())
-                .body(response.getBody());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("Fehler beim Abrufen der Feedbacks: " + e.getMessage());
-        }
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<String> getFeedbackById(@PathVariable String id) {
-        try {
-            String url = externalApiUrl + "/" + id;
+            String url = externalApiUrl + "/" + lecturerId;
             ResponseEntity<String> response = restTemplate.exchange(
                 url,
                 HttpMethod.GET,
@@ -50,28 +33,7 @@ public class LecturerFeedbackController {
                 .body(response.getBody());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("Fehler beim Abrufen des Feedbacks: " + e.getMessage());
-        }
-    }
-
-    @PostMapping
-    public ResponseEntity<String> createFeedback(@RequestBody String feedbackData) {
-        try {
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            HttpEntity<String> request = new HttpEntity<>(feedbackData, headers);
-
-            ResponseEntity<String> response = restTemplate.exchange(
-                externalApiUrl,
-                HttpMethod.POST,
-                request,
-                String.class
-            );
-            return ResponseEntity.status(response.getStatusCode())
-                .body(response.getBody());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("Fehler beim Erstellen des Feedbacks: " + e.getMessage());
+                .body("Fehler beim Abrufen der Feedbacks: " + e.getMessage());
         }
     }
 }
