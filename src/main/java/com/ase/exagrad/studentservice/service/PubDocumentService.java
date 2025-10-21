@@ -93,14 +93,14 @@ public class PubDocumentService {
   }
 
   private void checkForOverlappingPeriods(PubDocumentRequest metadata) {
-    if (metadata.getStartDate() == null || metadata.getEndDate() == null) {
+    if (metadata.getStartDate()==null || metadata.getEndDate()==null) {
       return;
     }
 
     List<PubDocument> existingDocs = pubDocumentRepository.findByStudentId(metadata.getStudentId());
 
     boolean overlaps = existingDocs.stream().anyMatch(doc -> {
-      if (doc.getStartDate() == null || doc.getEndDate() == null) {
+      if (doc.getStartDate()==null || doc.getEndDate()==null) {
         return false;
       }
       return !metadata.getStartDate().isAfter(doc.getEndDate())
