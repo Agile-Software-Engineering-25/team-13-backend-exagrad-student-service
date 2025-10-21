@@ -7,7 +7,7 @@ import org.springframework.web.client.RestTemplate;
 
 @RestController
 @RequestMapping("/api/lecturer-feedback")
-@CrossOrigin(origins = "https://sau-portal.de/exagrad-students")
+@CrossOrigin(origins = "*") //-> zu https://sau-portal.de/exagrad-students ändern for prod
 public class LecturerFeedbackController {
 
     @Value("${lecturer.feedback.api.url:https://sau-portal.de/exa-grad/grading-service/api/v1/feedback/for-lecturer}")

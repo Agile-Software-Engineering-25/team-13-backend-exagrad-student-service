@@ -47,7 +47,7 @@ minio-connection:
 lecturer:
   feedback:
     api:
-      url: <<url>> # URL eintragen
+      url: https://sau-portal.de/exa-grad/grading-service/api/v1/feedback/for-lecturer
 
 app:
   timezone: Europe/Berlin
