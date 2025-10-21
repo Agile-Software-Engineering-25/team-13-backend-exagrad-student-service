@@ -4,9 +4,9 @@ import lombok.Data;
 
 @Data
 public class TemplateDto {
-    private String name;
-    private String code;
-    private boolean elective;
-    private int planned_semester;
-    private int id;
+  private String name;
+  private String code;
+  private boolean elective;
+  private int planned_semester;
+  private int id;
 }
