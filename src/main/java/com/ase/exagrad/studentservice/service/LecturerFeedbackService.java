@@ -1,6 +1,6 @@
-package com.example.lecturerfeedback.service;
+package com.ase.exagrad.studentservice.service;
 
-import com.example.lecturerfeedback.dto.LecturerFeedbackDto;
+import com.ase.exagrad.studentservice.dto.response.LecturerFeedbackResponseDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -20,12 +20,16 @@ public class LecturerFeedbackService {
         this.baseUrl = baseUrl;
     }
 
-    public List<LecturerFeedbackDto> getFeedbackForLecturer(String lecturerId) {
+    public List<LecturerFeedbackResponseDto
+> getFeedbackForLecturer(String lecturerId) {
         String url = UriComponentsBuilder.fromHttpUrl(baseUrl)
                 .pathSegment(lecturerId)
                 .toUriString();
 
-        LecturerFeedbackDto[] response = restTemplate.getForObject(url, LecturerFeedbackDto[].class);
-        return Arrays.asList(response != null ? response : new LecturerFeedbackDto[0]);
+        LecturerFeedbackResponseDto
+[] response = restTemplate.getForObject(url, LecturerFeedbackResponseDto
+[].class);
+        return Arrays.asList(response != null ? response : new LecturerFeedbackResponseDto
+[0]);
     }
 }

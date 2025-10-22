@@ -1,4 +1,4 @@
-package com.example.lecturerfeedback.dto.response;
+package com.ase.exagrad.studentservice.dto.response;
 
 import java.util.UUID;
 

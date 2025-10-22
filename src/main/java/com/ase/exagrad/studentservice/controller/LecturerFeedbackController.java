@@ -1,19 +1,24 @@
-package com.example.lecturerfeedback.controller;
+package com.ase.exagrad.studentservice.controller;
 
-import com.example.lecturerfeedback.dto.LecturerFeedbackDto;
-import com.example.lecturerfeedback.service.LecturerFeedbackService;
+import com.ase.exagrad.studentservice.dto.response.LecturerFeedbackResponseDto;
+import com.ase.exagrad.studentservice.service.LecturerFeedbackService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/lecturer-feedback")
+@Tag(name = "Lecturer Feedback", description = "Get Feedback and Grade from a Lecturer")
 public class LecturerFeedbackController {
 
     private final LecturerFeedbackService feedbackService;
 
+    public LecturerFeedbackController(LecturerFeedbackService feedbackService) {
+        this.feedbackService = feedbackService;
+    }
+
     @GetMapping("/{lecturerId}")
-    public List<LecturerFeedbackDto> getFeedbackForLecturer(@PathVariable("lecturerId") String lecturerId) {
+    public List<LecturerFeedbackResponseDto> getFeedbackForLecturer(@PathVariable("lecturerId") String lecturerId) {
         return feedbackService.getFeedbackForLecturer(lecturerId);
     }
 }

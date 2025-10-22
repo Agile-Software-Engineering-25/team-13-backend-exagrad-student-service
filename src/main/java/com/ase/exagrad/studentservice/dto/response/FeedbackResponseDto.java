@@ -1,4 +1,4 @@
-package com.example.lecturerfeedback.dto.response;
+package com.ase.exagrad.studentservice.dto.response;
 
 public class FeedbackResponseDto {
     private String grade;
