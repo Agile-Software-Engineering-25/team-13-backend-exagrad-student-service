@@ -1,39 +1,19 @@
-package com.example.api.controller;
+package com.example.lecturerfeedback.controller;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
+import com.example.lecturerfeedback.dto.LecturerFeedbackDto;
+import com.example.lecturerfeedback.service.LecturerFeedbackService;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
+import java.util.List;
 
 @RestController
-@RequestMapping("/api/lecturer-feedback")
-@CrossOrigin(origins = "*") //-> zu https://sau-portal.de/exagrad-students ändern for prod
+@RequiredArgsConstructor
+@RequestMapping("/lecturer-feedback")
 public class LecturerFeedbackController {
 
-    @Value("${lecturer.feedback.api.url:https://sau-portal.de/exa-grad/grading-service/api/v1/feedback/for-lecturer}")
-    private String externalApiUrl;
-
-    private final RestTemplate restTemplate;
-
-    public LecturerFeedbackController(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-    }
+    private final LecturerFeedbackService feedbackService;
 
     @GetMapping("/{lecturerId}")
-    public ResponseEntity<String> getFeedbackForLecturer(@PathVariable String lecturerId) {
-        try {
-            String url = externalApiUrl + "/" + lecturerId;
-            ResponseEntity<String> response = restTemplate.exchange(
-                url,
-                HttpMethod.GET,
-                null,
-                String.class
-            );
-            return ResponseEntity.status(response.getStatusCode())
-                .body(response.getBody());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("Fehler beim Abrufen der Feedbacks: " + e.getMessage());
-        }
+    public List<LecturerFeedbackDto> getFeedbackForLecturer(@PathVariable("lecturerId") String lecturerId) {
+        return feedbackService.getFeedbackForLecturer(lecturerId);
     }
 }
