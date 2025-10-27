@@ -7,6 +7,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import java.util.Arrays;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -14,12 +15,13 @@ public class LecturerFeedbackService {
 
     private final RestTemplate restTemplate;
 
-    private final String baseUrl;
     @Value("${app.external-apis.lecturer-feedback.base-url}")
+    private String baseUrl;
+    
 
-    public List<LecturerFeedbackResponseDto> getFeedbackForLecturer(String lecturerId) {
+    public List<LecturerFeedbackResponseDto> getFeedbackForLecturer(String studentId) {
         String url = UriComponentsBuilder.fromHttpUrl(baseUrl)
-                .pathSegment(lecturerId)
+                .pathSegment(studentId)
                 .toUriString();
 
         LecturerFeedbackResponseDto[] response = restTemplate.getForObject(url, LecturerFeedbackResponseDto[].class);
