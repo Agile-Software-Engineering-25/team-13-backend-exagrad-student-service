@@ -1,6 +1,6 @@
 package com.ase.exagrad.studentservice.service;
 
-import com.ase.exagrad.studentservice.dto.ExamData;
+import com.ase.exagrad.studentservice.dto.ExamDataDto;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -15,20 +15,20 @@ public class ExamDataApiService {
     this.webClient = webClientBuilder.baseUrl("https://sau-portal.de/exa-grad/exam-service").build();
   }
 
-  public List<ExamData> fetchAllExamData(){
+  public List<ExamDataDto> fetchAllExamData(){
     return webClient.get()
         .uri("/api/exams")
         .retrieve()
-        .bodyToFlux(ExamData.class)
+        .bodyToFlux(ExamDataDto.class)
         .collectList()
         .block();
   }
 
-  public Mono<ExamData> fetchOneExamData(String examId){
+  public Mono<ExamDataDto> fetchOneExamData(String examId){
     return webClient.get()
         .uri("/api/exams/{id}", examId)
         .retrieve()
-        .bodyToMono(ExamData.class);
+        .bodyToMono(ExamDataDto.class);
   }
 
 }

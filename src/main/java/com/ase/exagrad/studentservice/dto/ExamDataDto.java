@@ -1,10 +1,11 @@
 package com.ase.exagrad.studentservice.dto;
 
 
-import lombok.RequiredArgsConstructor;
+import lombok.Data;
+import java.util.List;
 
-@RequiredArgsConstructor
-public class ExamData {
+@Data
+public class ExamDataDto {
 
   private String id;
   private String title;
@@ -13,10 +14,10 @@ public class ExamData {
   private String room;
   private String examType;
   private String semester;
-  private String ects;
-  private  String maxPoints;
-  private String duration;
-  private String attemptNumber;
+  private int ects;
+  private int maxPoints;
+  private int duration;
+  private int attemptNumber;
   private boolean fileUploadRequired;
-  private String tools;
+  private List<String> tools;
 }

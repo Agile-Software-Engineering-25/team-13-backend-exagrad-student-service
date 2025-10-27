@@ -1,6 +1,6 @@
 package com.ase.exagrad.studentservice.controller;
 
-import com.ase.exagrad.studentservice.dto.ExamData;
+import com.ase.exagrad.studentservice.dto.ExamDataDto;
 import com.ase.exagrad.studentservice.service.ExamDataApiService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,15 +21,15 @@ public class ExamDataController {
 
   @GetMapping
   @RequestMapping("/exams")
-  public ResponseEntity<List<ExamData>> getAllExamData(){
-    List<ExamData> examData = examDataApiService.fetchAllExamData();
+  public ResponseEntity<List<ExamDataDto>> getAllExamData(){
+    List<ExamDataDto> examData = examDataApiService.fetchAllExamData();
 
     return ResponseEntity.ok(examData);
   }
 
   @RequestMapping("/exam/{id}")
-  public ResponseEntity<Mono<ExamData>> getOneExamData(@PathVariable String id){
-    Mono<ExamData> examData = examDataApiService.fetchOneExamData(id);
+  public ResponseEntity<Mono<ExamDataDto>> getOneExamData(@PathVariable String id){
+    Mono<ExamDataDto> examData = examDataApiService.fetchOneExamData(id);
 
     return ResponseEntity.ok(examData);
   }
