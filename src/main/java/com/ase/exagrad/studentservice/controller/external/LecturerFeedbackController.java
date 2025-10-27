@@ -18,7 +18,7 @@ public class LecturerFeedbackController {
 
   @GetMapping("/{studentId}")
   public List<LecturerFeedbackResponseDto> 
-  getFeedbackForLecturer(@PathVariable("studentId") String studentId) {
+      getFeedbackForLecturer(@PathVariable("studentId") String studentId) {
     return feedbackService.getFeedbackForLecturer(studentId);
   }
 }

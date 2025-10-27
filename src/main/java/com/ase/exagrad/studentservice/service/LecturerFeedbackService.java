@@ -26,7 +26,7 @@ public class LecturerFeedbackService {
         .toUriString();
 
     LecturerFeedbackResponseDto[] response = 
-    restTemplate.getForObject(url, LecturerFeedbackResponseDto[].class);
+        restTemplate.getForObject(url, LecturerFeedbackResponseDto[].class);
     return Arrays.asList(response != null ? response : new LecturerFeedbackResponseDto[0]);
   }
 }
