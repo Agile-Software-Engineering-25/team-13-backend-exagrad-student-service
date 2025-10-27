@@ -15,7 +15,7 @@ WORKDIR /app
 
 COPY --from=build /app/target/*-SNAPSHOT.jar app.jar
 
-# ENV SPRING_PROFILES_ACTIVE=prod
+ENV SPRING_PROFILES_ACTIVE=prod
 
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
