@@ -13,8 +13,7 @@ public class TestSecurityConfig {
 
   @Bean
   public SecurityFilterChain testSecurityFilterChain(HttpSecurity http) throws Exception {
-    http
-        .csrf(AbstractHttpConfigurer::disable)
+    http.csrf(AbstractHttpConfigurer::disable)
         .cors(AbstractHttpConfigurer::disable)
         .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
         .sessionManagement(AbstractHttpConfigurer::disable);

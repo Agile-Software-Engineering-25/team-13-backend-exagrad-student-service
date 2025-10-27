@@ -10,6 +10,15 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import com.ase.exagrad.studentservice.component.ApiResponseFactory;
+import com.ase.exagrad.studentservice.config.TestSecurityConfig;
+import com.ase.exagrad.studentservice.dto.request.ExamDocumentRequest;
+import com.ase.exagrad.studentservice.dto.response.ApiResponseWrapper;
+import com.ase.exagrad.studentservice.dto.response.ErrorDetails;
+import com.ase.exagrad.studentservice.dto.response.ExamDocumentResponse;
+import com.ase.exagrad.studentservice.service.ExamDocumentService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -24,30 +33,18 @@ import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import com.ase.exagrad.studentservice.component.ApiResponseFactory;
-import com.ase.exagrad.studentservice.config.TestSecurityConfig;
-import com.ase.exagrad.studentservice.dto.request.ExamDocumentRequest;
-import com.ase.exagrad.studentservice.dto.response.ApiResponseWrapper;
-import com.ase.exagrad.studentservice.dto.response.ErrorDetails;
-import com.ase.exagrad.studentservice.dto.response.ExamDocumentResponse;
-import com.ase.exagrad.studentservice.service.ExamDocumentService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebMvcTest(ExamDocumentController.class)
 @Import(TestSecurityConfig.class)
 class ExamDocumentControllerTest {
 
-  @Autowired
-  private MockMvc mockMvc;
+  @Autowired private MockMvc mockMvc;
 
-  @Autowired
-  private ObjectMapper objectMapper;
+  @Autowired private ObjectMapper objectMapper;
 
-  @MockitoBean
-  private ExamDocumentService examDocumentService;
+  @MockitoBean private ExamDocumentService examDocumentService;
 
-  @MockitoBean
-  private ApiResponseFactory apiResponseFactory;
+  @MockitoBean private ApiResponseFactory apiResponseFactory;
 
   private MockMultipartFile mockFile;
   private ExamDocumentRequest examDocumentRequest;
@@ -60,8 +57,7 @@ class ExamDocumentControllerTest {
 
     // Create test file
     mockFile =
-        new MockMultipartFile(
-            "file", "test.pdf", "application/pdf", "Test PDF content".getBytes());
+        new MockMultipartFile("file", "test.pdf", "application/pdf", "Test PDF content".getBytes());
 
     // Create test request
     examDocumentRequest = new ExamDocumentRequest();
@@ -87,12 +83,12 @@ class ExamDocumentControllerTest {
         createApiResponse(examDocumentResponse, "Document uploaded successfully");
 
     when(examDocumentService.uploadExamDocument(any(), any())).thenReturn(examDocumentResponse);
-    when(apiResponseFactory.created(
-        any(ExamDocumentResponse.class), any(String.class)))
+    when(apiResponseFactory.created(any(ExamDocumentResponse.class), any(String.class)))
         .thenReturn(successResponse);
 
     // Act & Assert
-    mockMvc.perform(
+    mockMvc
+        .perform(
             multipart("/documents/exams")
                 .file(mockFile)
                 .file(createJsonFile("metadata", examDocumentRequest)))
@@ -105,20 +101,19 @@ class ExamDocumentControllerTest {
   }
 
   @Test
-  void uploadExamDocumentServiceThrowsIllegalArgumentExceptionReturnsBadRequest()
-      throws Exception {
+  void uploadExamDocumentServiceThrowsIllegalArgumentExceptionReturnsBadRequest() throws Exception {
     // Arrange
     String errorMessage = "Invalid file format";
     ApiResponseWrapper<ExamDocumentResponse> errorResponse = createErrorApiResponse(errorMessage);
 
     when(examDocumentService.uploadExamDocument(any(), any()))
         .thenThrow(new IllegalArgumentException(errorMessage));
-    when(apiResponseFactory.<ExamDocumentResponse>badRequest(
-        eq(errorMessage), any(String.class)))
+    when(apiResponseFactory.<ExamDocumentResponse>badRequest(eq(errorMessage), any(String.class)))
         .thenReturn(errorResponse);
 
     // Act & Assert
-    mockMvc.perform(
+    mockMvc
+        .perform(
             multipart("/documents/exams")
                 .file(mockFile)
                 .file(createJsonFile("metadata", examDocumentRequest)))
@@ -135,11 +130,12 @@ class ExamDocumentControllerTest {
     when(examDocumentService.uploadExamDocument(any(), any()))
         .thenThrow(new IOException("File processing error"));
     when(apiResponseFactory.<ExamDocumentResponse>internalServerError(
-        eq(errorMessage), any(String.class)))
+            eq(errorMessage), any(String.class)))
         .thenReturn(errorResponse);
 
     // Act & Assert
-    mockMvc.perform(
+    mockMvc
+        .perform(
             multipart("/documents/exams")
                 .file(mockFile)
                 .file(createJsonFile("metadata", examDocumentRequest)))
@@ -155,12 +151,12 @@ class ExamDocumentControllerTest {
         createApiResponse(documents, "Documents retrieved successfully");
 
     when(examDocumentService.getDocumentsByStudentId("STUDENT123")).thenReturn(documents);
-    when(apiResponseFactory.<List<ExamDocumentResponse>>success(
-        any(List.class), any(String.class)))
+    when(apiResponseFactory.<List<ExamDocumentResponse>>success(any(List.class), any(String.class)))
         .thenReturn(successResponse);
 
     // Act & Assert
-    mockMvc.perform(get("/documents/exams").param("studentId", "STUDENT123"))
+    mockMvc
+        .perform(get("/documents/exams").param("studentId", "STUDENT123"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.data").isArray())
         .andExpect(jsonPath("$.data[0].id").value(testId.toString()))
@@ -175,12 +171,12 @@ class ExamDocumentControllerTest {
         createApiResponse(documents, "Documents retrieved successfully");
 
     when(examDocumentService.getDocumentsByExamId("EXAM123")).thenReturn(documents);
-    when(apiResponseFactory.<List<ExamDocumentResponse>>success(
-        any(List.class), any(String.class)))
+    when(apiResponseFactory.<List<ExamDocumentResponse>>success(any(List.class), any(String.class)))
         .thenReturn(successResponse);
 
     // Act & Assert
-    mockMvc.perform(get("/documents/exams").param("examId", "EXAM123"))
+    mockMvc
+        .perform(get("/documents/exams").param("examId", "EXAM123"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.data").isArray())
         .andExpect(jsonPath("$.data[0].id").value(testId.toString()))
@@ -195,11 +191,12 @@ class ExamDocumentControllerTest {
         createErrorApiResponse(errorMessage);
 
     when(apiResponseFactory.<List<ExamDocumentResponse>>badRequest(
-        eq(errorMessage), any(String.class)))
+            eq(errorMessage), any(String.class)))
         .thenReturn(errorResponse);
 
     // Act & Assert
-    mockMvc.perform(get("/documents/exams"))
+    mockMvc
+        .perform(get("/documents/exams"))
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.message").value(errorMessage));
   }
@@ -212,14 +209,13 @@ class ExamDocumentControllerTest {
         createErrorApiResponse(errorMessage);
 
     when(apiResponseFactory.<List<ExamDocumentResponse>>badRequest(
-        eq(errorMessage), any(String.class)))
+            eq(errorMessage), any(String.class)))
         .thenReturn(errorResponse);
 
     // Act & Assert
-    mockMvc.perform(
-            get("/documents/exams")
-                .param("studentId", "STUDENT123")
-                .param("examId", "EXAM123"))
+    mockMvc
+        .perform(
+            get("/documents/exams").param("studentId", "STUDENT123").param("examId", "EXAM123"))
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.message").value(errorMessage));
   }
@@ -232,11 +228,12 @@ class ExamDocumentControllerTest {
         createErrorApiResponse(errorMessage);
 
     when(apiResponseFactory.<List<ExamDocumentResponse>>badRequest(
-        eq(errorMessage), any(String.class)))
+            eq(errorMessage), any(String.class)))
         .thenReturn(errorResponse);
 
     // Act & Assert
-    mockMvc.perform(get("/documents/exams").param("studentId", ""))
+    mockMvc
+        .perform(get("/documents/exams").param("studentId", ""))
         .andExpect(status().isBadRequest());
   }
 
@@ -247,7 +244,8 @@ class ExamDocumentControllerTest {
     doNothing().when(examDocumentService).deleteExamDocument(documentId.toString());
 
     // Act & Assert
-    mockMvc.perform(delete("/documents/exams/{documentId}", documentId))
+    mockMvc
+        .perform(delete("/documents/exams/{documentId}", documentId))
         .andExpect(status().isNoContent());
   }
 
@@ -259,12 +257,14 @@ class ExamDocumentControllerTest {
     ApiResponseWrapper<Void> errorResponse = createErrorApiResponse(errorMessage);
 
     doThrow(new IllegalArgumentException(errorMessage))
-        .when(examDocumentService).deleteExamDocument(invalidId);
+        .when(examDocumentService)
+        .deleteExamDocument(invalidId);
     when(apiResponseFactory.<Void>badRequest(eq(errorMessage), any(String.class)))
         .thenReturn(errorResponse);
 
     // Act & Assert
-    mockMvc.perform(delete("/documents/exams/{documentId}", invalidId))
+    mockMvc
+        .perform(delete("/documents/exams/{documentId}", invalidId))
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.message").value(errorMessage));
   }
@@ -277,12 +277,14 @@ class ExamDocumentControllerTest {
     ApiResponseWrapper<Void> errorResponse = createErrorApiResponse(errorMessage);
 
     doThrow(new IllegalArgumentException(errorMessage))
-        .when(examDocumentService).deleteExamDocument(documentId.toString());
+        .when(examDocumentService)
+        .deleteExamDocument(documentId.toString());
     when(apiResponseFactory.<Void>badRequest(eq(errorMessage), any(String.class)))
         .thenReturn(errorResponse);
 
     // Act & Assert
-    mockMvc.perform(delete("/documents/exams/{documentId}", documentId))
+    mockMvc
+        .perform(delete("/documents/exams/{documentId}", documentId))
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.message").value(errorMessage));
   }
@@ -295,13 +297,15 @@ class ExamDocumentControllerTest {
     ApiResponseWrapper<Void> errorResponse = createErrorApiResponse(errorMessage);
 
     doThrow(new IllegalStateException(errorMessage))
-        .when(examDocumentService).deleteExamDocument(documentId.toString());
+        .when(examDocumentService)
+        .deleteExamDocument(documentId.toString());
     when(apiResponseFactory.<Void>error(
-        eq(errorMessage), any(String.class), eq(HttpStatus.FORBIDDEN), any(ErrorDetails.class)))
+            eq(errorMessage), any(String.class), eq(HttpStatus.FORBIDDEN), any(ErrorDetails.class)))
         .thenReturn(errorResponse);
 
     // Act & Assert
-    mockMvc.perform(delete("/documents/exams/{documentId}", documentId))
+    mockMvc
+        .perform(delete("/documents/exams/{documentId}", documentId))
         .andExpect(status().isForbidden())
         .andExpect(jsonPath("$.message").value(errorMessage));
   }
@@ -314,13 +318,14 @@ class ExamDocumentControllerTest {
     ApiResponseWrapper<Void> errorResponse = createErrorApiResponse(errorMessage);
 
     doThrow(new RuntimeException("Storage error"))
-        .when(examDocumentService).deleteExamDocument(documentId.toString());
-    when(apiResponseFactory.<Void>internalServerError(
-        eq(errorMessage), any(String.class)))
+        .when(examDocumentService)
+        .deleteExamDocument(documentId.toString());
+    when(apiResponseFactory.<Void>internalServerError(eq(errorMessage), any(String.class)))
         .thenReturn(errorResponse);
 
     // Act & Assert
-    mockMvc.perform(delete("/documents/exams/{documentId}", documentId))
+    mockMvc
+        .perform(delete("/documents/exams/{documentId}", documentId))
         .andExpect(status().isInternalServerError())
         .andExpect(jsonPath("$.message").value(errorMessage));
   }

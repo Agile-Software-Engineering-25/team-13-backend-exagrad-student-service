@@ -1,22 +1,22 @@
 package com.ase.exagrad.studentservice.service;
 
-import java.io.IOException;
-import java.time.Duration;
-import java.time.Instant;
-import java.time.Year;
-import java.util.List;
-import java.util.UUID;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 import com.ase.exagrad.studentservice.config.StorageProperties;
 import com.ase.exagrad.studentservice.dto.request.ExamDocumentRequest;
 import com.ase.exagrad.studentservice.dto.response.ExamDocumentResponse;
 import com.ase.exagrad.studentservice.entity.ExamDocument;
 import com.ase.exagrad.studentservice.mappers.ExamDocumentMapper;
 import com.ase.exagrad.studentservice.repository.ExamDocumentRepository;
+import java.io.IOException;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.Year;
+import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -36,8 +36,7 @@ public class ExamDocumentService {
     fileValidationService.validateFile(file);
 
     String bucketName = storageProperties.getBucketName();
-    String sanitizedFilename =
-        fileValidationService.sanitizeFileName(file.getOriginalFilename());
+    String sanitizedFilename = fileValidationService.sanitizeFileName(file.getOriginalFilename());
     String minioKey = generateMinioKey(sanitizedFilename);
 
     minioService.uploadFile(
@@ -73,8 +72,7 @@ public class ExamDocumentService {
     return documents.stream()
         .map(
             doc -> {
-              String downloadUrl =
-                  minioService.getFileUrl(bucketName, doc.getMinioKey());
+              String downloadUrl = minioService.getFileUrl(bucketName, doc.getMinioKey());
               return examDocumentMapper.toResponse(doc, downloadUrl);
             })
         .toList();
@@ -85,8 +83,7 @@ public class ExamDocumentService {
     UUID uuid;
     try {
       uuid = UUID.fromString(documentId);
-    }
-    catch (IllegalArgumentException e) {
+    } catch (IllegalArgumentException e) {
       throw new IllegalArgumentException("Invalid document ID format");
     }
 
@@ -98,8 +95,7 @@ public class ExamDocumentService {
     // Mock deadline check - TODO: Replace with actual Team 14 API call
     Instant deadline = getMockDeadlineForExam(document.getExamId());
     if (Instant.now().isAfter(deadline)) {
-      throw new IllegalStateException(
-          "Deletion not allowed: deadline has passed for this exam");
+      throw new IllegalStateException("Deletion not allowed: deadline has passed for this exam");
     }
 
     // Delete from MinIO
@@ -113,9 +109,8 @@ public class ExamDocumentService {
   }
 
   /**
-   * Mock method to get deadline for an exam.
-   * TODO: Replace with actual call to Team 14 API
-   * For now, returns a deadline 7 days after document upload
+   * Mock method to get deadline for an exam. TODO: Replace with actual call to Team 14 API For now,
+   * returns a deadline 7 days after document upload
    */
   private Instant getMockDeadlineForExam(String examId) {
     final long DEADLINE_DAYS = 7L;

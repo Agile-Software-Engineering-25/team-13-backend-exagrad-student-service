@@ -1,12 +1,12 @@
 package com.ase.exagrad.studentservice.config;
 
+import com.ase.exagrad.studentservice.component.RequestLoggingInterceptor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import com.ase.exagrad.studentservice.component.RequestLoggingInterceptor;
-import lombok.RequiredArgsConstructor;
 
 @Configuration
 @RequiredArgsConstructor
@@ -14,6 +14,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
   private static final long CORS_MAX_AGE_SECONDS = 3600;
   private final RequestLoggingInterceptor requestLoggingInterceptor;
+
   @Value("${app.cors.allowed-origins}")
   private String[] allowedOrigins;
 
