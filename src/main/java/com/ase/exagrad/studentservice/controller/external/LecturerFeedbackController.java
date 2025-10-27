@@ -7,15 +7,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/lecturer-feedback")
 @Tag(name = "Lecturer Feedback", description = "Get Feedback and Grade from a Lecturer")
 public class LecturerFeedbackController {
 
     private final LecturerFeedbackService feedbackService;
-
-    public LecturerFeedbackController(LecturerFeedbackService feedbackService) {
-        this.feedbackService = feedbackService;
-    }
 
     @GetMapping("/{lecturerId}")
     public List<LecturerFeedbackResponseDto> getFeedbackForLecturer(@PathVariable("lecturerId") String lecturerId) {
