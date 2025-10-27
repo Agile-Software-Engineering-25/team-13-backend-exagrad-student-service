@@ -5,9 +5,9 @@ import lombok.Data;
 
 @Data
 public class LecturerFeedbackResponseDto {
-    private UUID id;
-    private UUID exam_id;
-    private UUID exam_submissions_id;
-    private UUID lecturer_id;
-    private FeedbackResponseDto feedback;
+  private UUID id;
+  private UUID examId;
+  private UUID examSubmissionsId;
+  private UUID lecturerId;
+  private FeedbackResponseDto feedback;
 }
