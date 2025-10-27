@@ -4,8 +4,8 @@ import java.util.List;
 import com.ase.exagrad.studentservice.dto.response.LecturerFeedbackResponseDto;
 import com.ase.exagrad.studentservice.service.LecturerFeedbackService;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.web.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -17,7 +17,8 @@ public class LecturerFeedbackController {
   private final LecturerFeedbackService feedbackService;
 
   @GetMapping("/{studentId}")
-  public List<LecturerFeedbackResponseDto> getFeedbackForLecturer(@PathVariable("studentId") String studentId) {
+  public List<LecturerFeedbackResponseDto> 
+  getFeedbackForLecturer(@PathVariable("studentId") String studentId) {
     return feedbackService.getFeedbackForLecturer(studentId);
   }
 }
