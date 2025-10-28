@@ -19,7 +19,13 @@ public class FeedbackService {
   private String baseUrl;
 
   public List<LecturerFeedbackResponseDto> getAllFeedbackForStudent(String studentId) {
-    String url = UriComponentsBuilder.fromHttpUrl(baseUrl).pathSegment(studentId).toUriString();
+    // Validate that studentId is strictly alphanumeric (adjust regex as needed)
+    if (studentId == null || !studentId.matches("^[a-zA-Z0-9_-]+$")) {
+      throw new IllegalArgumentException("Invalid student ID format");
+    }
+    String url = UriComponentsBuilder.fromHttpUrl(baseUrl)
+        .pathSegment(studentId)
+        .toUriString();
 
     LecturerFeedbackResponseDto[] response =
         restTemplate.getForObject(url, LecturerFeedbackResponseDto[].class);
