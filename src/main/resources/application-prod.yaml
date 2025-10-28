@@ -20,3 +20,4 @@ minio-connection:
 app:
   cors:
     allowed-origins: https://sau-portal.de
+    
