@@ -42,7 +42,7 @@ public class FeedbackService {
     }
 
     LecturerFeedbackResponseDto[] response =
-        restTemplate.getForObject(url, LecturerFeedbackResponseDto[].class);
+        restTemplate.getForObject(finalUri, LecturerFeedbackResponseDto[].class);
     return Arrays.asList(response != null ? response : new LecturerFeedbackResponseDto[0]);
   }
 }
