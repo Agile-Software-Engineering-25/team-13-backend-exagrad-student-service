@@ -1,7 +1,7 @@
 package com.ase.exagrad.studentservice.controller;
 
-import com.ase.exagrad.studentservice.dto.SendEmailRequest;
-import com.ase.exagrad.studentservice.dto.SendEmailResponse;
+import com.ase.exagrad.studentservice.dto.request.SendEmailRequest;
+import com.ase.exagrad.studentservice.dto.response.SendEmailResponse;
 import com.ase.exagrad.studentservice.service.NotificationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -14,10 +14,6 @@ import org.springframework.web.bind.annotation.*;
 public class NotificationController {
 
     private final NotificationService notificationService;
-
-    public NotificationController(NotificationService notificationService) {
-        this.notificationService = notificationService;
-    }
 
     @PostMapping("/send")
     public ResponseEntity<SendEmailResponse> sendEmail(@Valid @RequestBody SendEmailRequest request) {

@@ -1,12 +1,13 @@
 package com.ase.exagrad.studentservice.service;
 
-import com.ase.exagrad.studentservice.dto.SendEmailRequest;
-import com.ase.exagrad.studentservice.dto.SendEmailResponse;
+import com.ase.exagrad.studentservice.dto.request.SendEmailRequest;
+import com.ase.exagrad.studentservice.dto.response.SendEmailResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import lombok.RequiredArgsConstructor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,7 +17,6 @@ import java.util.Map;
 public class NotificationService {
 
     private final RestTemplate restTemplate;
-    private final String notificationServiceUrl;
 
     @Value("${app.external-apis.notification-service.base-url}") 
     private String notificationServiceUrl;
