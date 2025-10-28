@@ -1,15 +1,15 @@
 package com.ase.exagrad.studentservice.service.external;
 
-import com.ase.exagrad.studentservice.dto.external.LecturerFeedbackResponseDto;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+import com.ase.exagrad.studentservice.dto.external.LecturerFeedbackResponseDto;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
