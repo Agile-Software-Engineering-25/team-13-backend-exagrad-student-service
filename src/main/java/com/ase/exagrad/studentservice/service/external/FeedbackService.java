@@ -3,6 +3,8 @@ package com.ase.exagrad.studentservice.service.external;
 import com.ase.exagrad.studentservice.dto.external.LecturerFeedbackResponseDto;
 import java.util.Arrays;
 import java.util.List;
+import java.net.URI;
+import java.net.URISyntaxException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,20 @@ public class FeedbackService {
     String url = UriComponentsBuilder.fromHttpUrl(baseUrl)
         .pathSegment(studentId)
         .toUriString();
+
+    // SSRF Prevention: Validate host is as expected
+    URI baseUri;
+    URI finalUri;
+    try {
+      baseUri = new URI(baseUrl);
+      finalUri = new URI(url);
+    } catch (URISyntaxException e) {
+      throw new IllegalArgumentException("Malformed URL");
+    }
+    // Only allow requests to the allowed host
+    if (!finalUri.getHost().equalsIgnoreCase(baseUri.getHost())) {
+      throw new IllegalArgumentException("SSRF protection: Host mismatch");
+    }
 
     LecturerFeedbackResponseDto[] response =
         restTemplate.getForObject(url, LecturerFeedbackResponseDto[].class);
