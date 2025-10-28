@@ -1,7 +1,7 @@
 package com.ase.exagrad.studentservice.dto.external;
 
-import lombok.Data;
 import java.util.UUID;
+import lombok.Data;
 
 @Data
 public class FeedbackFileReferenceDto {
