@@ -1,8 +1,5 @@
 package com.ase.exagrad.studentservice.service;
 
-import java.io.InputStream;
-import java.util.concurrent.TimeUnit;
-import org.springframework.stereotype.Service;
 import com.ase.exagrad.studentservice.exception.StorageException;
 import io.minio.BucketExistsArgs;
 import io.minio.GetPresignedObjectUrlArgs;
@@ -11,8 +8,11 @@ import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import io.minio.RemoveObjectArgs;
 import io.minio.http.Method;
+import java.io.InputStream;
+import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
@@ -27,31 +27,31 @@ public class MinioService {
   /**
    * Upload file to MinIO bucket
    *
-   * @param bucketName  the bucket name
-   * @param objectKey   the object key/path
+   * @param bucketName the bucket name
+   * @param objectKey the object key/path
    * @param inputStream the file input stream
-   * @param size        the file size
+   * @param size the file size
    * @param contentType the content type
    * @throws StorageException if upload fails
    */
-  public void uploadFile(String bucketName, String objectKey, InputStream inputStream,
-                         long size, String contentType) {
+  public void uploadFile(
+      String bucketName, String objectKey, InputStream inputStream, long size, String contentType) {
     try {
       ensureBucketExists(bucketName);
 
       minioClient.putObject(
-          PutObjectArgs.builder()
-              .bucket(bucketName)
-              .object(objectKey)
-              .stream(inputStream, size, PART_SIZE)
+          PutObjectArgs.builder().bucket(bucketName).object(objectKey).stream(
+                  inputStream, size, PART_SIZE)
               .contentType(contentType)
               .build());
 
-      log.info("Successfully uploaded file to MinIO: bucket={}, key={}, size={}",
-          bucketName, objectKey, size);
+      log.info(
+          "Successfully uploaded file to MinIO: bucket={}, key={}, size={}",
+          bucketName,
+          objectKey,
+          size);
 
-    }
-    catch (Exception e) {
+    } catch (Exception e) {
       log.error("Failed to upload file to MinIO: bucket={}, key={}", bucketName, objectKey, e);
       throw new StorageException("Failed to upload file: " + objectKey, e);
     }
@@ -61,7 +61,7 @@ public class MinioService {
    * Generate presigned URL for file download
    *
    * @param bucketName the bucket name
-   * @param objectKey  the object key/path
+   * @param objectKey the object key/path
    * @return presigned URL valid for 1 hour
    * @throws StorageException if URL generation fails
    */
@@ -73,9 +73,9 @@ public class MinioService {
    * Generate presigned URL for file download with custom expiry
    *
    * @param bucketName the bucket name
-   * @param objectKey  the object key/path
-   * @param expiry     the expiry time
-   * @param timeUnit   the time unit for expiry
+   * @param objectKey the object key/path
+   * @param expiry the expiry time
+   * @param timeUnit the time unit for expiry
    * @return presigned URL
    * @throws StorageException if URL generation fails
    */
@@ -97,15 +97,9 @@ public class MinioService {
           expiry,
           timeUnit.name().toLowerCase());
       return url;
-    }
-    catch (Exception e) {
-      log.error(
-          "Failed to generate presigned URL: bucket={}, key={}",
-          bucketName,
-          objectKey,
-          e);
-      throw new StorageException(
-          "Failed to generate presigned URL for: " + objectKey, e);
+    } catch (Exception e) {
+      log.error("Failed to generate presigned URL: bucket={}, key={}", bucketName, objectKey, e);
+      throw new StorageException("Failed to generate presigned URL for: " + objectKey, e);
     }
   }
 
@@ -113,7 +107,7 @@ public class MinioService {
    * Delete file from MinIO bucket
    *
    * @param bucketName the bucket name
-   * @param objectKey  the object key/path
+   * @param objectKey the object key/path
    * @throws StorageException if deletion fails
    */
   public void deleteFile(String bucketName, String objectKey) {
@@ -121,21 +115,12 @@ public class MinioService {
       minioClient.removeObject(
           RemoveObjectArgs.builder().bucket(bucketName).object(objectKey).build());
 
-      log.info(
-          "Successfully deleted file from MinIO: bucket={}, key={}",
-          bucketName,
-          objectKey);
-    }
-    catch (Exception e) {
-      log.error(
-          "Failed to delete file from MinIO: bucket={}, key={}",
-          bucketName,
-          objectKey,
-          e);
+      log.info("Successfully deleted file from MinIO: bucket={}, key={}", bucketName, objectKey);
+    } catch (Exception e) {
+      log.error("Failed to delete file from MinIO: bucket={}, key={}", bucketName, objectKey, e);
       throw new StorageException("Failed to delete file: " + objectKey, e);
     }
   }
-
 
   /**
    * Ensure bucket exists, create if it doesn't
@@ -152,5 +137,4 @@ public class MinioService {
       log.info("Created new MinIO bucket: {}", bucketName);
     }
   }
-
 }

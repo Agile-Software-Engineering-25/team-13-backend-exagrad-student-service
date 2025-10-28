@@ -10,6 +10,11 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import com.ase.exagrad.studentservice.config.StorageProperties;
+import com.ase.exagrad.studentservice.entity.ExamDocument;
+import com.ase.exagrad.studentservice.mappers.ExamDocumentMapper;
+import com.ase.exagrad.studentservice.repository.ExamDocumentRepository;
 import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,31 +23,21 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import com.ase.exagrad.studentservice.config.StorageProperties;
-import com.ase.exagrad.studentservice.entity.ExamDocument;
-import com.ase.exagrad.studentservice.mappers.ExamDocumentMapper;
-import com.ase.exagrad.studentservice.repository.ExamDocumentRepository;
 
 @ExtendWith(MockitoExtension.class)
 class ExamDocumentServiceTest {
 
-  @Mock
-  private ExamDocumentRepository examDocumentRepository;
+  @Mock private ExamDocumentRepository examDocumentRepository;
 
-  @Mock
-  private MinioService minioService;
+  @Mock private MinioService minioService;
 
-  @Mock
-  private StorageProperties storageProperties;
+  @Mock private StorageProperties storageProperties;
 
-  @Mock
-  private FileValidationService fileValidationService;
+  @Mock private FileValidationService fileValidationService;
 
-  @Mock
-  private ExamDocumentMapper examDocumentMapper;
+  @Mock private ExamDocumentMapper examDocumentMapper;
 
-  @InjectMocks
-  private ExamDocumentService examDocumentService;
+  @InjectMocks private ExamDocumentService examDocumentService;
 
   private UUID testDocumentId;
   private ExamDocument testDocument;
@@ -122,8 +117,7 @@ class ExamDocumentServiceTest {
     examDocumentService.deleteExamDocument(testDocumentId.toString());
 
     // Assert
-    verify(minioService, times(1))
-        .deleteFile(eq(bucketName), eq(testDocument.getMinioKey()));
+    verify(minioService, times(1)).deleteFile(eq(bucketName), eq(testDocument.getMinioKey()));
   }
 
   @Test

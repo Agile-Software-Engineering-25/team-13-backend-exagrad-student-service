@@ -122,6 +122,72 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+            <!-- Spotless Plugin - Automatic Code Formatting -->
+            <plugin>
+                <groupId>com.diffplug.spotless</groupId>
+                <artifactId>spotless-maven-plugin</artifactId>
+                <version>2.43.0</version>
+                <configuration>
+                    <java>
+                        <!-- Google Java Format (standard Java style) -->
+                        <googleJavaFormat>
+                            <version>1.23.0</version>
+                            <style>GOOGLE</style>
+                        </googleJavaFormat>
+                        <!-- Remove unused imports -->
+                        <removeUnusedImports/>
+                        <!-- Format annotations consistently -->
+                        <formatAnnotations/>
+                    </java>
+                </configuration>
+                <executions>
+                    <!-- Auto-apply formatting during build -->
+                    <execution>
+                        <id>spotless-apply</id>
+                        <goals>
+                            <goal>apply</goal>
+                        </goals>
+                        <phase>process-sources</phase>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Checkstyle Plugin - Logic and Complexity Rules Only -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>3.5.0</version>
+                <configuration>
+                    <!-- Point to custom config file -->
+                    <configLocation>checkstyle.xml</configLocation>
+                    <!-- Include test sources in checks -->
+                    <includeTestSourceDirectory>true</includeTestSourceDirectory>
+                    <!-- Set severity level (warning = doesn't fail build) -->
+                    <violationSeverity>warning</violationSeverity>
+                    <!-- Fail on violations (set to false for warnings-only) -->
+                    <failOnViolation>false</failOnViolation>
+                    <!-- Print results to console -->
+                    <consoleOutput>true</consoleOutput>
+                </configuration>
+                <executions>
+                    <execution>
+                        <!-- Eclipse/IntelliJ integration hint -->
+                        <?m2e execute onConfiguration,onIncremental?>
+                        <id>checkstyle-check</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <!-- Use specific Checkstyle version for consistency -->
+                    <dependency>
+                        <groupId>com.puppycrawl.tools</groupId>
+                        <artifactId>checkstyle</artifactId>
+                        <version>10.18.1</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
         </plugins>
     </build>
 </project>
