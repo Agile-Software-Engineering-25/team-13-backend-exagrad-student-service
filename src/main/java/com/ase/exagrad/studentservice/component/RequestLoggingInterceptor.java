@@ -1,14 +1,14 @@
 package com.ase.exagrad.studentservice.component;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.time.Duration;
 import java.time.Instant;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.event.Level;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Slf4j
@@ -17,8 +17,8 @@ public class RequestLoggingInterceptor implements HandlerInterceptor {
   private static final String START_TIME_ATTRIBUTE = "startTime";
 
   @Override
-  public boolean preHandle(HttpServletRequest request,
-                           HttpServletResponse response, Object handler) {
+  public boolean preHandle(
+      HttpServletRequest request, HttpServletResponse response, Object handler) {
     Instant startTime = Instant.now();
     request.setAttribute(START_TIME_ATTRIBUTE, startTime);
 
@@ -33,10 +33,10 @@ public class RequestLoggingInterceptor implements HandlerInterceptor {
   }
 
   @Override
-  public void afterCompletion(HttpServletRequest request,
-                              HttpServletResponse response, Object handler, Exception ex) {
+  public void afterCompletion(
+      HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
     Instant startTime = (Instant) request.getAttribute(START_TIME_ATTRIBUTE);
-    if (startTime!=null) {
+    if (startTime != null) {
       Duration duration = Duration.between(startTime, Instant.now());
 
       Level level = getLogLevel(response.getStatus());
@@ -48,7 +48,7 @@ public class RequestLoggingInterceptor implements HandlerInterceptor {
           response.getStatus(),
           duration.toMillis());
 
-      if (ex!=null) {
+      if (ex != null) {
         log.error("Exception during request: {}", ex.getMessage(), ex);
       }
     }
@@ -56,7 +56,7 @@ public class RequestLoggingInterceptor implements HandlerInterceptor {
 
   private String getClientIp(HttpServletRequest request) {
     String xForwardedFor = request.getHeader("X-Forwarded-For");
-    if (xForwardedFor!=null && !xForwardedFor.isEmpty()) {
+    if (xForwardedFor != null && !xForwardedFor.isEmpty()) {
       return xForwardedFor.split(",")[0].trim();
     }
     return request.getRemoteAddr();
@@ -65,8 +65,7 @@ public class RequestLoggingInterceptor implements HandlerInterceptor {
   private Level getLogLevel(int statusCode) {
     if (statusCode >= HttpStatus.INTERNAL_SERVER_ERROR.value()) {
       return Level.ERROR;
-    }
-    else if (statusCode >= HttpStatus.BAD_REQUEST.value()) {
+    } else if (statusCode >= HttpStatus.BAD_REQUEST.value()) {
       return Level.WARN;
     }
     return Level.INFO;

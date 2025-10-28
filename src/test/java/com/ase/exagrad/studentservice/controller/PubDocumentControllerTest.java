@@ -13,6 +13,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import com.ase.exagrad.studentservice.component.ApiResponseFactory;
+import com.ase.exagrad.studentservice.config.TestSecurityConfig;
+import com.ase.exagrad.studentservice.dto.request.PubDocumentRequest;
+import com.ase.exagrad.studentservice.dto.response.ApiResponseWrapper;
+import com.ase.exagrad.studentservice.dto.response.PubDocumentResponse;
+import com.ase.exagrad.studentservice.service.PubDocumentService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
@@ -25,29 +33,18 @@ import org.springframework.context.annotation.Import;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import com.ase.exagrad.studentservice.component.ApiResponseFactory;
-import com.ase.exagrad.studentservice.config.TestSecurityConfig;
-import com.ase.exagrad.studentservice.dto.request.PubDocumentRequest;
-import com.ase.exagrad.studentservice.dto.response.ApiResponseWrapper;
-import com.ase.exagrad.studentservice.dto.response.PubDocumentResponse;
-import com.ase.exagrad.studentservice.service.PubDocumentService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebMvcTest(PubDocumentController.class)
 @Import(TestSecurityConfig.class)
 class PubDocumentControllerTest {
 
-  @Autowired
-  private MockMvc mockMvc;
+  @Autowired private MockMvc mockMvc;
 
-  @Autowired
-  private ObjectMapper objectMapper;
+  @Autowired private ObjectMapper objectMapper;
 
-  @MockitoBean
-  private PubDocumentService pubDocumentService;
+  @MockitoBean private PubDocumentService pubDocumentService;
 
-  @MockitoBean
-  private ApiResponseFactory apiResponseFactory;
+  @MockitoBean private ApiResponseFactory apiResponseFactory;
 
   private MockMultipartFile mockFile;
   private PubDocumentRequest pubDocumentRequest;
@@ -93,8 +90,7 @@ class PubDocumentControllerTest {
 
   @Test
   @Disabled("because fails - reason wrong status code")
-  void uploadPubDocumentServiceThrowsInvalidDateRangeExceptionReturnsBadRequest()
-      throws Exception {
+  void uploadPubDocumentServiceThrowsInvalidDateRangeExceptionReturnsBadRequest() throws Exception {
     // Arrange
     String errorMessage = "Invalid date range";
     ApiResponseWrapper<PubDocumentResponse> errorResponse = createErrorApiResponse(errorMessage);
@@ -123,7 +119,7 @@ class PubDocumentControllerTest {
     when(pubDocumentService.uploadPubDocument(any(), any()))
         .thenThrow(new IOException("File processing error"));
     when(apiResponseFactory.<PubDocumentResponse>internalServerError(
-        eq(errorMessage), any(String.class)))
+            eq(errorMessage), any(String.class)))
         .thenReturn(errorResponse);
 
     // Act & Assert
@@ -164,8 +160,8 @@ class PubDocumentControllerTest {
     ApiResponseWrapper<List<PubDocumentResponse>> errorResponse =
         createErrorApiResponse(errorMessage);
 
-    when(apiResponseFactory.<List<PubDocumentResponse>>badRequest(eq(errorMessage),
-        any(String.class)))
+    when(apiResponseFactory.<List<PubDocumentResponse>>badRequest(
+            eq(errorMessage), any(String.class)))
         .thenReturn(errorResponse);
 
     // Act & Assert
