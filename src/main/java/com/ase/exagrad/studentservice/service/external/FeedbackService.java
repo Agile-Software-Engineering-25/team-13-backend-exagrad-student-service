@@ -23,9 +23,7 @@ public class FeedbackService {
     if (studentId == null || !studentId.matches("^[a-zA-Z0-9_-]+$")) {
       throw new IllegalArgumentException("Invalid student ID format");
     }
-    String url = UriComponentsBuilder.fromHttpUrl(baseUrl)
-        .pathSegment(studentId)
-        .toUriString();
+    String url = UriComponentsBuilder.fromHttpUrl(baseUrl).pathSegment(studentId).toUriString();
 
     LecturerFeedbackResponseDto[] response =
         restTemplate.getForObject(url, LecturerFeedbackResponseDto[].class);
