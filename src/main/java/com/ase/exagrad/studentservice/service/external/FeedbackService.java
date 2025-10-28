@@ -1,31 +1,27 @@
-package com.ase.exagrad.studentservice.service;
+package com.ase.exagrad.studentservice.service.external;
 
+import com.ase.exagrad.studentservice.dto.external.LecturerFeedbackResponseDto;
 import java.util.Arrays;
 import java.util.List;
-import com.ase.exagrad.studentservice.dto.response.LecturerFeedbackResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-
 @Service
 @RequiredArgsConstructor
-public class LecturerFeedbackService {
+public class FeedbackService {
 
   private final RestTemplate restTemplate;
 
   @Value("${app.external-apis.lecturer-feedback.base-url}")
   private String baseUrl;
-    
 
-  public List<LecturerFeedbackResponseDto> getFeedbackForLecturer(String studentId) {
-    String url = UriComponentsBuilder.fromHttpUrl(baseUrl)
-        .pathSegment(studentId)
-        .toUriString();
+  public List<LecturerFeedbackResponseDto> getAllFeedbackForStudent(String studentId) {
+    String url = UriComponentsBuilder.fromHttpUrl(baseUrl).pathSegment(studentId).toUriString();
 
-    LecturerFeedbackResponseDto[] response = 
+    LecturerFeedbackResponseDto[] response =
         restTemplate.getForObject(url, LecturerFeedbackResponseDto[].class);
     return Arrays.asList(response != null ? response : new LecturerFeedbackResponseDto[0]);
   }
