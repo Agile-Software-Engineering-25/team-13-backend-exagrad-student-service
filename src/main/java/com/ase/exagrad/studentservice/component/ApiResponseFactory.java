@@ -1,10 +1,10 @@
 package com.ase.exagrad.studentservice.component;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
 import com.ase.exagrad.studentservice.dto.response.ApiResponseWrapper;
 import com.ase.exagrad.studentservice.dto.response.ErrorDetails;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
