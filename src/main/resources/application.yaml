@@ -54,3 +54,6 @@ app:
   file:
     max-size: 10485760 # 10MB
     allowed-types: application/pdf,application/octet-stream,image/jpeg,image/png,image/gif,text/plain,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document
+  external-apis:
+    lecturer-feedback:
+      base-url: https://sau-portal.de/exa-grad/grading-service/api/v1/external/feedback/student
