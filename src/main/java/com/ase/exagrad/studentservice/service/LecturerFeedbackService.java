@@ -21,6 +21,10 @@ public class LecturerFeedbackService {
     
 
   public List<LecturerFeedbackResponseDto> getFeedbackForLecturer(String studentId) {
+    // Validate that studentId is strictly alphanumeric (adjust regex as needed)
+    if (studentId == null || !studentId.matches("^[a-zA-Z0-9_-]+$")) {
+      throw new IllegalArgumentException("Invalid student ID format");
+    }
     String url = UriComponentsBuilder.fromHttpUrl(baseUrl)
         .pathSegment(studentId)
         .toUriString();

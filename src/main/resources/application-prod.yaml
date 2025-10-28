@@ -17,3 +17,6 @@ minio-connection:
   access-key: ${MINIO_ACCESS_KEY}
   secret-key: ${MINIO_SECRET_KEY}
   region: ${MINIO_REGION:us-east-1}
+app:
+  cors:
+    allowed-origins: https://sau-portal.de
