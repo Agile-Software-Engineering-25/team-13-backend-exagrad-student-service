@@ -14,10 +14,11 @@ public class ExamDataDto {
   private String room;
   private String examType;
   private String semester;
-  private int ects;
-  private int maxPoints;
-  private int duration;
-  private int attemptNumber;
+  private Integer ects;
+  private Integer maxPoints;
+  private Integer duration;
+  private Integer attemptNumber;
   private boolean fileUploadRequired;
   private List<String> tools;
+  private  Integer submissions;
 }
