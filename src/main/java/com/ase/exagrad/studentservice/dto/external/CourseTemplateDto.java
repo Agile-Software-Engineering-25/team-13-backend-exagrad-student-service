@@ -12,5 +12,5 @@ public class CourseTemplateDto {
   private Boolean elective;
 
   @JsonProperty("planned_semester")
-  private Integer plannedSemester;
+  private Integer semester;
 }

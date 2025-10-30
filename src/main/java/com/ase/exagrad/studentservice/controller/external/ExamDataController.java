@@ -1,10 +1,11 @@
-package com.ase.exagrad.studentservice.controller;
+package com.ase.exagrad.studentservice.controller.external;
 
-import com.ase.exagrad.studentservice.dto.external.CourseResponseDto;
+import com.ase.exagrad.studentservice.dto.external.StudentCourseExamDto;
 import com.ase.exagrad.studentservice.service.external.CourseExamService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,14 +21,18 @@ public class ExamDataController {
 
   @GetMapping("/students/{studentId}/courses")
   @Operation(
-      summary = "Get student courses",
-      description = "Get all courses for a specific student")
+      summary = "Get student courses with exams",
+      description = "Get all courses for a specific student enriched with exam data")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "Courses retrieved successfully"),
+        @ApiResponse(
+            responseCode = "200",
+            description = "Courses with exams retrieved successfully"),
       })
-  public ResponseEntity<CourseResponseDto> getStudentCourses(@PathVariable String studentId) {
-    CourseResponseDto courses = courseExamService.fetchCoursesForStudent(studentId);
+  public ResponseEntity<List<StudentCourseExamDto>> getStudentCourses(
+      @PathVariable String studentId) {
+    List<StudentCourseExamDto> courses =
+        courseExamService.fetchCoursesWithExamsForStudent(studentId);
     return ResponseEntity.ok(courses);
   }
 }

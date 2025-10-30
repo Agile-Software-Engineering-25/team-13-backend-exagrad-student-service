@@ -16,8 +16,6 @@ public class ExamDataDto {
   private Integer ects;
   private Integer maxPoints;
   private Integer duration;
-  private Integer attemptNumber;
   private boolean fileUploadRequired;
   private List<String> tools;
-  private Integer submissions;
 }

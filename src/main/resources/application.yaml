@@ -61,3 +61,4 @@ app:
       base-url: https://sau-portal.de/exa-grad/exam-service
     course-service:
       base-url: https://sau-portal.de/api/masterdata/studies/external_connections
+
