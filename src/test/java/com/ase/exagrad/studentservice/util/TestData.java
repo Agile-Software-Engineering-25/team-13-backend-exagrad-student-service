@@ -1,11 +1,11 @@
 package com.ase.exagrad.studentservice.util;
 
+import com.ase.exagrad.studentservice.dto.request.PubDocumentRequest;
+import com.ase.exagrad.studentservice.dto.response.PubDocumentResponse;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.UUID;
-import com.ase.exagrad.studentservice.dto.request.PubDocumentRequest;
-import com.ase.exagrad.studentservice.dto.response.PubDocumentResponse;
 
 public final class TestData {
 
@@ -17,10 +17,8 @@ public final class TestData {
   public static final int TEST_DAY_START = 1;
   public static final int TEST_DAY_END = 10;
   // Dates
-  public static final LocalDate START_DATE =
-      LocalDate.of(TEST_YEAR, TEST_MONTH, TEST_DAY_START);
-  public static final LocalDate END_DATE =
-      LocalDate.of(TEST_YEAR, TEST_MONTH, TEST_DAY_END);
+  public static final LocalDate START_DATE = LocalDate.of(TEST_YEAR, TEST_MONTH, TEST_DAY_START);
+  public static final LocalDate END_DATE = LocalDate.of(TEST_YEAR, TEST_MONTH, TEST_DAY_END);
 
   private TestData() {
     // utility class

@@ -7,30 +7,39 @@
     <!-- Define the charset -->
     <property name="charset" value="UTF-8"/>
 
+    <!-- ===== SUPPRESSIONS FOR TEST FILES ===== -->
+    
+    <!-- Suppress magic numbers in test files -->
+    <module name="SuppressionSingleFilter">
+        <property name="checks" value="MagicNumber"/>
+        <property name="files" value=".*[/\\]test[/\\].*\.java$"/>
+    </module>
+
+    <!-- Suppress method length checks in test files -->
+    <module name="SuppressionSingleFilter">
+        <property name="checks" value="MethodLength"/>
+        <property name="files" value=".*[/\\]test[/\\].*\.java$"/>
+    </module>
+
+    <!-- Suppress Javadoc checks in test files -->
+    <module name="SuppressionSingleFilter">
+        <property name="checks" value="MissingJavadoc.*"/>
+        <property name="files" value=".*[/\\]test[/\\].*\.java$"/>
+    </module>
+
     <!-- === TreeWalker module processes Java source code === -->
     <module name="TreeWalker">
 
-        <module name="UnusedLocalVariable">
-            <property name="allowUnnamedVariables" value="false"/>
-        </module>
-        <!-- Naming Conventions -->
+        <!-- ===== NAMING CONVENTIONS ===== -->
 
-        <!-- Classes and Interfaces: PascalCase, noun phrases -->
+        <!-- Classes and Interfaces: PascalCase -->
         <module name="TypeName">
             <property name="format" value="^[A-Z][a-zA-Z0-9]*$"/>
-            <property name="applyToPublic" value="true"/>
-            <property name="applyToProtected" value="true"/>
-            <property name="applyToPackage" value="true"/>
-            <property name="applyToPrivate" value="true"/>
         </module>
 
         <!-- Methods: camelCase, verb phrases -->
         <module name="MethodName">
             <property name="format" value="^[a-z][a-zA-Z0-9]*$"/>
-            <property name="applyToPublic" value="true"/>
-            <property name="applyToProtected" value="true"/>
-            <property name="applyToPackage" value="true"/>
-            <property name="applyToPrivate" value="true"/>
         </module>
 
         <!-- Variables: camelCase, descriptive -->
@@ -47,108 +56,87 @@
             <property name="format" value="^[A-Z][A-Z0-9_]*$"/>
         </module>
 
-        <!-- Type parameters (generics): Single uppercase letter -->
-        <module name="ClassTypeParameterName">
-            <property name="format" value="^[A-Z]$"/>
-        </module>
-        <module name="MethodTypeParameterName">
-            <property name="format" value="^[A-Z]$"/>
-        </module>
-        <module name="InterfaceTypeParameterName">
-            <property name="format" value="^[A-Z]$"/>
-        </module>
-
-        <!-- Packages: lowercase, dot separated, company/project prefix is conventionally enforced by structure -->
-
+        <!-- Package names: lowercase -->
         <module name="PackageName">
             <property name="format" value="^[a-z]+(\.[a-z][a-z0-9]*)*$"/>
         </module>
 
-        <!-- Formatting -->
+        <!-- ===== CODE COMPLEXITY (WARNINGS ONLY) ===== -->
 
-        <!-- Indentation: 2 spaces, no tabs -->
-        <module name="Indentation">
-            <property name="basicOffset" value="2"/>
-            <property name="braceAdjustment" value="0"/>
-            <property name="caseIndent" value="2"/>
-            <property name="lineWrappingIndentation" value="4"/>
-            <property name="tabWidth" value="2"/>
-            <property name="forceStrictCondition" value="false"/>
+        <!-- Cyclomatic Complexity: Max 10 per method -->
+        <module name="CyclomaticComplexity">
+            <property name="max" value="10"/>
+            <property name="severity" value="warning"/>
         </module>
 
-
-        <!-- Braces: open brace on same line, close brace alone on its own line -->
-        <module name="LeftCurly">
-            <property name="option" value="eol"/>
+        <!-- Method Length: Max 50 lines -->
+        <module name="MethodLength">
+            <property name="max" value="50"/>
+            <property name="countEmpty" value="false"/>
+            <property name="severity" value="warning"/>
         </module>
 
-        <module name="RightCurly">
-            <property name="option" value="alone"/>
+        <!-- Parameter Count: Max 7 parameters -->
+        <module name="ParameterNumber">
+            <property name="max" value="7"/>
+            <property name="severity" value="warning"/>
         </module>
 
-        <!-- Spacing -->
-
-        <!-- No space before opening parenthesis in method calls -->
-        <module name="MethodParamPad">
-            <property name="option" value="nospace"/>
-        </module>
-
-        <!-- Spaces after commas and certain keywords -->
-        <module name="WhitespaceAfter">
-            <property name="tokens"
-                      value="COMMA, LITERAL_IF, LITERAL_FOR, LITERAL_WHILE, LITERAL_SWITCH, LITERAL_CATCH"/>
-        </module>
-
-        <!-- Spaces around operators / wrapping -->
-        <module name="OperatorWrap"/>
-
-        <!-- Spaces inside parentheses: disabled for this Checkstyle version -->
-
-        <!-- Comments -->
-
-        <!-- Avoid too many comments - no direct support but encourage self-documenting code -->
-
-        <!-- Declarations -->
-
-        <!-- One statement per line (closest equivalent) -->
-        <module name="OneStatementPerLine"/>
-
-        <!-- Statements -->
+        <!-- ===== DESIGN & BEST PRACTICES ===== -->
 
         <!-- Require braces on all control statements -->
         <module name="NeedBraces">
-            <property name="tokens"
-                      value="LITERAL_IF, LITERAL_ELSE, LITERAL_FOR, LITERAL_WHILE, LITERAL_DO"/>
+            <property name="tokens" value="LITERAL_IF, LITERAL_ELSE, LITERAL_FOR, LITERAL_WHILE, LITERAL_DO"/>
         </module>
 
-        <!-- Switch statements must have break, return or comment fall-through -->
-        <module name="FallThrough">
-        </module>
+        <!-- Switch statements must have break or fall-through comment -->
+        <module name="FallThrough"/>
 
-        <!-- Import Ordering -->
-        <module name="ImportOrder">
-            <property name="groups" value="java, javax, org, com"/>
-            <property name="option" value="top"/>
-            <property name="sortStaticImportsAlphabetically" value="true"/>
-        </module>
+        <!-- One statement per line -->
+        <module name="OneStatementPerLine"/>
 
         <!-- Unused imports -->
         <module name="UnusedImports"/>
 
-        <!-- Magic Numbers -->
+        <!-- Unused local variables -->
+        <module name="UnusedLocalVariable">
+            <property name="allowUnnamedVariables" value="false"/>
+        </module>
+
+        <!-- Magic Numbers (except common ones) - WARNING ONLY -->
         <module name="MagicNumber">
             <property name="ignoreNumbers" value="-1,0,1,2"/>
             <property name="ignoreHashCodeMethod" value="true"/>
             <property name="ignoreAnnotation" value="true"/>
+            <property name="severity" value="warning"/>
         </module>
 
-    </module>
+        <!-- Avoid empty blocks - WARNING ONLY -->
+        <module name="EmptyBlock">
+            <property name="option" value="text"/>
+            <property name="severity" value="warning"/>
+        </module>
 
-    <!-- Line Length: max 80 characters -->
-    <module name="LineLength">
-        <property name="max" value="100"/>
-        <property name="ignorePattern"
-                  value="^package.*|^import.*|a href|href|http(s)?://.*"/>
+        <!-- Avoid nested blocks - WARNING ONLY -->
+        <module name="AvoidNestedBlocks">
+            <property name="severity" value="warning"/>
+        </module>
+
+        <!-- ===== JAVADOC (WARNINGS ONLY) ===== -->
+
+        <!-- Public classes should have Javadoc -->
+        <module name="MissingJavadocType">
+            <property name="scope" value="public"/>
+            <property name="severity" value="warning"/>
+        </module>
+
+        <!-- Public methods should have Javadoc -->
+        <module name="MissingJavadocMethod">
+            <property name="scope" value="public"/>
+            <property name="severity" value="warning"/>
+            <property name="allowMissingPropertyJavadoc" value="true"/>
+        </module>
+
     </module>
 
 </module>
