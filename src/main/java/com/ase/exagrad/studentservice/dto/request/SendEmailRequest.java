@@ -9,13 +9,15 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class SendEmailRequest {
 
-    @NotBlank
-    @Email
-    private String to;
+    @NotEmpty(message = "Empfänger darf nicht leer sein")
+    private List<@Email(message = "Ungültige E-Mail-Adresse") String> to;
 
-    @NotBlank
+    @NotBlank(message = "Betreff darf nicht leer sein")
     private String subject;
 
-    @NotBlank
-    private String body;
+    @NotBlank(message = "Text darf nicht leer sein")
+    private String text;
+
+    @Email(message = "Ungültige Reply-To-Adresse")
+    private String replyTo;
 }

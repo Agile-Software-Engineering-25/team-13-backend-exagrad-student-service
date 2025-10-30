@@ -58,4 +58,4 @@ app:
     lecturer-feedback:
       base-url: https://sau-portal.de/exa-grad/grading-service/api/v1/external/feedback/student
     notification-service:
-      base-url: https://sau-portal.de/notification-service/api/v1/notifications
+      base-url: https://sau-portal.de/notification-service/api/v1/emails
