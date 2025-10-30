@@ -57,3 +57,7 @@ app:
   external-apis:
     lecturer-feedback:
       base-url: https://sau-portal.de/exa-grad/grading-service/api/v1/external/feedback/student
+    exam-service:
+      base-url: https://sau-portal.de/exa-grad/exam-service
+    course-service:
+      base-url: https://sau-portal.de/api/masterdata/studies/external_connections

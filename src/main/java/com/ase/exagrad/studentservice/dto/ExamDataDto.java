@@ -1,8 +1,7 @@
 package com.ase.exagrad.studentservice.dto;
 
-
-import lombok.Data;
 import java.util.List;
+import lombok.Data;
 
 @Data
 public class ExamDataDto {
@@ -20,5 +19,5 @@ public class ExamDataDto {
   private Integer attemptNumber;
   private boolean fileUploadRequired;
   private List<String> tools;
-  private  Integer submissions;
+  private Integer submissions;
 }
