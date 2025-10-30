@@ -1,10 +1,5 @@
 package com.ase.exagrad.studentservice.controller.external;
 
-import java.util.List;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import com.ase.exagrad.studentservice.component.ApiResponseFactory;
 import com.ase.exagrad.studentservice.dto.external.StudentDto;
 import com.ase.exagrad.studentservice.dto.response.ApiResponseWrapper;
@@ -16,7 +11,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
@@ -31,15 +31,14 @@ public class StudentDataController {
   @Operation(
       summary = "Get data for student",
       description = "Retrieves all available data of this student")
-  @ApiResponses(value = {
-      @ApiResponse(
-          responseCode = "200",
-          description = "Successfully retrieved student data",
-          content = @Content(schema = @Schema(implementation = ApiResponseWrapper.class))),
-      @ApiResponse(
-          responseCode = "500",
-          description = "Internal server error")
-  })
+  @ApiResponses(
+      value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Successfully retrieved student data",
+            content = @Content(schema = @Schema(implementation = ApiResponseWrapper.class))),
+        @ApiResponse(responseCode = "500", description = "Internal server error")
+      })
   public ResponseEntity<ApiResponseWrapper<List<StudentDto>>> getStudentData(
       HttpServletRequest request) {
     List<StudentDto> student = studentService.getStudent();

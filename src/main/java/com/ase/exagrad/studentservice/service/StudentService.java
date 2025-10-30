@@ -1,13 +1,13 @@
 package com.ase.exagrad.studentservice.service;
 
+import com.ase.exagrad.studentservice.dto.external.StudentDto;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import com.ase.exagrad.studentservice.dto.external.StudentDto;
-import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
