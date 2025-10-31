@@ -7,15 +7,13 @@ import lombok.Data;
 public class ExamDataDto {
 
   private String id;
-  private String title;
   private String moduleCode;
   private String examDate;
   private String room;
   private String examType;
-  private String semester;
-  private Integer ects;
   private Integer maxPoints;
   private Integer duration;
   private boolean fileUploadRequired;
   private List<String> tools;
+  private int weightPerCent;
 }

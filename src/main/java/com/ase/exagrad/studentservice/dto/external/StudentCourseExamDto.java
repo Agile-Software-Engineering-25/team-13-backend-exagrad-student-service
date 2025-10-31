@@ -11,9 +11,8 @@ public class StudentCourseExamDto {
 
   private String courseName;
   private String courseCode;
-  private String lecturer = "Test Doz";
+  private String lecturer;
   private Integer semester;
   private Integer creditPoints;
   private List<ExamDataDto> exams;
 }
-

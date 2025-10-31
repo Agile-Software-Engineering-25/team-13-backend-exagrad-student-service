@@ -54,13 +54,11 @@ public class CourseExamService {
   private StudentCourseExamDto mapToCourseExamDto(
       CourseDto course, Map<String, List<ExamDataDto>> examsByModuleCode) {
     return StudentCourseExamDto.builder()
-        .courseId(course.getId())
         .courseName(course.getTemplate().getName())
         .courseCode(course.getTemplate().getCode())
+        .lecturer("Test Doz")
         .semester(course.getTemplate().getSemester())
         .creditPoints(course.getCreditPoints())
-        .totalUnits(course.getTotalUnits())
-        .elective(course.getTemplate().getElective())
         .exams(examsByModuleCode.getOrDefault(course.getTemplate().getCode(), List.of()))
         .build();
   }
