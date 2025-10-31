@@ -1,32 +1,34 @@
 name: Deploy to K3s
 
-permissions:
-  contents: read
-  packages: write
-
 on:
   push:
     branches: [ main ]
   workflow_dispatch:
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
-  deploy:
+  build-publish-deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v5
 
-      - name: Build and Publish Image
+      - name: Build and publish image
         uses: Agile-Software-Engineering-25/build-and-publish-image@v1
         with:
-          image_name: "team-13-backend-exagrad-student-service"
           push: true
-          extra_tags: "${{ github.sha }}"
+          image_name: team-13-backend-exagrad-student-service
+          extra_tags: ${{ github.sha }}
 
-      - name: Deploy to Namespace
+      - name: Deploy to Kubernetes namespace
         uses: Agile-Software-Engineering-25/deploy-to-k8s@v1
         with:
           kubeconfig: ${{ secrets.KUBECONFIG }}
           namespace: ${{ vars.K8S_NAMESPACE }}
           image: ghcr.io/agile-software-engineering-25/team-13-backend-exagrad-student-service
-          tag: latest
+          tag: ${{ github.sha }}
+          deployment: exagrad-student-service
