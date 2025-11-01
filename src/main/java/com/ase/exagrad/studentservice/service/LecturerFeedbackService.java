@@ -22,7 +22,9 @@ public class LecturerFeedbackService {
 
   public List<LecturerFeedbackResponseDto> getFeedbackForLecturer(String studentId) {
     // Validate that studentId is strictly alphanumeric (adjust regex as needed)
-    if (studentId == null || !studentId.matches("^[a-zA-Z0-9_-]+$")) {
+    // Only accept IDs 4-32 chars, cannot start/end with dash/underscore, no dots
+    if (studentId == null || !studentId.matches("^(?=.{4,32}$)[a-zA-Z0-9](?:[a-zA-Z0-9_-]*[a-zA-Z0-9])?$") 
+        || studentId.contains(".") || studentId.contains("/")) {
       throw new IllegalArgumentException("Invalid student ID format");
     }
     String url = UriComponentsBuilder.fromHttpUrl(baseUrl)
