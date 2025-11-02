@@ -10,7 +10,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,7 +26,7 @@ public class StudentDataController {
   private final StudentService studentService;
   private final ApiResponseFactory apiResponseFactory;
 
-  @GetMapping
+  @GetMapping("/{studentId}")
   @Operation(
       summary = "Get data for student",
       description = "Retrieves all available data of this student")
@@ -39,8 +38,8 @@ public class StudentDataController {
             content = @Content(schema = @Schema(implementation = ApiResponseWrapper.class))),
         @ApiResponse(responseCode = "500", description = "Internal server error")
       })
-  public ResponseEntity<List<StudentDto>> getStudentData(@PathVariable String studentId) {
-    List<StudentDto> student = studentService.fetchDataForStudent(studentId);
+  public ResponseEntity<StudentDto> getStudentData(@PathVariable String studentId) {
+    StudentDto student = studentService.fetchDataForStudent(studentId);
     return ResponseEntity.ok(student);
   }
 }
