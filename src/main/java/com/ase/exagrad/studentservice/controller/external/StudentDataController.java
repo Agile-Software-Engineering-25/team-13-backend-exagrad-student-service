@@ -43,4 +43,3 @@ public class StudentDataController {
     return ResponseEntity.ok(student);
   }
 }
-
