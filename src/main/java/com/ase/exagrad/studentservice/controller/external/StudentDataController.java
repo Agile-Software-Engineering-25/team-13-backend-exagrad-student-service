@@ -38,9 +38,9 @@ public class StudentDataController {
             content = @Content(schema = @Schema(implementation = ApiResponseWrapper.class))),
         @ApiResponse(responseCode = "500", description = "Internal server error")
       })
-  public ResponseEntity<StudentDto> getStudentData(@PathVariable String studentId) {
+  public ResponseEntity<ApiResponseWrapper<StudentDto>> getStudentData(@PathVariable String studentId) {
     StudentDto student = studentService.fetchDataForStudent(studentId);
-    return ResponseEntity.ok(student);
+    return apiResponseFactory.success(student);
   }
 }
 
