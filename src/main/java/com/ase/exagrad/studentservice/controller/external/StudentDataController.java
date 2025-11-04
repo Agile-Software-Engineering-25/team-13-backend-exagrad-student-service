@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,9 +39,9 @@ public class StudentDataController {
             content = @Content(schema = @Schema(implementation = ApiResponseWrapper.class))),
         @ApiResponse(responseCode = "500", description = "Internal server error")
       })
-  public ResponseEntity<ApiResponseWrapper<StudentDto>> getStudentData(@PathVariable String studentId) {
+  public ResponseEntity<ApiResponseWrapper<StudentDto>> getStudentData(
+      @PathVariable String studentId, HttpServletRequest request) {
     StudentDto student = studentService.fetchDataForStudent(studentId);
-    return apiResponseFactory.success(student);
+    return ResponseEntity.ok(apiResponseFactory.success(student, request.getRequestURI()));
   }
 }
-
