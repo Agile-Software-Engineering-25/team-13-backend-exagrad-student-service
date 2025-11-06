@@ -1,4 +1,4 @@
-package com.ase.exagrad.studentservice.dto.request;
+package com.ase.exagrad.studentservice.dto.external;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

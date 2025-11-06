@@ -1,7 +1,7 @@
-package com.ase.exagrad.studentservice.service;
+package com.ase.exagrad.studentservice.service.external;
 
-import com.ase.exagrad.studentservice.dto.request.SendEmailRequest;
-import com.ase.exagrad.studentservice.dto.response.SendEmailResponse;
+import com.ase.exagrad.studentservice.dto.external.SendEmailRequest;
+import com.ase.exagrad.studentservice.dto.external.SendEmailResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.*;
@@ -25,8 +25,6 @@ public class NotificationService {
         try {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
-
-            headers.setBearerAuth("TOKEN_HIER");
 
             Map<String, Object> payload = new HashMap<>();
             payload.put("to", request.getTo());

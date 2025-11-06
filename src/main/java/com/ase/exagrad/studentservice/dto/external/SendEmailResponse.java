@@ -1,4 +1,4 @@
-package com.ase.exagrad.studentservice.dto.response;
+package com.ase.exagrad.studentservice.dto.external;
 
 import lombok.Data;
 import lombok.AllArgsConstructor;
