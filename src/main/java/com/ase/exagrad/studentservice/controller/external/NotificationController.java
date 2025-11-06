@@ -15,7 +15,7 @@ public class NotificationController {
 
     private final NotificationService notificationService;
 
-    @PostMapping
+    @PostMapping("/email")
     public ResponseEntity<SendEmailResponse> sendEmail(@Valid @RequestBody SendEmailRequest request) {
         SendEmailResponse response = notificationService.sendEmail(request);
         return ResponseEntity.ok(response);

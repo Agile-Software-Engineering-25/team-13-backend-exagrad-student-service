@@ -29,7 +29,7 @@ public class NotificationService {
             Map<String, Object> payload = new HashMap<>();
             payload.put("to", request.getTo());
             payload.put("subject", request.getSubject());
-            payload.put("body", request.getBody());
+            payload.put("body", request.getText());
 
             HttpEntity<Map<String, Object>> httpEntity = new HttpEntity<>(payload, headers);
 
