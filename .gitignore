@@ -38,3 +38,7 @@ build/
 
 ### Claude Code ###
 .claude/
+
+### env files ###
+.env
+
