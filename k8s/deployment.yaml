@@ -88,3 +88,8 @@ spec:
                 secretKeyRef:
                   name: minio
                   key: MINIO_REGION
+            - name: KEYCLOAK_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: keycloak-secret
+                  key: KEYCLOAK_CLIENT_SECRET

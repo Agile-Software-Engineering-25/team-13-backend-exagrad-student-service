@@ -67,7 +67,6 @@ keycloak:
   server-url: https://keycloak.sau-portal.de
   realm: sau
   client-id: team-13
-  ssl-required: external
-  grant_type: client_credentials
+  grant-type: client_credentials
   client-secret: ${KEYCLOAK_CLIENT_SECRET:default-secret}
 
