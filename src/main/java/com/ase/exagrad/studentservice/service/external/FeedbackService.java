@@ -70,7 +70,7 @@ public class FeedbackService {
   }
 
   /*
-   * Helper Methods to filter feedback array with publishStadus 'APPROVED'
+   * Helper Methods to filter feedback array with publishStatus 'APPROVED'
    */
   public List<ExamFeedbackResponseDto> filterApprovedFeedbacks(
       List<ExamFeedbackResponseDto> feedbacks) {
