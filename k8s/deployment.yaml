@@ -50,10 +50,10 @@ spec:
             httpGet:
               path: /api/v1/exagrad/student/actuator/health/liveness
               port: 8080
-            initialDelaySeconds: 10
+            initialDelaySeconds: 30
             periodSeconds: 5
             timeoutSeconds: 5
-            failureThreshold: 12
+            failureThreshold: 20
             successThreshold: 1
           env:
             - name: SPRING_PROFILES_ACTIVE
