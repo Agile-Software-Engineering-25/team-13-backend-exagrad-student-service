@@ -17,10 +17,11 @@ public class StudentService {
   @Value("${app.external-apis.student.base-url}")
   private String studentBaseUrl;
 
-  public StudentDto fetchDataForStudent(String studentId) {
+  public StudentDto fetchDataForStudent(String studentId, String authorizationHeader) {
     return webClient
         .get()
         .uri("/users/{userId}", studentId)
+        .header("Authorization", authorizationHeader)
         .retrieve()
         .bodyToMono(StudentDto.class)
         .block();
