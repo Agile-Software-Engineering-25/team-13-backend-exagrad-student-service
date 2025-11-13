@@ -3,29 +3,33 @@ package com.ase.exagrad.studentservice.service.external;
 import com.ase.exagrad.studentservice.dto.ExamDataDto;
 import com.ase.exagrad.studentservice.dto.external.CourseDto;
 import com.ase.exagrad.studentservice.dto.external.CourseResponseDto;
+import com.ase.exagrad.studentservice.dto.external.ExamFeedbackResponseDto;
 import com.ase.exagrad.studentservice.dto.external.StudentCourseExamDto;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Service
+@RequiredArgsConstructor
 public class CourseExamService {
 
-  private final WebClient courseWebClient;
-  private final WebClient examWebClient;
+  private final WebClient.Builder webClientBuilder;
+  private final FeedbackService feedbackService;
 
-  public CourseExamService(
-      WebClient.Builder webClientBuilder,
-      @Value("${app.external-apis.course-service.base-url}") String courseBaseUrl,
-      @Value("${app.external-apis.exam-service.base-url}") String examBaseUrl) {
-    this.courseWebClient = webClientBuilder.baseUrl(courseBaseUrl).build();
-    this.examWebClient = webClientBuilder.baseUrl(examBaseUrl).build();
-  }
+  @Value("${app.external-apis.course-service.base-url}")
+  private String courseBaseUrl;
+
+  @Value("${app.external-apis.exam-service.base-url}")
+  private String examBaseUrl;
 
   public List<StudentCourseExamDto> fetchCoursesWithExamsForStudent(String studentId) {
+    WebClient courseWebClient = webClientBuilder.baseUrl(courseBaseUrl).build();
+    WebClient examWebClient = webClientBuilder.baseUrl(examBaseUrl).build();
+
     CourseResponseDto courseResponse =
         courseWebClient
             .get()
@@ -42,6 +46,21 @@ public class CourseExamService {
             .bodyToFlux(ExamDataDto.class)
             .collectList()
             .block();
+
+    List<ExamFeedbackResponseDto> feedbacks = feedbackService.getAllFeedbackForStudent(studentId);
+
+    Map<String, ExamFeedbackResponseDto> feedbacksByExamId =
+        feedbacks.stream()
+            .collect(
+                Collectors.toMap(
+                    ExamFeedbackResponseDto::getExamUuid,
+                    feedback -> feedback,
+                    (existing, replacement) -> existing));
+
+    exams.forEach(
+        exam -> {
+          exam.setFeedback(feedbacksByExamId.get(exam.getId()));
+        });
 
     Map<String, List<ExamDataDto>> examsByModuleCode =
         exams.stream().collect(Collectors.groupingBy(ExamDataDto::getModuleCode));

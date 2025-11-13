@@ -1,5 +1,6 @@
 package com.ase.exagrad.studentservice.dto;
 
+import com.ase.exagrad.studentservice.dto.external.ExamFeedbackResponseDto;
 import java.util.List;
 import lombok.Data;
 
@@ -16,4 +17,5 @@ public class ExamDataDto {
   private boolean fileUploadRequired;
   private List<String> tools;
   private int weightPerCent;
+  private ExamFeedbackResponseDto feedback;
 }

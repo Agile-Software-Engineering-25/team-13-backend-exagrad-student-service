@@ -54,10 +54,28 @@ public class FeedbackService {
     try {
       ExamFeedbackResponseDto[] response =
           restTemplate.getForObject(finalUri, ExamFeedbackResponseDto[].class);
-      return Arrays.asList(response != null ? response : new ExamFeedbackResponseDto[0]);
+
+      List<ExamFeedbackResponseDto> approvedFeedbacks =
+          filterApprovedFeedbacks(
+              Arrays.asList(response != null ? response : new ExamFeedbackResponseDto[0]));
+      log.info(
+          "Fetched {} approved feedback entries for student {}",
+          approvedFeedbacks.size(),
+          studentId);
+      return approvedFeedbacks;
     } catch (RestClientException e) {
       log.error("Failed to fetch feedback for student {}: {}", studentId, e.getMessage(), e);
       throw new RuntimeException("Failed to retrieve feedback from external service", e);
     }
+  }
+
+  /*
+   * Helper Methods to filter feedback array with publishStadus 'APPROVED'
+   */
+  public List<ExamFeedbackResponseDto> filterApprovedFeedbacks(
+      List<ExamFeedbackResponseDto> feedbacks) {
+    return feedbacks.stream()
+        .filter(feedback -> "APPROVED".equalsIgnoreCase(feedback.getPublishStatus()))
+        .toList();
   }
 }
