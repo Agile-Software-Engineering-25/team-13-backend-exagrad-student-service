@@ -58,9 +58,7 @@ public class CourseExamService {
                     (existing, replacement) -> existing));
 
     exams.forEach(
-        exam -> {
-          exam.setFeedback(feedbacksByExamId.get(exam.getId()));
-        });
+        exam -> exam.setFeedback(feedbacksByExamId.get(exam.getId())));
 
     Map<String, List<ExamDataDto>> examsByModuleCode =
         exams.stream().collect(Collectors.groupingBy(ExamDataDto::getModuleCode));
