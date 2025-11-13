@@ -27,6 +27,7 @@ public class PubDocumentService {
   private final StorageProperties storageProperties;
   private final FileValidationService fileValidationService;
   private final PubDocumentMapper pubDocumentMapper;
+  private final NotificationService notificationService;
 
   @Transactional
   public PubDocumentResponse uploadPubDocument(MultipartFile file, PubDocumentRequest metadata)
@@ -56,6 +57,10 @@ public class PubDocumentService {
     PubDocument saved = pubDocumentRepository.saveAndFlush(doc);
 
     String downloadUrl = minioService.getFileUrl(bucketName, saved.getMinioKey());
+
+    notificationService.sendPubDocumentUploadNotification(
+        metadata.getStudentId(), sanitizedFilename);
+
     return pubDocumentMapper.toResponse(saved, downloadUrl);
   }
 

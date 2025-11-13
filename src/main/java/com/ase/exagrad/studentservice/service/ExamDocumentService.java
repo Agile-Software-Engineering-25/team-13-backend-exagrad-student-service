@@ -28,6 +28,7 @@ public class ExamDocumentService {
   private final StorageProperties storageProperties;
   private final FileValidationService fileValidationService;
   private final ExamDocumentMapper examDocumentMapper;
+  private final NotificationService notificationService;
 
   @Transactional
   public ExamDocumentResponse uploadExamDocument(MultipartFile file, ExamDocumentRequest metadata)
@@ -53,6 +54,10 @@ public class ExamDocumentService {
     ExamDocument saved = examDocumentRepository.saveAndFlush(doc);
 
     String downloadUrl = minioService.getFileUrl(bucketName, saved.getMinioKey());
+
+    notificationService.sendExamDocumentUploadNotification(
+        metadata.getStudentId(), sanitizedFilename);
+
     return examDocumentMapper.toResponse(saved, downloadUrl);
   }
 

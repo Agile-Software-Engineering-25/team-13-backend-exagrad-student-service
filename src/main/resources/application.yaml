@@ -66,3 +66,15 @@ app:
     course-service:
       base-url: https://sau-portal.de/api/masterdata/studies/external_connections
 
+notification:
+  service:
+    url: https://sau-portal.de/notification-service/api/v1/notifications
+
+
+keycloak:
+  server-url: https://keycloak.sau-portal.de
+  realm: sau
+  client-id: team-13
+  grant-type: client_credentials
+  client-secret: ${KEYCLOAK_CLIENT_SECRET:default-secret}
+
