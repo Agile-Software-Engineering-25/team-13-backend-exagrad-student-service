@@ -14,6 +14,8 @@ spring:
     driverClassName: org.h2.Driver
     username: sa
     password: password
+  flyway:
+    enabled: false
 server:
   error:
     include-message: always
